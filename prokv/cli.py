@@ -7,12 +7,13 @@
 from __future__ import annotations
 
 import argparse
+from dataclasses import replace
 from pathlib import Path
 
 from prokv.config import VideoSpec
 from prokv.export import VIDEO_NAME, RenderPlanExporter, VideoExporter, load_render_plan
 from prokv.pipeline import Pipeline
-from prokv.rendering import CaptionStyle
+from prokv.style import DEFAULT_STYLE
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -30,7 +31,10 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--from-plan", type=Path, metavar="PLAN", help="Render an existing render_plan.json")
     args = parser.parse_args(argv)
 
-    video_exporter = VideoExporter(caption_style=CaptionStyle(font_path=args.font))
+    style = DEFAULT_STYLE
+    if args.font:
+        style = replace(style, caption=replace(style.caption, font_path=args.font))
+    video_exporter = VideoExporter(style=style)
 
     if args.from_plan:
         out_path = (args.out or args.from_plan.parent) / VIDEO_NAME
@@ -41,6 +45,7 @@ def main(argv: list[str] | None = None) -> int:
         pipeline = Pipeline(
             exporter=RenderPlanExporter() if args.plan_only else video_exporter,
             spec=VideoSpec(fps=args.fps, duration_s=args.duration),
+            style=style,
         )
         result = pipeline.run(args.prompt, args.caption, args.out or Path("output"), args.images)
     print(f"Wrote {result}")

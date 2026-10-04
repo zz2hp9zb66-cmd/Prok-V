@@ -24,10 +24,10 @@ class StaggeredRevealAnimator(Animator):
         self,
         start_delay_s: float = 0.2,
         stagger_s: float = 0.45,
-        reveal_s: float = 0.8,
-        slide_px: float = 140.0,
-        drift_px: float = 40.0,
-        drift_scale: float = 1.04,
+        reveal_s: float = 1.0,
+        slide_px: float = 90.0,
+        drift_px: float = 24.0,
+        drift_scale: float = 1.025,
     ) -> None:
         self.start_delay_s = start_delay_s
         self.stagger_s = stagger_s
@@ -46,9 +46,9 @@ class StaggeredRevealAnimator(Animator):
             settled = min(start + self.reveal_s, end_s)
             tracks[layer.id] = [
                 Keyframe(0.0, offset_x=direction * self.slide_px, offset_y=self.slide_px / 2,
-                         scale=0.9, opacity=0.0, easing="hold"),
+                         scale=0.94, opacity=0.0, easing="hold"),
                 Keyframe(start, offset_x=direction * self.slide_px, offset_y=self.slide_px / 2,
-                         scale=0.9, opacity=0.0, easing="ease_out"),
+                         scale=0.94, opacity=0.0, easing="ease_out"),
                 Keyframe(settled, easing="linear"),
                 Keyframe(end_s, offset_x=-direction * self.drift_px / 2, offset_y=-self.drift_px,
                          scale=self.drift_scale),

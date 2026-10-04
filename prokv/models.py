@@ -10,6 +10,7 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 from prokv.config import VideoSpec
+from prokv.style import DEFAULT_STYLE
 
 
 @dataclass
@@ -42,7 +43,7 @@ class Composition:
 
     spec: VideoSpec
     layers: list[Layer]
-    background: str = "#F4EFE6"
+    background: str = DEFAULT_STYLE.background
 
 
 @dataclass
@@ -103,7 +104,7 @@ def project_from_dict(data: dict, base_dir: Path = Path(".")) -> Project:
     return Project(
         prompt=data["prompt"],
         spec=spec,
-        composition=Composition(spec, layers, comp.get("background", "#F4EFE6")),
+        composition=Composition(spec, layers, comp.get("background", DEFAULT_STYLE.background)),
         animation=Animation(
             {lid: [Keyframe(**kf) for kf in kfs] for lid, kfs in data["animation"]["tracks"].items()}
         ),

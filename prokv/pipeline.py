@@ -12,17 +12,28 @@ from prokv.config import VideoSpec
 from prokv.export import Exporter, VideoExporter
 from prokv.generation import ImageGenerator, PlaceholderGenerator
 from prokv.models import Project
+from prokv.style import DEFAULT_STYLE, VisualStyle
 
 
 @dataclass
 class Pipeline:
-    """Each stage is pluggable; defaults are free, offline placeholders."""
+    """Each stage is pluggable; defaults are free, offline placeholders.
 
-    generator: ImageGenerator = field(default_factory=PlaceholderGenerator)
-    compositor: Compositor = field(default_factory=StaggeredCollageCompositor)
+    `style` is applied to the default stages; stages passed in explicitly keep
+    whatever style they were built with.
+    """
+
+    generator: ImageGenerator | None = None
+    compositor: Compositor | None = None
     animator: Animator = field(default_factory=StaggeredRevealAnimator)
-    exporter: Exporter = field(default_factory=VideoExporter)
+    exporter: Exporter | None = None
     spec: VideoSpec = field(default_factory=VideoSpec)
+    style: VisualStyle = DEFAULT_STYLE
+
+    def __post_init__(self) -> None:
+        self.generator = self.generator or PlaceholderGenerator(style=self.style)
+        self.compositor = self.compositor or StaggeredCollageCompositor(style=self.style)
+        self.exporter = self.exporter or VideoExporter(style=self.style)
 
     def run(
         self,

@@ -11,7 +11,8 @@ from dataclasses import asdict
 from pathlib import Path
 
 from prokv.models import Project, project_from_dict
-from prokv.rendering import CaptionStyle, FrameRenderer, LayerStyle
+from prokv.rendering import FrameRenderer
+from prokv.style import DEFAULT_STYLE, VisualStyle
 
 PLAN_NAME = "render_plan.json"
 VIDEO_NAME = "video.mp4"
@@ -56,14 +57,12 @@ class VideoExporter(Exporter):
 
     def __init__(
         self,
-        layer_style: LayerStyle | None = None,
-        caption_style: CaptionStyle | None = None,
+        style: VisualStyle = DEFAULT_STYLE,
         crf: int = 20,
         preset: str = "medium",
         ffmpeg: str = "ffmpeg",
     ) -> None:
-        self.layer_style = layer_style
-        self.caption_style = caption_style
+        self.style = style
         self.crf = crf
         self.preset = preset
         self.ffmpeg = ffmpeg
@@ -77,7 +76,7 @@ class VideoExporter(Exporter):
         if ffmpeg is None:
             raise RuntimeError(f"FFmpeg not found ({self.ffmpeg!r}). Install it and make sure it is on PATH.")
         spec = project.spec
-        renderer = FrameRenderer(project, self.layer_style, self.caption_style)
+        renderer = FrameRenderer(project, self.style)
         out_path.parent.mkdir(parents=True, exist_ok=True)
         cmd = [
             ffmpeg, "-y", "-loglevel", "error",
@@ -97,6 +96,7 @@ class VideoExporter(Exporter):
             pass  # FFmpeg exited early; its error is reported below.
         finally:
             stderr = proc.stderr.read().decode(errors="replace")
+            proc.stderr.close()
             proc.wait()
         if proc.returncode != 0:
             raise RuntimeError(f"FFmpeg failed (exit {proc.returncode}): {stderr.strip()}")

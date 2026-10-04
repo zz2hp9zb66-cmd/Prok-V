@@ -5,11 +5,19 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from PIL import Image
+
 from prokv import Pipeline, VideoSpec
 from prokv.captions import build_captions
 from prokv.export import RenderPlanExporter, load_render_plan
 from prokv.models import Keyframe
+from prokv.generation import PlaceholderGenerator
 from prokv.rendering import FrameRenderer, interpolate
+from prokv.style import WARM_STRICT, hex_to_rgb
+
+
+def _distance(a, b):
+    return max(abs(x - y) for x, y in zip(a, b))
 
 
 def _plan(out: Path, **kwargs) -> Path:
@@ -56,6 +64,26 @@ class PipelineTest(unittest.TestCase):
         self.assertEqual([(c.text, c.start_s, c.end_s) for c in caps], [("a", 0, 4), ("b", 4, 8)])
 
 
+class StyleTest(unittest.TestCase):
+    def test_placeholders_use_palette_colors(self):
+        palette = [hex_to_rgb(c) for c in WARM_STRICT.palette.colors()]
+        with tempfile.TemporaryDirectory() as tmp:
+            for image in PlaceholderGenerator(width=96, height=128).generate("palette", 6, Path(tmp)):
+                with Image.open(image.path) as im:
+                    corner = im.convert("RGB").getpixel((2, 2))
+                self.assertLess(min(_distance(corner, c) for c in palette), 50, corner)
+
+    def test_placeholder_schemes_come_from_palette(self):
+        palette = set(WARM_STRICT.palette.colors())
+        for scheme in WARM_STRICT.placeholder.schemes:
+            self.assertTrue(set(scheme) <= palette, scheme)
+
+    def test_background_is_cream(self):
+        with tempfile.TemporaryDirectory() as tmp:
+            plan = json.loads(_plan(Path(tmp)).read_text())
+            self.assertEqual(plan["composition"]["background"], WARM_STRICT.palette.cream)
+
+
 class RenderingTest(unittest.TestCase):
     def test_interpolate_eases_between_keyframes(self):
         track = [Keyframe(0, opacity=0, easing="linear"), Keyframe(2, opacity=1)]
@@ -70,10 +98,11 @@ class RenderingTest(unittest.TestCase):
             renderer = FrameRenderer(load_render_plan(_plan(Path(tmp))))
             first, later = renderer.render(0.0), renderer.render(5.0)
             self.assertEqual(first.size, (1080, 1920))
-            bg = first.getpixel((0, 0))
-            self.assertEqual(first.getcolors(1_000_000)[0][1], bg)  # plain background at t=0
-            self.assertEqual(len(first.getcolors(1_000_000)), 1)
-            self.assertGreater(len(later.getcolors(1_000_000)), 10)
+            # At t=0 nothing has appeared yet: only the grainy cream background.
+            cream = hex_to_rgb(WARM_STRICT.background)
+            self.assertLess(_distance(first.resize((1, 1), Image.Resampling.BOX).getpixel((0, 0)), cream), 4)
+            self.assertEqual(first.getpixel((540, 960)), renderer.background.getpixel((540, 960)))
+            self.assertNotEqual(later.getpixel((540, 960)), renderer.background.getpixel((540, 960)))
 
 
 @unittest.skipUnless(shutil.which("ffmpeg") and shutil.which("ffprobe"), "FFmpeg not installed")

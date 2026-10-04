@@ -14,7 +14,7 @@ Prok-V turns a text prompt into a vertical social-media video (9:16, 1080×1920)
 
 | # | Stage | Module | What it will do | Current placeholder |
 |---|-------|--------|-----------------|---------------------|
-| 1 | Generate | `prokv/generation.py` | Create images from the prompt with an image model | Solid-colour PNGs derived from the prompt |
+| 1 | Generate | `prokv/generation.py` | Create images from the prompt with an image model | Palette-coloured abstract cards (vinyl record, arch, band) chosen from the prompt |
 | 2 | Compose | `prokv/composition.py` | Arrange images into an editorial/collage layout | Staggered left/right cascade with a slight tilt |
 | 3 | Animate | `prokv/animation.py` | Move, scale, fade and reveal collage elements | Each layer slides in from its side, fades in and grows, then drifts slowly |
 | 4 | Captions | `prokv/captions.py` | Place and time the user's own text | Splits the duration evenly between captions |
@@ -29,20 +29,38 @@ defined in `prokv/models.py`: `GeneratedImage` → `Composition` (of `Layer`s) �
 `VideoExporter` first writes `render_plan.json` (the whole `Project` as JSON), then
 `FrameRenderer` (`prokv/rendering.py`) draws every frame with Pillow:
 
-1. Each layer's image is cropped to its size, given a white border and a soft
-   shadow, and rotated to its resting angle (done once per layer).
+1. Each layer's image is cropped to its size, warm-toned like an archival print,
+   given a thin light border and a soft warm shadow, and rotated to its resting
+   angle (done once per layer). The background is grainy cream paper with thin
+   olive rules near the top and bottom.
 2. For each frame, the layer's keyframes are interpolated with their easing curve
    (`linear`, `ease_in`, `ease_out`, `ease_in_out`, `hold`) to get its offset,
    scale, rotation and opacity, and it is pasted onto the background.
-3. Active captions are drawn on top in a rounded box, word-wrapped, with a short
-   fade in/out, at the `top`, `center` or `bottom` position.
+3. Active captions are drawn on top in a burgundy block with cream serif text,
+   word-wrapped, with a short fade in/out, at `top`, `center` or `bottom`.
 
 Raw frames are piped straight into FFmpeg (`libx264`, `yuv420p`, `+faststart`), so
 no frame files are written to disk.
 
-The look is configured separately from the motion: `LayerStyle` (border, shadow)
-and `CaptionStyle` (font, size, colours, box, margins, fade) are passed to
-`VideoExporter`; the motion comes from the `Animator`.
+### Visual style: WARM × STRICT
+
+Every colour and typography setting lives in `prokv/style.py`, separate from the
+rendering logic. The direction is warm, strict, calm, adult and editorial: a mix
+of editorial magazine, archival music photography, vinyl culture and a modern
+wine bar, kept understated.
+
+| Role | Colour | Hex |
+|------|--------|-----|
+| Main accent | burgundy / dark burgundy | `#5A171B` / `#351315` |
+| Light contrast, background | cream / paper beige | `#E8DDC8` / `#CBB99A` |
+| Calm secondary accent | olive / dark olive | `#535342` / `#303126` |
+| Deep tones, shadows | espresso / warm black | `#2B201A` / `#171512` |
+
+No pure RGB colours, neon, cold blues or bright purples. `VisualStyle` groups the
+palette, background, `PlaceholderStyle`, `LayerStyle` (toning, border, shadow) and
+`CaptionStyle` (font, colours, block, margins, fade). `WARM_STRICT` is the
+default; pass another one with `Pipeline(style=...)` to change the look without
+touching any rendering code. The motion comes separately from the `Animator`.
 
 Each stage is an abstract base class (`ImageGenerator`, `Compositor`, `Animator`,
 `Exporter`) with one default implementation, so a real tool can replace a
@@ -66,7 +84,9 @@ prokv/
   animation.py     Stage 3 — Animator, StaggeredRevealAnimator
   captions.py      Stage 4 — build_captions
   export.py        Stage 5 — Exporter, RenderPlanExporter, VideoExporter
-  rendering.py     Pillow frame renderer, LayerStyle, CaptionStyle
+  rendering.py     Pillow frame renderer
+  style.py         Visual style & palette (WARM_STRICT)
+  imaging.py       Small Pillow helpers (grain)
   pipeline.py      Runs the stages in order
   cli.py           Command-line entry point
 tests/             Standard-library unittest suite
@@ -74,13 +94,21 @@ tests/             Standard-library unittest suite
 
 ## Quick start
 
-Requires Python 3.10+ and [FFmpeg](https://ffmpeg.org/download.html) on your `PATH`.
+Requires Python 3.10+ and [FFmpeg](https://ffmpeg.org/download.html) (with `libx264`,
+included in standard builds) on your `PATH`:
+
+- macOS: `brew install ffmpeg`
+- Ubuntu/Debian: `sudo apt install ffmpeg`
+- Windows: `winget install ffmpeg`, then open a new terminal
+
+Check with `ffmpeg -version`. Without FFmpeg, `--plan-only` still works and the
+video tests are skipped.
 
 ```bash
 pip install -e .        # installs Pillow and the `prokv` command
 
 # One prompt + captions -> output/video.mp4 (and output/render_plan.json)
-python -m prokv "neon city at night" --caption "Welcome" --caption "to the future"
+python -m prokv "wine bar, vinyl, evening" --caption "Вечер начинается с пластинки" --caption "Тёплый звук"
 
 # Re-render an existing plan (e.g. after editing render_plan.json by hand)
 python -m prokv --from-plan output/render_plan.json
@@ -90,7 +118,7 @@ python -m unittest discover -s tests
 
 Options: `--images N` (default 4), `--duration SECONDS` (default 10), `--fps N`
 (default 30), `--out DIR` (default `output/`), `--font PATH` (caption font; by
-default a system bold sans-serif with Cyrillic support such as DejaVu Sans Bold),
+default a system bold serif with Cyrillic support such as Liberation Serif Bold),
 `--plan-only` (write the JSON plan without rendering).
 
 Captions share the video duration evenly, in the order given.
@@ -101,6 +129,6 @@ Decisions still open (each needs approval before it's added, especially
 anything paid or needing an API key):
 
 1. **Image generation**: a local open-source model or a hosted API.
-2. **Typography**: bundled brand fonts and richer caption styles.
+2. **Typography**: a bundled editorial font (currently a system serif is used).
 3. **More layouts and animations**: extra `Compositor` / `Animator` implementations.
 4. **Audio**: background music or voice-over.

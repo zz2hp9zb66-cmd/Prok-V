@@ -6,6 +6,7 @@ from abc import ABC, abstractmethod
 
 from prokv.config import VideoSpec
 from prokv.models import Composition, GeneratedImage, Layer
+from prokv.style import DEFAULT_STYLE, VisualStyle
 
 
 class Compositor(ABC):
@@ -19,10 +20,17 @@ class Compositor(ABC):
 class StaggeredCollageCompositor(Compositor):
     """Cascades images down the canvas, alternating left/right with a slight tilt."""
 
-    def __init__(self, tile_ratio: float = 0.62, margin: int = 60, tilt: float = 3.0) -> None:
+    def __init__(
+        self,
+        tile_ratio: float = 0.62,
+        margin: int = 130,
+        tilt: float = 1.5,
+        style: VisualStyle = DEFAULT_STYLE,
+    ) -> None:
         self.tile_ratio = tile_ratio
         self.margin = margin
         self.tilt = tilt
+        self.background = style.background
 
     def compose(self, images: list[GeneratedImage], spec: VideoSpec) -> Composition:
         layers = []
@@ -45,4 +53,4 @@ class StaggeredCollageCompositor(Compositor):
                     z=i,
                 )
             )
-        return Composition(spec=spec, layers=layers)
+        return Composition(spec=spec, layers=layers, background=self.background)
