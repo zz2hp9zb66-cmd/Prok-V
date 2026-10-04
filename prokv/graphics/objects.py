@@ -47,10 +47,28 @@ def sleeve(size: int, p: Palette, title: str, artist: str, footer: str, fonts,
     else:
         m = int(size * 0.07)
         draw.rectangle((m, m, size - m, size - m), outline=p.olive, width=2)
-        title_font = fonts.get("display_italic", int(size * 0.17))
-        draw.text((m + 26, m + 26), title, font=title_font, fill=p.cream, anchor="lt")
+        max_w = size - 2 * m - 52
+        fs = int(size * 0.17)
+        while True:  # wrap the title into at most 3 lines at the largest size that fits
+            title_font = fonts.get("display_italic", fs)
+            lines, cur = [], ""
+            for word in title.split():
+                cand = f"{cur} {word}".strip()
+                if cur and title_font.getlength(cand) > max_w:
+                    lines.append(cur)
+                    cur = word
+                else:
+                    cur = cand
+            lines.append(cur)
+            if fs <= 18 or (len(lines) <= 3 and all(title_font.getlength(l) <= max_w for l in lines)):
+                break
+            fs -= 2
+        y = m + 26
+        for line in lines:
+            draw.text((m + 26, y), line, font=title_font, fill=p.cream, anchor="lt")
+            y += int(fs * 1.05)
         small = fonts.get("mono", max(12, int(size * 0.042)))
-        draw.text((m + 28, m + 36 + title_font.size), artist.upper(), font=small, fill=p.paper, anchor="lt")
+        draw.text((m + 28, y + 10), artist.upper(), font=small, fill=p.paper, anchor="lt")
         draw.text((size - m - 24, size - m - 22), footer.upper(), font=small, fill=p.paper, anchor="rb")
         cx, cy, rr = size * 0.5, size * 0.62, size * 0.16
         draw.ellipse((cx - rr, cy - rr, cx + rr, cy + rr), outline=p.burgundy, width=3)
@@ -126,6 +144,23 @@ def instrument(kind: str, size: int, color: str, accent: str) -> Image.Image:
             sq += [(x, y), (x + step, y)]
             x += step
         d.line(sq, fill=accent, width=w * 2)
+    elif kind in ("vocals", "voice", "mic"):
+        cx = S / 2
+        d.rounded_rectangle((cx - S * 0.13, S * 0.08, cx + S * 0.13, S * 0.5), radius=S * 0.13, outline=color,
+                            width=w * 2)
+        for k in range(3):
+            y = S * (0.2 + k * 0.09)
+            d.line((cx - S * 0.13, y, cx + S * 0.13, y), fill=color, width=w)
+        d.arc((cx - S * 0.22, S * 0.2, cx + S * 0.22, S * 0.62), 0, 180, fill=accent, width=w * 2)
+        d.line((cx, S * 0.62, cx, S * 0.84), fill=color, width=w * 2)
+        d.line((cx - S * 0.15, S * 0.86, cx + S * 0.15, S * 0.86), fill=color, width=w * 2)
+    elif kind in ("production", "mixing", "console"):
+        for k in range(5):
+            x = S * (0.14 + k * 0.18)
+            d.line((x, S * 0.12, x, S * 0.88), fill=color, width=w * 2)
+            y = S * (0.3 + 0.4 * ((k * 37) % 5) / 4)
+            d.rectangle((x - S * 0.05, y - S * 0.035, x + S * 0.05, y + S * 0.035),
+                        fill=accent if k == 2 else color)
     elif kind in ("lyricon", "wind", "sax"):
         x = S * 0.3
         d.line((x, S * 0.06, x, S * 0.94), fill=color, width=w * 3)
@@ -182,4 +217,24 @@ def bass_guitar(w: int, h: int, color: str, accent: str) -> Image.Image:
     for k in range(4):
         x = cx - nw * 0.36 + k * nw * 0.24
         d.line((x, H * 0.13, x, H * 0.84), fill=accent, width=SS)
+    return _down(image, w, h)
+
+
+def helmets(w: int, h: int, color: str, accent: str) -> Image.Image:
+    """Two abstract robot helmets side by side: rounded shells with a visor slit."""
+    image, d = _canvas(w, h, SS)
+    W, H = w * SS, h * SS
+    lw = 3 * SS
+    hw, hh = W * 0.4, H * 0.9
+    for i, cx in enumerate((W * 0.27, W * 0.73)):
+        x0, y0 = cx - hw / 2, H * 0.05
+        d.rounded_rectangle((x0, y0, x0 + hw, y0 + hh), radius=hw * 0.48, outline=color, width=lw)
+        if i == 0:
+            d.rounded_rectangle((x0 + hw * 0.12, y0 + hh * 0.36, x0 + hw * 0.88, y0 + hh * 0.56),
+                                radius=hh * 0.1, fill=accent)
+        else:
+            for k in range(4):
+                y = y0 + hh * (0.38 + k * 0.05)
+                d.line((x0 + hw * 0.14, y, x0 + hw * 0.86, y), fill=accent, width=SS * 2)
+        d.line((cx - hw * 0.3, y0 + hh * 0.9, cx + hw * 0.3, y0 + hh * 0.9), fill=color, width=lw)
     return _down(image, w, h)

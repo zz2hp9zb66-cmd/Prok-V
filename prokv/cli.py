@@ -63,15 +63,18 @@ def main(argv: list[str] | None = None) -> int:
 
 
 def render_track_map(path: Path, out_path: Path, style, spec: VideoSpec) -> Path:
-    from prokv.content.track_map import TrackMap
+    from prokv.content.track_map import Episode
     from prokv.export import encode_mp4
-    from prokv.layout.track_map import build_track_map
+    from prokv.layout.maps import build_episode
     from prokv.render.stage_renderer import StageRenderer
 
-    tm = TrackMap.load(path)
-    stage, overlay = build_track_map(tm, style, spec)
+    ep = Episode.load(path)
+    stage, overlay = build_episode(ep, style, spec)
     renderer = StageRenderer(stage, spec.fps, style.grain, overlay)
-    print(f"№{tm.number:03d} {tm.track} — {stage.duration:.0f}s, {len(stage.nodes)} nodes, {len(stage.links)} links")
+    print(f"№{ep.number:03d} {ep.track} — {stage.duration:.1f}s, {len(ep.sections)} sections, "
+          f"{len(stage.nodes)} nodes, {len(stage.links)} links")
+    for sec in ep.sections:
+        print(f"  {sec.start:5.1f}–{sec.end:5.1f}  {sec.type}")
     return encode_mp4(renderer.frames(), spec, out_path)
 
 

@@ -133,38 +133,48 @@ Rendering takes roughly 0.8× the video length on a laptop CPU (a 60 s video ≈
 
 ## Series format: «Карта одного трека» (one-track map)
 
-A second, scripted format: a 40-second map built around one record. Unlike the
-scene-by-scene Reels, one central object stays on screen while the map grows,
-shrinks and the camera moves (`prokv/animation/stage.py` + `prokv/render/stage_renderer.py`).
+A second, scripted format: a map built around one record. Unlike the
+scene-by-scene Reels, one central object (sleeve + spinning record + title) stays
+on screen while the map grows and shrinks and the camera moves
+(`prokv/animation/stage.py`, `prokv/render/stage_renderer.py`).
 
 ```bash
 python -m prokv --map examples/maps/001_billie_jean.json   # → output/001_billie_jean.mp4
+python -m prokv --map examples/maps/002_get_lucky.json     # → output/002_get_lucky.mp4
 ```
 
-An episode is one JSON file (`examples/maps/001_billie_jean.json`): track, artist,
-album, year, label, city and studio, people (1–3, the triangle), musicians (2–6,
-with an instrument texture: `drums`, `bass`, `guitar`, `rhodes`, `synth`, `lyricon`),
-the two `core` instruments for "the turn", afterlife entries (1–3), influence
-words, `bpm` (musician lines appear on the beat grid) and `sources`. All on-screen
-phrases (hook, questions, outro, CTA) have defaults and can be overridden.
+An episode is one JSON file: track facts (`track`, `artist`, `album`, `year`,
+`label`, `bpm`, optional `sleeve_title`, `cover_image`) plus a list of **sections**
+with `start`/`end` times (seconds or `"m:ss"`, back to back). Each section is a
+reusable block from `prokv/layout/maps/`:
 
-| Time | Part | What happens |
-|------|------|--------------|
-| 0–3 | Hook | Small vinyl, two-line hook, question; record starts spinning |
-| 3–6 | Object | Sleeve slides in, record peeks out; artist above, huge title, subtitle |
-| 6–10 | Coordinates | Four lines draw out one by one: artist, album, year, label |
-| 10–14 | Place | Camera eases down; city-grid fragment, city → studio; an arrow back |
-| 14–19 | People | Object shrinks; three credits form a triangle; "That's only the beginning." |
-| 19–25 | Musicians | Six lines on a 1.5-beat grid; name + instrument texture |
-| 25–29 | The turn | Only the core pair stays; drum kit and bass; a pulse on the beat |
-| 29–33 | Afterlife | Arrows outwards: later records that sampled/reinterpreted it |
-| 33–37 | Influence | Camera zooms out: the whole map, outer ring in thinner dashed lines |
-| 37–40 | Final | Vinyl only; outro lines; series card, episode number, CTA |
+| Section | What it shows | Main fields |
+|---------|---------------|-------------|
+| `hook` | Big opening line(s), small record or two "helmets", body or question | `text` or `lines`, `body`, `question`, `object` |
+| `object` | Sleeve + record arrive; artist above, huge title, feat/subtitle, first thin rays | `above`, `feat`, `below`, `rays` |
+| `coordinates` | Up to 4 lines draw out to facts (left/right/top/bottom) | `items: [{label, value, side}]` |
+| `places` | Camera eases down; one city (grid + studio + arrow back) or two cities joined by a line | `places: [{city, place, caption}]`, `caption` |
+| `branches` | 1–3 main names around the object (triangle), tag or closing line | `items: [{name, role}]`, `tag`, `outro` |
+| `musicians` | 2–6 musicians on the beat grid, with instrument textures | `items: [{instrument, name, texture}]`, `caption` |
+| `core` | The turn: two musicians stay, big drum kit / bass drawings, beat pulse | `pair`, `pair_label`, `text` |
+| `statement` | The map dims; a huge word, a pause, the answer, a caption | `words`, `caption`, `emphasis` |
+| `chain` | A vertical chain back in time from one name, arrows down | `origin`, `items`, `caption` |
+| `cycle` | Steps around a circle; the last arrow closes the loop | `items`, `caption` |
+| `afterlife` | Arrows outwards to later records that sampled / reused it | `question`, `caption`, `items: [{artist, year}]` |
+| `awards` | A year in the centre, lines to the awards | `year`, `label`, `items`, `caption` |
+| `final_map` | Camera pulls back: rings of names, or in/out arrows around the title | `inner`/`outer`, or `top`, `subtitle`, `nodes: [{text, dir}]` |
+| `outro` | Record, closing lines, series card | `lines`, `card`, `cta` |
 
-No photos are used: the sleeve is typographic and the city is an abstract
-grid. `cover_image` (a path relative to the JSON) puts a real cover on the sleeve
-if you have the rights to use it. No audio is added: put the video over the
-track in your editor; the beat grid follows `bpm`.
+`"keep": true` on a section hands its elements to the next one (e.g. the
+musicians stay for `core` or are dimmed by `statement`); otherwise they fade
+out at the end of the section. Instrument textures: `drums`, `bass`, `guitar`,
+`rhodes`, `synth`, `lyricon`, `vocals`, `production`. Musician lines appear every
+1.5 beats of `bpm`, so the video lines up with the track when started on a downbeat.
+
+No photos are used: the sleeve is typographic and cities are abstract grids.
+`cover_image` (a path relative to the JSON) puts a real cover on the sleeve if
+you have the rights to use it. No audio is added. `sources` and `notes` keep the
+research with the episode; they are not rendered.
 
 ## Adding a template
 

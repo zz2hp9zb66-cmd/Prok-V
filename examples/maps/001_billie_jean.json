@@ -5,33 +5,51 @@
   "album": "Thriller",
   "year": "1982",
   "label": "Epic",
-  "city": "LOS ANGELES",
-  "studio": "WESTLAKE RECORDING STUDIOS",
-  "recorded": "RECORDED / 1982",
-  "people": [
-    {"name": "MICHAEL JACKSON", "role": "songwriter / vocals / co-producer"},
-    {"name": "QUINCY JONES", "role": "producer"},
-    {"name": "BRUCE SWEDIEN", "role": "recording + mixing"}
-  ],
-  "musicians": [
-    {"instrument": "DRUMS", "name": "Leon “Ndugu” Chancler", "texture": "drums"},
-    {"instrument": "BASS", "name": "Louis Johnson", "texture": "bass"},
-    {"instrument": "GUITAR", "name": "David Williams", "texture": "guitar"},
-    {"instrument": "RHODES / SYNTH", "name": "Greg Phillinganes", "texture": "rhodes"},
-    {"instrument": "SYNTH", "name": "Bill Wolfer", "texture": "synth"},
-    {"instrument": "LYRICON", "name": "Tom Scott", "texture": "lyricon"}
-  ],
-  "core": ["DRUMS", "BASS"],
-  "turn_pair": "CHANCLER × JOHNSON",
-  "afterlife": [
-    {"artist": "AALIYAH", "year": "1996", "note": "“Got to Give It Up” (feat. Slick Rick) — drums"},
-    {"artist": "SNOOP DOGG / GOLDIE LOC", "year": "1999", "note": "Goldie Loc feat. Snoop Dogg — “Let's Roll”"},
-    {"artist": "CEELO GREEN", "year": "2010", "note": "“Bright Lights Bigger City” — bass line interpolated"}
-  ],
-  "influence_inner": ["MICHAEL JACKSON", "EPIC", "1982", "LOS ANGELES", "QUINCY JONES", "BRUCE SWEDIEN",
-                      "LOUIS JOHNSON", "NDUGU CHANCLER", "DAVID WILLIAMS", "GREG PHILLINGANES"],
-  "influence_outer": ["COVERS", "SAMPLES", "REMIXES", "POP", "R&B", "HIP-HOP"],
   "bpm": 117,
+  "sections": [
+    {"type": "hook", "start": "0:00", "end": "0:03",
+     "lines": ["ТЫ УЗНАЕШЬ ЕГО", "ЗА НЕСКОЛЬКО СЕКУНД."], "question": "НО КТО СОЗДАЛ ЭТОТ ЗВУК?", "object": "vinyl"},
+    {"type": "object", "start": "0:03", "end": "0:06",
+     "above": "MICHAEL JACKSON", "below": "ANATOMY OF A RECORD / 1982"},
+    {"type": "coordinates", "start": "0:06", "end": "0:10", "keep": true, "items": [
+      {"label": "ARTIST", "value": "Michael Jackson", "side": "left"},
+      {"label": "ALBUM", "value": "Thriller", "side": "right"},
+      {"label": "YEAR", "value": "1982", "side": "top"},
+      {"label": "LABEL", "value": "Epic", "side": "bottom"}]},
+    {"type": "places", "start": "0:10", "end": "0:14",
+     "places": [{"city": "LOS ANGELES", "place": "WESTLAKE RECORDING STUDIOS", "caption": "RECORDED / 1982"}]},
+    {"type": "branches", "start": "0:14", "end": "0:19", "outro": "THAT'S ONLY THE BEGINNING.", "items": [
+      {"name": "MICHAEL JACKSON", "role": "songwriter / vocals / co-producer"},
+      {"name": "QUINCY JONES", "role": "producer"},
+      {"name": "BRUCE SWEDIEN", "role": "recording + mixing"}]},
+    {"type": "musicians", "start": "0:19", "end": "0:25", "keep": true, "items": [
+      {"instrument": "DRUMS", "name": "Leon “Ndugu” Chancler", "texture": "drums"},
+      {"instrument": "BASS", "name": "Louis Johnson", "texture": "bass"},
+      {"instrument": "GUITAR", "name": "David Williams", "texture": "guitar"},
+      {"instrument": "RHODES / SYNTH", "name": "Greg Phillinganes", "texture": "rhodes"},
+      {"instrument": "SYNTH", "name": "Bill Wolfer", "texture": "synth"},
+      {"instrument": "LYRICON", "name": "Tom Scott", "texture": "lyricon"}]},
+    {"type": "core", "start": "0:25", "end": "0:29", "pair": ["DRUMS", "BASS"], "pair_label": "CHANCLER × JOHNSON",
+     "text": ["И ВОТ ПОЧЕМУ", "ТЕБЕ ХВАТАЕТ ПАРЫ СЕКУНД."]},
+    {"type": "afterlife", "start": "0:29", "end": "0:33", "question": "WHAT HAPPENED NEXT?",
+     "caption": "BILLIE JEAN → SAMPLED · REUSED · REINTERPRETED", "items": [
+      {"artist": "AALIYAH", "year": "1996"},
+      {"artist": "SNOOP DOGG / GOLDIE LOC", "year": "1999"},
+      {"artist": "CEELO GREEN", "year": "2010"}]},
+    {"type": "final_map", "start": "0:33", "end": "0:37",
+     "inner": ["MICHAEL JACKSON", "EPIC", "1982", "LOS ANGELES", "QUINCY JONES", "BRUCE SWEDIEN",
+               "LOUIS JOHNSON", "NDUGU CHANCLER", "DAVID WILLIAMS", "GREG PHILLINGANES"],
+     "outer": ["COVERS", "SAMPLES", "REMIXES", "POP", "R&B", "HIP-HOP"]},
+    {"type": "outro", "start": "0:37", "end": "0:40", "lines": ["ONE SONG.", "DOZENS OF CONNECTIONS."],
+     "cta": "What should we map next?"}
+  ],
+  "notes": {
+    "afterlife": [
+      "Aaliyah feat. Slick Rick — “Got to Give It Up” (1996): drums from Billie Jean",
+      "Goldie Loc feat. Snoop Dogg — “Let's Roll” (1999)",
+      "CeeLo Green — “Bright Lights Bigger City” (The Lady Killer, 2010): bass line interpolated"
+    ]
+  },
   "sources": [
     "https://www.whosampled.com/Michael-Jackson/Billie-Jean/",
     "https://www.whosampled.com/sample/5041/Aaliyah-Slick-Rick-Got-to-Give-It-Up-Michael-Jackson-Billie-Jean/",

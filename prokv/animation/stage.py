@@ -91,6 +91,7 @@ class Node(Animated):
 
     def show(self, t: float, dur: float = 0.6, dy: float = 30, scale_from: float | None = None,
              rise: bool = False, easing: str = "ease_out_quart") -> "Node":
+        t = max(t, self.keys[-1].t)
         v = self.value(t)
         start = {"opacity": 0.0}
         if rise:
@@ -102,9 +103,10 @@ class Node(Animated):
         target = {k: v[k] for k in start}
         target["opacity"] = 1.0
         self.set(t, **start)
-        return self.animate(t, dur, easing, **target)
+        return self.animate(self.keys[-1].t, dur, easing, **target)
 
     def hide(self, t: float, dur: float = 0.45, dy: float = -18, easing: str = "ease_in_out") -> "Node":
+        t = max(t, self.keys[-1].t)
         v = self.value(t)
         return self.animate(t, dur, easing, opacity=0.0, y=v["y"] + dy)
 

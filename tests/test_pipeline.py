@@ -146,7 +146,7 @@ if __name__ == "__main__":
 
 
 class TrackMapTest(unittest.TestCase):
-    EPISODE = Path(__file__).resolve().parent.parent / "examples" / "maps" / "001_billie_jean.json"
+    MAPS = Path(__file__).resolve().parent.parent / "examples" / "maps"
 
     def test_keyframes(self):
         from PIL import Image as _Image
@@ -161,26 +161,47 @@ class TrackMapTest(unittest.TestCase):
         with self.assertRaises(ValueError):
             node.animate(1.0, 0.2, x=0)
 
-    def test_episode_builds_and_renders(self):
-        from prokv.content.track_map import TrackMap
-        from prokv.layout.track_map import DURATION, build_track_map
+    def test_episodes_build_and_render(self):
+        from prokv.content.track_map import Episode
+        from prokv.layout.maps import build_episode
         from prokv.render.stage_renderer import StageRenderer
 
-        tm = TrackMap.load(self.EPISODE)
-        stage, overlay = build_track_map(tm)
-        renderer = StageRenderer(stage, 30, 4, overlay)
-        self.assertEqual(renderer.frame_count, int(DURATION * 30))
-        frames = [renderer.render(t) for t in (0.0, 4.5, 21.0, 35.5, 39.9)]
-        self.assertTrue(all(f.size == (1080, 1920) for f in frames))
-        self.assertEqual(len({f.tobytes() for f in frames}), len(frames))
+        for path in sorted(self.MAPS.glob("*.json")):
+            with self.subTest(episode=path.name):
+                ep = Episode.load(path)
+                stage, overlay = build_episode(ep)
+                renderer = StageRenderer(stage, 30, 4, overlay)
+                self.assertEqual(renderer.frame_count, round(ep.duration * 30))
+                times = [sec.start + sec.length * 0.7 for sec in ep.sections]
+                frames = [renderer.render(t) for t in times]
+                self.assertTrue(all(f.size == (1080, 1920) for f in frames))
+                self.assertEqual(len({f.tobytes() for f in frames}), len(frames))
+
+    def test_all_section_types_are_used(self):
+        from prokv.content.track_map import Episode
+        from prokv.layout.maps import SECTIONS
+
+        used = {sec.type for path in self.MAPS.glob("*.json") for sec in Episode.load(path).sections}
+        self.assertEqual(used, set(SECTIONS))
 
     def test_episode_validation(self):
-        from prokv.content.track_map import TrackMap
+        from prokv.content.track_map import Episode
 
-        data = json.loads(self.EPISODE.read_text(encoding="utf-8"))
-        data["core"] = ["DRUMS", "TUBA"]
-        with tempfile.TemporaryDirectory() as tmp:
-            path = Path(tmp) / "bad.json"
-            path.write_text(json.dumps(data), encoding="utf-8")
-            with self.assertRaises(ValueError):
-                TrackMap.load(path)
+        base = json.loads((self.MAPS / "001_billie_jean.json").read_text(encoding="utf-8"))
+        broken = {
+            "unknown pair": lambda d: d["sections"][6].update(pair=["DRUMS", "TUBA"]),
+            "gap in timing": lambda d: d["sections"][1].update(start="0:04"),
+            "unknown type": lambda d: d["sections"][0].update(type="fireworks"),
+        }
+        for name, breaker in broken.items():
+            data = json.loads(json.dumps(base))
+            breaker(data)
+            with self.subTest(name), tempfile.TemporaryDirectory() as tmp:
+                path = Path(tmp) / "bad.json"
+                path.write_text(json.dumps(data), encoding="utf-8")
+                with self.assertRaises(ValueError):
+                    Episode.load(path)
+
+
+if __name__ == "__main__":
+    unittest.main()
