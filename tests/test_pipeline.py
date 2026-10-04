@@ -143,3 +143,44 @@ class VideoExportTest(unittest.TestCase):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class TrackMapTest(unittest.TestCase):
+    EPISODE = Path(__file__).resolve().parent.parent / "examples" / "maps" / "001_billie_jean.json"
+
+    def test_keyframes(self):
+        from PIL import Image as _Image
+
+        from prokv.animation.stage import Node
+        node = Node(_Image.new("RGBA", (4, 4)), 100, 100)
+        node.show(1.0, 0.5)
+        node.animate(2.0, 1.0, x=200)
+        self.assertEqual(node.value(0.5)["opacity"], 0.0)
+        self.assertAlmostEqual(node.value(1.6)["opacity"], 1.0)
+        self.assertAlmostEqual(node.value(3.5)["x"], 200)
+        with self.assertRaises(ValueError):
+            node.animate(1.0, 0.2, x=0)
+
+    def test_episode_builds_and_renders(self):
+        from prokv.content.track_map import TrackMap
+        from prokv.layout.track_map import DURATION, build_track_map
+        from prokv.render.stage_renderer import StageRenderer
+
+        tm = TrackMap.load(self.EPISODE)
+        stage, overlay = build_track_map(tm)
+        renderer = StageRenderer(stage, 30, 4, overlay)
+        self.assertEqual(renderer.frame_count, int(DURATION * 30))
+        frames = [renderer.render(t) for t in (0.0, 4.5, 21.0, 35.5, 39.9)]
+        self.assertTrue(all(f.size == (1080, 1920) for f in frames))
+        self.assertEqual(len({f.tobytes() for f in frames}), len(frames))
+
+    def test_episode_validation(self):
+        from prokv.content.track_map import TrackMap
+
+        data = json.loads(self.EPISODE.read_text(encoding="utf-8"))
+        data["core"] = ["DRUMS", "TUBA"]
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "bad.json"
+            path.write_text(json.dumps(data), encoding="utf-8")
+            with self.assertRaises(ValueError):
+                TrackMap.load(path)

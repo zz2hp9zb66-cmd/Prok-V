@@ -5,6 +5,7 @@ Examples:
     python -m prokv "Ваш текст или тема ролика..."
     cat text.txt | python -m prokv --file -
     python -m prokv --from-plan output/storyboard.json     # re-render an edited storyboard
+    python -m prokv --map examples/maps/001_billie_jean.json  # "Карта одного трека" episode
 """
 
 from __future__ import annotations
@@ -30,6 +31,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--style", type=Path, help="JSON file with style overrides (see examples/style_override.json)")
     parser.add_argument("--max-scenes", type=int, default=12, help="Upper limit on the number of scenes")
     parser.add_argument("--fps", type=int, default=30, help="Frames per second (default 30)")
+    parser.add_argument("--map", type=Path, metavar="EPISODE", help="Render a one-track map episode (JSON)")
     parser.add_argument("--plan-only", action="store_true", help="Only write storyboard.json, no video")
     args = parser.parse_args(argv)
 
@@ -37,7 +39,10 @@ def main(argv: list[str] | None = None) -> int:
     pipeline = Pipeline(style=style, spec=VideoSpec(fps=args.fps), max_scenes=args.max_scenes)
     started = time.monotonic()
 
-    if args.from_plan:
+    if args.map:
+        result = render_track_map(args.map, (args.out or Path("output")) / f"{args.map.stem}.mp4", style,
+                                  VideoSpec(fps=args.fps))
+    elif args.from_plan:
         storyboard = load_storyboard(args.from_plan)
         out = (args.out or args.from_plan.parent) / VIDEO_NAME
         result = pipeline.render(storyboard, out)
@@ -55,6 +60,19 @@ def main(argv: list[str] | None = None) -> int:
         result = out_dir / STORYBOARD_NAME if args.plan_only else pipeline.render(storyboard, out_dir / VIDEO_NAME)
     print(f"Wrote {result}  ({time.monotonic() - started:.0f}s)")
     return 0
+
+
+def render_track_map(path: Path, out_path: Path, style, spec: VideoSpec) -> Path:
+    from prokv.content.track_map import TrackMap
+    from prokv.export import encode_mp4
+    from prokv.layout.track_map import build_track_map
+    from prokv.render.stage_renderer import StageRenderer
+
+    tm = TrackMap.load(path)
+    stage, overlay = build_track_map(tm, style, spec)
+    renderer = StageRenderer(stage, spec.fps, style.grain, overlay)
+    print(f"№{tm.number:03d} {tm.track} — {stage.duration:.0f}s, {len(stage.nodes)} nodes, {len(stage.links)} links")
+    return encode_mp4(renderer.frames(), spec, out_path)
 
 
 def _print_plan(storyboard) -> None:

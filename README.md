@@ -23,10 +23,10 @@ text ─► 1. content    split into scenes, choose a template, condense wording
 |--------|--------------|
 | `prokv/content/` | `analyzer.py`: text → `Storyboard` (scenes). `text.py`: sentences, numbers, years, keywords, condensing |
 | `prokv/layout/` | `grid.py`: safe area. `templates/`: the 9 scene templates + shared `SceneContext` |
-| `prokv/graphics/` | `shapes.py`: graphic sprites. `texture.py`: paper background with grain |
+| `prokv/graphics/` | `shapes.py`: graphic sprites. `objects.py`: sleeve, vinyl, city grid, instrument textures. `texture.py`: paper |
 | `prokv/typography/` | `fonts.py`: fonts by role. `text.py`: layout, fitting, per-word sprites |
 | `prokv/animation/` | `easing.py`, `motion.py` (motion presets), `element.py` (animated element), `timeline.py` |
-| `prokv/render/` | `renderer.py`: storyboard → frames, transitions, header and progress line |
+| `prokv/render/` | `renderer.py`: storyboard → frames, transitions, header and progress line. `stage_renderer.py`: keyframed map videos |
 | `prokv/export/` | `ffmpeg.py`: MP4 encoding. `storyboard_io.py`: save/load `storyboard.json` |
 | `prokv/style.py` | **The visual system**: palette, fonts, sizes, spacing, motion, scene themes |
 | `prokv/pipeline.py`, `prokv/cli.py` | Wiring and the command line |
@@ -130,6 +130,41 @@ Options: `--out DIR` (default `output/`), `--style FILE.json`, `--max-scenes N`,
 `--fps N` (default 30). The command prints the scene plan before rendering.
 
 Rendering takes roughly 0.8× the video length on a laptop CPU (a 60 s video ≈ 50 s).
+
+## Series format: «Карта одного трека» (one-track map)
+
+A second, scripted format: a 40-second map built around one record. Unlike the
+scene-by-scene Reels, one central object stays on screen while the map grows,
+shrinks and the camera moves (`prokv/animation/stage.py` + `prokv/render/stage_renderer.py`).
+
+```bash
+python -m prokv --map examples/maps/001_billie_jean.json   # → output/001_billie_jean.mp4
+```
+
+An episode is one JSON file (`examples/maps/001_billie_jean.json`): track, artist,
+album, year, label, city and studio, people (1–3, the triangle), musicians (2–6,
+with an instrument texture: `drums`, `bass`, `guitar`, `rhodes`, `synth`, `lyricon`),
+the two `core` instruments for "the turn", afterlife entries (1–3), influence
+words, `bpm` (musician lines appear on the beat grid) and `sources`. All on-screen
+phrases (hook, questions, outro, CTA) have defaults and can be overridden.
+
+| Time | Part | What happens |
+|------|------|--------------|
+| 0–3 | Hook | Small vinyl, two-line hook, question; record starts spinning |
+| 3–6 | Object | Sleeve slides in, record peeks out; artist above, huge title, subtitle |
+| 6–10 | Coordinates | Four lines draw out one by one: artist, album, year, label |
+| 10–14 | Place | Camera eases down; city-grid fragment, city → studio; an arrow back |
+| 14–19 | People | Object shrinks; three credits form a triangle; "That's only the beginning." |
+| 19–25 | Musicians | Six lines on a 1.5-beat grid; name + instrument texture |
+| 25–29 | The turn | Only the core pair stays; drum kit and bass; a pulse on the beat |
+| 29–33 | Afterlife | Arrows outwards: later records that sampled/reinterpreted it |
+| 33–37 | Influence | Camera zooms out: the whole map, outer ring in thinner dashed lines |
+| 37–40 | Final | Vinyl only; outro lines; series card, episode number, CTA |
+
+No photos are used: the sleeve is typographic and the city is an abstract
+grid. `cover_image` (a path relative to the JSON) puts a real cover on the sleeve
+if you have the rights to use it. No audio is added: put the video over the
+track in your editor; the beat grid follows `bpm`.
 
 ## Adding a template
 

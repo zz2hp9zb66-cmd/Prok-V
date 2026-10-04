@@ -1,0 +1,42 @@
+{
+  "number": 1,
+  "track": "Billie Jean",
+  "artist": "Michael Jackson",
+  "album": "Thriller",
+  "year": "1982",
+  "label": "Epic",
+  "city": "LOS ANGELES",
+  "studio": "WESTLAKE RECORDING STUDIOS",
+  "recorded": "RECORDED / 1982",
+  "people": [
+    {"name": "MICHAEL JACKSON", "role": "songwriter / vocals / co-producer"},
+    {"name": "QUINCY JONES", "role": "producer"},
+    {"name": "BRUCE SWEDIEN", "role": "recording + mixing"}
+  ],
+  "musicians": [
+    {"instrument": "DRUMS", "name": "Leon “Ndugu” Chancler", "texture": "drums"},
+    {"instrument": "BASS", "name": "Louis Johnson", "texture": "bass"},
+    {"instrument": "GUITAR", "name": "David Williams", "texture": "guitar"},
+    {"instrument": "RHODES / SYNTH", "name": "Greg Phillinganes", "texture": "rhodes"},
+    {"instrument": "SYNTH", "name": "Bill Wolfer", "texture": "synth"},
+    {"instrument": "LYRICON", "name": "Tom Scott", "texture": "lyricon"}
+  ],
+  "core": ["DRUMS", "BASS"],
+  "turn_pair": "CHANCLER × JOHNSON",
+  "afterlife": [
+    {"artist": "AALIYAH", "year": "1996", "note": "“Got to Give It Up” (feat. Slick Rick) — drums"},
+    {"artist": "SNOOP DOGG / GOLDIE LOC", "year": "1999", "note": "Goldie Loc feat. Snoop Dogg — “Let's Roll”"},
+    {"artist": "CEELO GREEN", "year": "2010", "note": "“Bright Lights Bigger City” — bass line interpolated"}
+  ],
+  "influence_inner": ["MICHAEL JACKSON", "EPIC", "1982", "LOS ANGELES", "QUINCY JONES", "BRUCE SWEDIEN",
+                      "LOUIS JOHNSON", "NDUGU CHANCLER", "DAVID WILLIAMS", "GREG PHILLINGANES"],
+  "influence_outer": ["COVERS", "SAMPLES", "REMIXES", "POP", "R&B", "HIP-HOP"],
+  "bpm": 117,
+  "sources": [
+    "https://www.whosampled.com/Michael-Jackson/Billie-Jean/",
+    "https://www.whosampled.com/sample/5041/Aaliyah-Slick-Rick-Got-to-Give-It-Up-Michael-Jackson-Billie-Jean/",
+    "https://www.whosampled.com/sample/13317/Goldie-Loc-Snoop-Dogg-Let's-Roll-Michael-Jackson-Billie-Jean/",
+    "https://en.wikipedia.org/wiki/Bright_Lights_Bigger_City",
+    "https://en.wikipedia.org/wiki/Billie_Jean"
+  ]
+}
