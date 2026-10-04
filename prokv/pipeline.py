@@ -9,7 +9,7 @@ from prokv.animation import Animator, StaggeredRevealAnimator
 from prokv.captions import build_captions
 from prokv.composition import Compositor, StaggeredCollageCompositor
 from prokv.config import VideoSpec
-from prokv.export import Exporter, RenderPlanExporter
+from prokv.export import Exporter, VideoExporter
 from prokv.generation import ImageGenerator, PlaceholderGenerator
 from prokv.models import Project
 
@@ -21,7 +21,7 @@ class Pipeline:
     generator: ImageGenerator = field(default_factory=PlaceholderGenerator)
     compositor: Compositor = field(default_factory=StaggeredCollageCompositor)
     animator: Animator = field(default_factory=StaggeredRevealAnimator)
-    exporter: Exporter = field(default_factory=RenderPlanExporter)
+    exporter: Exporter = field(default_factory=VideoExporter)
     spec: VideoSpec = field(default_factory=VideoSpec)
 
     def run(

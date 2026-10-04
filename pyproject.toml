@@ -8,7 +8,7 @@ version = "0.1.0"
 description = "Generate vertical 9:16 social-media videos from a text prompt."
 readme = "README.md"
 requires-python = ">=3.10"
-dependencies = []  # Standard library only for now.
+dependencies = ["pillow>=10.1"]  # FFmpeg must also be installed (system binary).
 
 [project.scripts]
 prokv = "prokv.cli:main"

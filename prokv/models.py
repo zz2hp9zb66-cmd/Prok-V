@@ -47,7 +47,11 @@ class Composition:
 
 @dataclass
 class Keyframe:
-    """Transform of a layer at a moment in time, relative to its resting position."""
+    """Transform of a layer at a moment in time, relative to its resting position.
+
+    `easing` is the curve used to move from this keyframe to the next one
+    ("linear", "ease_in", "ease_out", "ease_in_out" or "hold").
+    """
 
     time_s: float
     offset_x: float = 0.0
@@ -55,6 +59,7 @@ class Keyframe:
     scale: float = 1.0
     rotation: float = 0.0
     opacity: float = 1.0
+    easing: str = "ease_out"
 
 
 @dataclass
@@ -83,3 +88,24 @@ class Project:
     composition: Composition
     animation: Animation
     captions: list[Caption]
+
+
+def project_from_dict(data: dict, base_dir: Path = Path(".")) -> Project:
+    """Rebuild a Project from its JSON form; relative image paths resolve against base_dir."""
+    spec = VideoSpec(**data["spec"])
+    comp = data["composition"]
+    layers = []
+    for raw in comp["layers"]:
+        image = dict(raw["image"])
+        path = Path(image.pop("path"))
+        image = GeneratedImage(path if path.is_absolute() else base_dir / path, **image)
+        layers.append(Layer(**{**raw, "image": image}))
+    return Project(
+        prompt=data["prompt"],
+        spec=spec,
+        composition=Composition(spec, layers, comp.get("background", "#F4EFE6")),
+        animation=Animation(
+            {lid: [Keyframe(**kf) for kf in kfs] for lid, kfs in data["animation"]["tracks"].items()}
+        ),
+        captions=[Caption(**c) for c in data["captions"]],
+    )
