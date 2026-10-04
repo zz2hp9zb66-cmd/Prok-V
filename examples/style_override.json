@@ -1,0 +1,22 @@
+{
+  "motion": {
+    "speed": 1.15,
+    "transition": "fade",
+    "word_stagger_s": 0.05
+  },
+  "type": {
+    "display": 124,
+    "title": 88
+  },
+  "spacing": {
+    "margin_x": 110
+  },
+  "scene_themes": {
+    "quote": "burgundy",
+    "timeline": "cream"
+  },
+  "themes": {
+    "cream": { "accent": "#5A171B", "line": "#535342" }
+  },
+  "show_progress": false
+}

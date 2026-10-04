@@ -1,112 +1,75 @@
-"""Plain data objects passed between pipeline stages.
+"""Plain data passed between stages: text -> Storyboard (scenes) -> video.
 
-Every stage consumes and produces these types, so a stage implementation can be
-swapped (e.g. placeholder -> real image model) without touching the others.
+A Storyboard is saved as storyboard.json next to the video. It can be edited by
+hand (texts, scene kinds, durations) and re-rendered with `--from-plan`.
 """
 
 from __future__ import annotations
 
-from dataclasses import dataclass, field
-from pathlib import Path
+from dataclasses import asdict, dataclass, field
 
 from prokv.config import VideoSpec
-from prokv.style import DEFAULT_STYLE
+
+SCENE_KINDS = (
+    "statement",    # 01 one strong thought
+    "big_number",   # 02 a key figure
+    "comparison",   # 03 two sides
+    "list",         # 04 enumerated points
+    "timeline",     # 05 dated events
+    "quote",        # 06 a quotation
+    "diagram",      # 07 steps / cause -> effect
+    "split",        # 08 term + explanation
+    "conclusion",   # 09 the takeaway
+)
 
 
 @dataclass
-class GeneratedImage:
-    """An image produced by the generation stage."""
+class SceneContent:
+    """Condensed, on-screen wording of one scene. Templates use the fields they need."""
 
-    path: Path
-    prompt: str
-    width: int
-    height: int
-
-
-@dataclass
-class Layer:
-    """One image placed on the canvas (pixel coordinates, top-left origin)."""
-
-    id: str
-    image: GeneratedImage
-    x: int
-    y: int
-    width: int
-    height: int
-    rotation: float = 0.0
-    z: int = 0
+    kicker: str = ""             # small label above the headline
+    headline: str = ""
+    body: str = ""               # secondary line
+    number: str = ""             # display string, e.g. "+10%"
+    items: list[str] = field(default_factory=list)          # list entries / diagram steps
+    pairs: list[list[str]] = field(default_factory=list)    # [label, text]: timeline, comparison
+    quote: str = ""
+    author: str = ""
+    highlights: list[str] = field(default_factory=list)     # words to emphasise
 
 
 @dataclass
-class Composition:
-    """The static collage: a canvas plus its layers."""
-
-    spec: VideoSpec
-    layers: list[Layer]
-    background: str = DEFAULT_STYLE.background
-
-
-@dataclass
-class Keyframe:
-    """Transform of a layer at a moment in time, relative to its resting position.
-
-    `easing` is the curve used to move from this keyframe to the next one
-    ("linear", "ease_in", "ease_out", "ease_in_out" or "hold").
-    """
-
-    time_s: float
-    offset_x: float = 0.0
-    offset_y: float = 0.0
-    scale: float = 1.0
-    rotation: float = 0.0
-    opacity: float = 1.0
-    easing: str = "ease_out"
+class Scene:
+    kind: str
+    duration_s: float
+    content: SceneContent
+    source: str = ""             # the original text this scene was made from
+    variant: str = ""            # "" or "alt": alternative layout of the same template
 
 
 @dataclass
-class Animation:
-    """Keyframes for each layer, keyed by layer id."""
+class Storyboard:
+    title: str
+    language: str
+    scenes: list[Scene]
+    spec: VideoSpec = field(default_factory=VideoSpec)
 
-    tracks: dict[str, list[Keyframe]] = field(default_factory=dict)
+    @property
+    def duration_s(self) -> float:
+        return sum(scene.duration_s for scene in self.scenes)
 
+    def to_dict(self) -> dict:
+        return asdict(self)
 
-@dataclass
-class Caption:
-    """User-supplied text shown on screen for a time range."""
-
-    text: str
-    start_s: float
-    end_s: float
-    position: str = "bottom"  # "top" | "center" | "bottom"
-
-
-@dataclass
-class Project:
-    """Everything the export stage needs to produce the final video."""
-
-    prompt: str
-    spec: VideoSpec
-    composition: Composition
-    animation: Animation
-    captions: list[Caption]
-
-
-def project_from_dict(data: dict, base_dir: Path = Path(".")) -> Project:
-    """Rebuild a Project from its JSON form; relative image paths resolve against base_dir."""
-    spec = VideoSpec(**data["spec"])
-    comp = data["composition"]
-    layers = []
-    for raw in comp["layers"]:
-        image = dict(raw["image"])
-        path = Path(image.pop("path"))
-        image = GeneratedImage(path if path.is_absolute() else base_dir / path, **image)
-        layers.append(Layer(**{**raw, "image": image}))
-    return Project(
-        prompt=data["prompt"],
-        spec=spec,
-        composition=Composition(spec, layers, comp.get("background", DEFAULT_STYLE.background)),
-        animation=Animation(
-            {lid: [Keyframe(**kf) for kf in kfs] for lid, kfs in data["animation"]["tracks"].items()}
-        ),
-        captions=[Caption(**c) for c in data["captions"]],
-    )
+    @classmethod
+    def from_dict(cls, data: dict) -> Storyboard:
+        return cls(
+            title=data["title"],
+            language=data.get("language", "ru"),
+            spec=VideoSpec(**data.get("spec", {})),
+            scenes=[
+                Scene(s["kind"], s["duration_s"], SceneContent(**s["content"]), s.get("source", ""),
+                      s.get("variant", ""))
+                for s in data["scenes"]
+            ],
+        )

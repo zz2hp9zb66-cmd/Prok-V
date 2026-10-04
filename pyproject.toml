@@ -4,8 +4,8 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "prokv"
-version = "0.1.0"
-description = "Generate vertical 9:16 social-media videos from a text prompt."
+version = "0.2.0"
+description = "Turn text into editorial motion-infographic Reels (vertical 1080x1920 MP4)."
 readme = "README.md"
 requires-python = ">=3.10"
 dependencies = ["pillow>=10.1"]  # FFmpeg must also be installed (system binary).
@@ -13,5 +13,5 @@ dependencies = ["pillow>=10.1"]  # FFmpeg must also be installed (system binary)
 [project.scripts]
 prokv = "prokv.cli:main"
 
-[tool.setuptools]
-packages = ["prokv"]
+[tool.setuptools.packages.find]
+include = ["prokv*"]

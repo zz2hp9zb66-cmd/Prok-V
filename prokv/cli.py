@@ -1,52 +1,65 @@
-"""Command-line entry point.
+"""Turn text into an editorial infographic Reel (vertical 1080×1920 MP4).
 
-    python -m prokv "a prompt" --caption "Hello" --caption "World"   # -> output/video.mp4
-    python -m prokv --from-plan output/render_plan.json               # re-render an existing plan
+Examples:
+    python -m prokv --file examples/demo_ru.txt            # -> output/video.mp4
+    python -m prokv "Ваш текст или тема ролика..."
+    cat text.txt | python -m prokv --file -
+    python -m prokv --from-plan output/storyboard.json     # re-render an edited storyboard
 """
 
 from __future__ import annotations
 
 import argparse
-from dataclasses import replace
+import sys
+import time
 from pathlib import Path
 
 from prokv.config import VideoSpec
-from prokv.export import VIDEO_NAME, RenderPlanExporter, VideoExporter, load_render_plan
-from prokv.pipeline import Pipeline
-from prokv.style import DEFAULT_STYLE
+from prokv.export import load_storyboard, save_storyboard
+from prokv.pipeline import STORYBOARD_NAME, VIDEO_NAME, Pipeline
+from prokv.style import DEFAULT_STYLE, load_style
 
 
 def main(argv: list[str] | None = None) -> int:
-    parser = argparse.ArgumentParser(
-        prog="prokv", description=__doc__, formatter_class=argparse.RawDescriptionHelpFormatter
-    )
-    parser.add_argument("prompt", nargs="?", help="Text prompt describing the visuals")
-    parser.add_argument("--caption", action="append", default=[], help="Caption text (repeatable)")
-    parser.add_argument("--images", type=int, default=4, help="Number of images to generate")
-    parser.add_argument("--duration", type=float, default=10.0, help="Video length in seconds")
-    parser.add_argument("--fps", type=int, default=30, help="Frames per second")
-    parser.add_argument("--out", type=Path, help="Output directory (default: output/, or the plan's folder)")
-    parser.add_argument("--font", help="Path to a .ttf/.otf font for captions")
-    parser.add_argument("--plan-only", action="store_true", help="Write render_plan.json without a video")
-    parser.add_argument("--from-plan", type=Path, metavar="PLAN", help="Render an existing render_plan.json")
+    parser = argparse.ArgumentParser(prog="prokv", description=__doc__,
+                                     formatter_class=argparse.RawDescriptionHelpFormatter)
+    parser.add_argument("text", nargs="?", help="The text (or topic) of the video")
+    parser.add_argument("--file", "-f", help="Read the text from a file ('-' for stdin)")
+    parser.add_argument("--from-plan", type=Path, metavar="STORYBOARD", help="Render an existing storyboard.json")
+    parser.add_argument("--out", "-o", type=Path, help="Output folder (default: output/)")
+    parser.add_argument("--style", type=Path, help="JSON file with style overrides (see examples/style_override.json)")
+    parser.add_argument("--max-scenes", type=int, default=12, help="Upper limit on the number of scenes")
+    parser.add_argument("--fps", type=int, default=30, help="Frames per second (default 30)")
+    parser.add_argument("--plan-only", action="store_true", help="Only write storyboard.json, no video")
     args = parser.parse_args(argv)
 
-    style = DEFAULT_STYLE
-    if args.font:
-        style = replace(style, caption=replace(style.caption, font_path=args.font))
-    video_exporter = VideoExporter(style=style)
+    style = load_style(args.style) if args.style else DEFAULT_STYLE
+    pipeline = Pipeline(style=style, spec=VideoSpec(fps=args.fps), max_scenes=args.max_scenes)
+    started = time.monotonic()
 
     if args.from_plan:
-        out_path = (args.out or args.from_plan.parent) / VIDEO_NAME
-        result = video_exporter.render(load_render_plan(args.from_plan), out_path)
+        storyboard = load_storyboard(args.from_plan)
+        out = (args.out or args.from_plan.parent) / VIDEO_NAME
+        result = pipeline.render(storyboard, out)
     else:
-        if not args.prompt:
-            parser.error("a prompt is required unless --from-plan is given")
-        pipeline = Pipeline(
-            exporter=RenderPlanExporter() if args.plan_only else video_exporter,
-            spec=VideoSpec(fps=args.fps, duration_s=args.duration),
-            style=style,
-        )
-        result = pipeline.run(args.prompt, args.caption, args.out or Path("output"), args.images)
-    print(f"Wrote {result}")
+        if args.file:
+            text = sys.stdin.read() if args.file == "-" else Path(args.file).read_text(encoding="utf-8")
+        elif args.text:
+            text = args.text
+        else:
+            parser.error("give the text as an argument, or use --file / --from-plan")
+        out_dir = args.out or Path("output")
+        storyboard = pipeline.plan(text)
+        _print_plan(storyboard)
+        save_storyboard(storyboard, out_dir / STORYBOARD_NAME)
+        result = out_dir / STORYBOARD_NAME if args.plan_only else pipeline.render(storyboard, out_dir / VIDEO_NAME)
+    print(f"Wrote {result}  ({time.monotonic() - started:.0f}s)")
     return 0
+
+
+def _print_plan(storyboard) -> None:
+    print(f"«{storyboard.title}» — {len(storyboard.scenes)} scenes, {storyboard.duration_s:.1f}s")
+    for i, scene in enumerate(storyboard.scenes, 1):
+        c = scene.content
+        summary = c.number or c.headline or c.quote or " / ".join(c.items[:2] or [p[1] for p in c.pairs])
+        print(f"  {i:02d}  {scene.kind:<11} {scene.duration_s:>4.1f}s  {summary}")

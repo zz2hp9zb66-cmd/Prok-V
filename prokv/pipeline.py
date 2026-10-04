@@ -1,57 +1,44 @@
-"""Wires the stages together: prompt -> images -> collage -> animation -> captions -> export."""
+"""text -> content analysis -> storyboard -> scene templates -> frames -> MP4."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass, field
 from pathlib import Path
 
-from prokv.animation import Animator, StaggeredRevealAnimator
-from prokv.captions import build_captions
-from prokv.composition import Compositor, StaggeredCollageCompositor
 from prokv.config import VideoSpec
-from prokv.export import Exporter, VideoExporter
-from prokv.generation import ImageGenerator, PlaceholderGenerator
-from prokv.models import Project
+from prokv.content.analyzer import ContentAnalyzer, RuleBasedAnalyzer
+from prokv.export import encode_mp4, save_storyboard
+from prokv.models import Storyboard
+from prokv.render import StoryboardRenderer
 from prokv.style import DEFAULT_STYLE, VisualStyle
+
+STORYBOARD_NAME = "storyboard.json"
+VIDEO_NAME = "video.mp4"
 
 
 @dataclass
 class Pipeline:
-    """Each stage is pluggable; defaults are free, offline placeholders.
+    """Every stage is replaceable: pass another analyzer or style."""
 
-    `style` is applied to the default stages; stages passed in explicitly keep
-    whatever style they were built with.
-    """
-
-    generator: ImageGenerator | None = None
-    compositor: Compositor | None = None
-    animator: Animator = field(default_factory=StaggeredRevealAnimator)
-    exporter: Exporter | None = None
-    spec: VideoSpec = field(default_factory=VideoSpec)
     style: VisualStyle = DEFAULT_STYLE
+    spec: VideoSpec = field(default_factory=VideoSpec)
+    analyzer: ContentAnalyzer | None = None
+    max_scenes: int = 12
 
     def __post_init__(self) -> None:
-        self.generator = self.generator or PlaceholderGenerator(style=self.style)
-        self.compositor = self.compositor or StaggeredCollageCompositor(style=self.style)
-        self.exporter = self.exporter or VideoExporter(style=self.style)
+        self.analyzer = self.analyzer or RuleBasedAnalyzer(self.style.motion, self.max_scenes)
 
-    def run(
-        self,
-        prompt: str,
-        captions: list[str] | None = None,
-        out_dir: Path = Path("output"),
-        image_count: int = 4,
-    ) -> Path:
-        if image_count < 1:
-            raise ValueError("image_count must be at least 1")
-        images = self.generator.generate(prompt, image_count, out_dir / "images")
-        composition = self.compositor.compose(images, self.spec)
-        animation = self.animator.animate(composition, self.spec)
-        project = Project(
-            prompt=prompt,
-            spec=self.spec,
-            composition=composition,
-            animation=animation,
-            captions=build_captions(captions or [], self.spec),
-        )
-        return self.exporter.export(project, out_dir)
+    def plan(self, text: str) -> Storyboard:
+        """Analyse text into a storyboard (scenes, templates, wording, timing)."""
+        return self.analyzer.analyze(text, self.spec)
+
+    def render(self, storyboard: Storyboard, out_path: Path) -> Path:
+        renderer = StoryboardRenderer(storyboard, self.style)
+        return encode_mp4(renderer.frames(), storyboard.spec, out_path)
+
+    def run(self, text: str, out_dir: Path = Path("output"), plan_only: bool = False) -> Path:
+        storyboard = self.plan(text)
+        plan_path = save_storyboard(storyboard, out_dir / STORYBOARD_NAME)
+        if plan_only:
+            return plan_path
+        return self.render(storyboard, out_dir / VIDEO_NAME)

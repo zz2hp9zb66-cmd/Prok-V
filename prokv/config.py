@@ -10,7 +10,6 @@ class VideoSpec:
     width: int = 1080
     height: int = 1920
     fps: int = 30
-    duration_s: float = 10.0
 
     @property
     def aspect_ratio(self) -> str:

@@ -1,7 +1,3 @@
-"""Prok-V: generate vertical 9:16 social-media videos from a text prompt."""
+"""Prok-V: turn text into editorial motion-infographic Reels (vertical 1080×1920 MP4)."""
 
-from prokv.config import VideoSpec
-from prokv.pipeline import Pipeline
-
-__all__ = ["Pipeline", "VideoSpec"]
-__version__ = "0.1.0"
+__version__ = "0.2.0"

@@ -1,134 +1,140 @@
-# Prok-V — Visual Content Generator
+# Prok-V — editorial infographic Reels from text
 
-Prok-V turns a text prompt into a vertical social-media video (9:16, 1080×1920).
+Prok-V turns plain text into a vertical motion-infographic video (9:16, 1080×1920 MP4).
+You give it a text or a topic; it splits it into scenes, picks a layout for each one,
+sets the typography and graphics, animates them and encodes the video.
 
-> **Status:** produces a real 1080×1920 MP4 with animated collage and captions.
-> Images are still offline placeholders. No paid APIs or API keys are required.
+Everything is generated programmatically with **Pillow** (graphics and frames) and
+**FFmpeg** (encoding). No AI image generation, no photos, no paid APIs, no API keys.
 
-## The workflow
-
-```
- text prompt ──► 1. Generate ──► 2. Compose ──► 3. Animate ──► 4. Captions ──► 5. Export
-                   images         collage        keyframes      user text       9:16 video
-```
-
-| # | Stage | Module | What it will do | Current placeholder |
-|---|-------|--------|-----------------|---------------------|
-| 1 | Generate | `prokv/generation.py` | Create images from the prompt with an image model | Palette-coloured abstract cards (vinyl record, arch, band) chosen from the prompt |
-| 2 | Compose | `prokv/composition.py` | Arrange images into an editorial/collage layout | Staggered left/right cascade with a slight tilt |
-| 3 | Animate | `prokv/animation.py` | Move, scale, fade and reveal collage elements | Each layer slides in from its side, fades in and grows, then drifts slowly |
-| 4 | Captions | `prokv/captions.py` | Place and time the user's own text | Splits the duration evenly between captions |
-| 5 | Export | `prokv/export.py` + `prokv/rendering.py` | Render frames and encode an MP4 at 1080×1920 | ✅ Pillow draws frames, FFmpeg encodes H.264 MP4 |
-
-`prokv/pipeline.py` wires the stages together. The data passed between them is
-defined in `prokv/models.py`: `GeneratedImage` → `Composition` (of `Layer`s) →
-`Animation` (of `Keyframe`s) + `Caption`s → `Project`.
-
-### How a video is rendered
-
-`VideoExporter` first writes `render_plan.json` (the whole `Project` as JSON), then
-`FrameRenderer` (`prokv/rendering.py`) draws every frame with Pillow:
-
-1. Each layer's image is cropped to its size, warm-toned like an archival print,
-   given a thin light border and a soft warm shadow, and rotated to its resting
-   angle (done once per layer). The background is grainy cream paper with thin
-   olive rules near the top and bottom.
-2. For each frame, the layer's keyframes are interpolated with their easing curve
-   (`linear`, `ease_in`, `ease_out`, `ease_in_out`, `hold`) to get its offset,
-   scale, rotation and opacity, and it is pasted onto the background.
-3. Active captions are drawn on top in a burgundy block with cream serif text,
-   word-wrapped, with a short fade in/out, at `top`, `center` or `bottom`.
-
-Raw frames are piped straight into FFmpeg (`libx264`, `yuv420p`, `+faststart`), so
-no frame files are written to disk.
-
-### Visual style: WARM × STRICT
-
-Every colour and typography setting lives in `prokv/style.py`, separate from the
-rendering logic. The direction is warm, strict, calm, adult and editorial: a mix
-of editorial magazine, archival music photography, vinyl culture and a modern
-wine bar, kept understated.
-
-| Role | Colour | Hex |
-|------|--------|-----|
-| Main accent | burgundy / dark burgundy | `#5A171B` / `#351315` |
-| Light contrast, background | cream / paper beige | `#E8DDC8` / `#CBB99A` |
-| Calm secondary accent | olive / dark olive | `#535342` / `#303126` |
-| Deep tones, shadows | espresso / warm black | `#2B201A` / `#171512` |
-
-No pure RGB colours, neon, cold blues or bright purples. `VisualStyle` groups the
-palette, background, `PlaceholderStyle`, `LayerStyle` (toning, border, shadow) and
-`CaptionStyle` (font, colours, block, margins, fade). `WARM_STRICT` is the
-default; pass another one with `Pipeline(style=...)` to change the look without
-touching any rendering code. The motion comes separately from the `Animator`.
-
-Each stage is an abstract base class (`ImageGenerator`, `Compositor`, `Animator`,
-`Exporter`) with one default implementation, so a real tool can replace a
-placeholder without changing the rest of the pipeline:
-
-```python
-from prokv import Pipeline
-
-pipeline = Pipeline(generator=MyRealImageGenerator())  # other stages keep their defaults
-pipeline.run("misty mountain sunrise", captions=["Day one", "Let's go"])
-```
-
-## Project layout
+## Workflow
 
 ```
-prokv/
-  config.py        VideoSpec: 1080×1920, 30 fps, duration
-  models.py        Data objects shared by all stages
-  generation.py    Stage 1 — ImageGenerator, PlaceholderGenerator
-  composition.py   Stage 2 — Compositor, StaggeredCollageCompositor
-  animation.py     Stage 3 — Animator, StaggeredRevealAnimator
-  captions.py      Stage 4 — build_captions
-  export.py        Stage 5 — Exporter, RenderPlanExporter, VideoExporter
-  rendering.py     Pillow frame renderer
-  style.py         Visual style & palette (WARM_STRICT)
-  imaging.py       Small Pillow helpers (grain)
-  pipeline.py      Runs the stages in order
-  cli.py           Command-line entry point
-tests/             Standard-library unittest suite
+text ─► 1. content    split into scenes, choose a template, condense wording, timing
+     ─► 2. layout     scene template places elements on the grid
+     ─► 3. graphics   lines, frames, blocks, rings, arrows, vinyl, paper texture
+     ─► 4. typography serif/sans/mono roles, wrapping, auto-fit, highlighted words
+     ─► 5. animation  fade, slide, mask reveal, line drawing, word-by-word, count-up
+     ─► 6. render     frames: background, header, elements, scene transitions
+     ─► 7. export     FFmpeg → H.264 MP4 1080×1920 (+ storyboard.json)
+```
+
+| Folder | What it does |
+|--------|--------------|
+| `prokv/content/` | `analyzer.py`: text → `Storyboard` (scenes). `text.py`: sentences, numbers, years, keywords, condensing |
+| `prokv/layout/` | `grid.py`: safe area. `templates/`: the 9 scene templates + shared `SceneContext` |
+| `prokv/graphics/` | `shapes.py`: graphic sprites. `texture.py`: paper background with grain |
+| `prokv/typography/` | `fonts.py`: fonts by role. `text.py`: layout, fitting, per-word sprites |
+| `prokv/animation/` | `easing.py`, `motion.py` (motion presets), `element.py` (animated element), `timeline.py` |
+| `prokv/render/` | `renderer.py`: storyboard → frames, transitions, header and progress line |
+| `prokv/export/` | `ffmpeg.py`: MP4 encoding. `storyboard_io.py`: save/load `storyboard.json` |
+| `prokv/style.py` | **The visual system**: palette, fonts, sizes, spacing, motion, scene themes |
+| `prokv/pipeline.py`, `prokv/cli.py` | Wiring and the command line |
+
+## Scene templates
+
+The analyzer picks a template from the content of each part of the text:
+
+| # | Template | Chosen when the text has… | Looks like |
+|---|----------|---------------------------|------------|
+| 01 | `statement` | the opening title, or a plain thought | Large serif headline, key word in burgundy italic, thin drawn circle |
+| 02 | `big_number` | a percentage, money, a large number | Number counts up; ring chart for % (alt: huge left-aligned number) |
+| 03 | `comparison` | "раньше… / сегодня…", "не X, а Y", "X vs Y" | Two columns, divider line drawing down, "vs" badge |
+| 04 | `list` | bullet points, or "Heading: a, b, c" | Numbered rows with hairlines drawing across |
+| 05 | `timeline` | two or more years | Vertical line drawing down, dots, years, short captions |
+| 06 | `quote` | text in «quotes» (+ "— говорит …") | Dark ground, oversized quote mark, italic lines rising |
+| 07 | `diagram` | "сначала… затем… потом…", "→", "приводит к" | Steps in frames joined by arrows; the result step filled |
+| 08 | `split` | "X — это Y" (definition) | Burgundy panel with the term, explanation below |
+| 09 | `conclusion` | "Итог: …", "В итоге…", or the last paragraph | Vinyl record, centred takeaway |
+
+The same template twice in a row switches to an alternative layout (`variant: "alt"`),
+and two plain statements in a row become a statement + split, so screens don't repeat.
+
+## How the text is analysed
+
+The analyzer (`RuleBasedAnalyzer`) is rule-based and runs offline (Russian and English):
+
+- **Scenes**: blank lines separate scenes; long paragraphs are split into sentences,
+  and sentences with their own structure (numbers, years, quotes, steps, contrasts)
+  get their own scene. At most `--max-scenes` (default 12) scenes are kept.
+- **Wording**: text on screen is shortened, never rewritten: fillers ("на самом деле",
+  "конечно"…) and parentheses are removed and sentences are cut at clause boundaries
+  (headline ≤ 8–12 words, secondary line ≤ 14). Quotes are kept verbatim.
+- **Highlights**: one key word per headline (proper nouns and long nouns preferred).
+- **Duration**: from the number of words on screen and elements (3.4–7.5 s per scene).
+
+You can steer it with light markup in the text:
+
+```
+# Title of the video          → opening scene and header title
+(blank line) or ---           → scene boundary
+- item / 1. item              → list scene
+**word**                      → highlight this word
+```
+
+The result is saved as `storyboard.json`. Edit it by hand (wording, `kind`,
+`duration_s`, `highlights`) and re-render with `--from-plan`.
+The analyzer is a replaceable class (`ContentAnalyzer`), so a smarter one can be
+plugged in later without touching layout or rendering.
+
+## Visual system: WARM × STRICT
+
+Warm, strict, intellectual, calm, adult, editorial, minimal; vinyl, music, culture,
+restaurants and wine bars. Cream/beige is the light contrast, burgundy the main
+accent, olive the calm secondary accent. Only these colours are used:
+
+| Burgundy | Dark Burgundy | Warm Cream | Paper Beige | Dark Olive | Muted Olive | Espresso | Warm Black |
+|---|---|---|---|---|---|---|---|
+| `#5A171B` | `#351315` | `#E8DDC8` | `#CBB99A` | `#303126` | `#535342` | `#2B201A` | `#171512` |
+
+Everything visual lives in `prokv/style.py` (`VisualStyle`):
+
+- `palette` and `themes` (cream, paper, burgundy, espresso, olive) and
+  `scene_themes` (which theme each template uses);
+- `fonts`: roles `display`, `display_italic`, `serif`, `serif_italic`, `text`, `mono`,
+  each a list of font files (first installed one wins; all support Cyrillic);
+- `type`: font sizes and leading; `spacing`: margins, safe areas, line weights;
+- `motion`: speed, entrance duration, word stagger, easing, drift, transition
+  (`wipe_up`, `fade`, `cut`) and scene-timing rules;
+- `grain`, `show_header`, `show_progress`.
+
+Change it without touching code by passing a JSON file with only the settings you
+want to override — see `examples/style_override.json`:
+
+```bash
+python -m prokv --file my_text.txt --style examples/style_override.json
 ```
 
 ## Quick start
 
-Requires Python 3.10+ and [FFmpeg](https://ffmpeg.org/download.html) (with `libx264`,
-included in standard builds) on your `PATH`:
+Requirements: Python 3.10+, Pillow, and [FFmpeg](https://ffmpeg.org/download.html)
+on your `PATH`:
 
 - macOS: `brew install ffmpeg`
-- Ubuntu/Debian: `sudo apt install ffmpeg`
+- Ubuntu/Debian: `sudo apt install ffmpeg fonts-liberation`
 - Windows: `winget install ffmpeg`, then open a new terminal
 
-Check with `ffmpeg -version`. Without FFmpeg, `--plan-only` still works and the
-video tests are skipped.
-
 ```bash
-pip install -e .        # installs Pillow and the `prokv` command
+pip install -e .                                   # installs Pillow and the `prokv` command
 
-# One prompt + captions -> output/video.mp4 (and output/render_plan.json)
-python -m prokv "wine bar, vinyl, evening" --caption "Вечер начинается с пластинки" --caption "Тёплый звук"
-
-# Re-render an existing plan (e.g. after editing render_plan.json by hand)
-python -m prokv --from-plan output/render_plan.json
+python -m prokv --file examples/demo_ru.txt         # → output/video.mp4 + output/storyboard.json
+python -m prokv "Ваш текст или тема ролика…"         # text as an argument
+cat text.txt | python -m prokv --file -             # from stdin
+python -m prokv --file text.txt --plan-only         # only storyboard.json, to review/edit first
+python -m prokv --from-plan output/storyboard.json  # render an (edited) storyboard
 
 python -m unittest discover -s tests
 ```
 
-Options: `--images N` (default 4), `--duration SECONDS` (default 10), `--fps N`
-(default 30), `--out DIR` (default `output/`), `--font PATH` (caption font; by
-default a system bold serif with Cyrillic support such as Liberation Serif Bold),
-`--plan-only` (write the JSON plan without rendering).
+Options: `--out DIR` (default `output/`), `--style FILE.json`, `--max-scenes N`,
+`--fps N` (default 30). The command prints the scene plan before rendering.
 
-Captions share the video duration evenly, in the order given.
+Rendering takes roughly 0.8× the video length on a laptop CPU (a 60 s video ≈ 50 s).
 
-## Roadmap
+## Adding a template
 
-Decisions still open (each needs approval before it's added, especially
-anything paid or needing an API key):
-
-1. **Image generation**: a local open-source model or a hosted API.
-2. **Typography**: a bundled editorial font (currently a system serif is used).
-3. **More layouts and animations**: extra `Compositor` / `Animator` implementations.
-4. **Audio**: background music or voice-over.
+Create `prokv/layout/templates/t10_mine.py` with a function decorated by
+`@template("mine")` that adds elements through the `SceneContext` helpers
+(`fit`, `place_words`, `place_lines`, `label`, `kicker`, `rule`, `add`), import it in
+`templates/__init__.py`, map it to a theme in `style.scene_themes`, and teach the
+analyzer when to choose it.
