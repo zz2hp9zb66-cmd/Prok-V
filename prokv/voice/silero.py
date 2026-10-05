@@ -10,6 +10,7 @@ check https://github.com/snakers4/silero-models before commercial use.
 
 from __future__ import annotations
 
+import os
 import re
 import wave
 from array import array
@@ -37,7 +38,7 @@ class VoiceConfig:
     """Everything that defines the voice. Change `speaker` to switch voices."""
 
     speaker: str = DEFAULT_VOICE
-    model: str = "v5_5_ru"
+    model: str = os.environ.get("PROKV_SILERO_MODEL", "v5_5_ru")  # e.g. v4_ru for old PyTorch
     sample_rate: int = 48000
     pause_s: float = 0.35                      # silence between sentence chunks
     models_dir: Path = PROJECT_ROOT / "models" / "silero"
@@ -96,6 +97,9 @@ class SileroTTS:
         if re.search(r"\d", text):
             print("Warning: Silero may skip digits — write numbers in words (e.g. «тысяча девятьсот "
                   "восемьдесят второй») for reliable reading.")
+        if re.search(r"[A-Za-z]", text):
+            print("Warning: the Russian model skips Latin letters — write names in Cyrillic "
+                  "(e.g. «Прок-Ви» instead of «Prok-V»).")
         model = self.load()
         cfg = self.config
         silence = [0.0] * int(cfg.pause_s * cfg.sample_rate)

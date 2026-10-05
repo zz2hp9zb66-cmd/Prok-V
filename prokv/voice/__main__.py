@@ -51,6 +51,7 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--file", "-f", help="Read the text from a file")
     parser.add_argument("--speaker", default=DEFAULT_VOICE, choices=sorted(VOICES),
                         help=f"Voice (default {DEFAULT_VOICE})")
+    parser.add_argument("--model", help="Silero model, e.g. v5_5_ru (default) or v4_ru")
     parser.add_argument("--out", "-o", type=Path, help="Output WAV path (default: voiceover/<name>.wav)")
     parser.add_argument("--test", action="store_true", help="Create voiceover/test_ru.wav")
     parser.add_argument("--samples", action="store_true", help="Create one sample per voice")
@@ -60,6 +61,8 @@ def main(argv: list[str] | None = None) -> int:
     if args.check:
         return check()
     config = VoiceConfig(speaker=args.speaker)
+    if args.model:
+        config = config.with_(model=args.model)
     if args.samples:
         for name, kind in VOICES.items():
             tts = SileroTTS(config.with_(speaker=name))
