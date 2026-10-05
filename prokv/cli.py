@@ -37,16 +37,23 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--voice", type=Path, metavar="WAV", help="Use this audio file as the voice track")
     parser.add_argument("--voiceover", metavar="TEXT", help="Russian text to speak (Silero TTS) as the voice track")
     parser.add_argument("--voiceover-file", metavar="TXT", help="Read the voiceover text from a file")
+    parser.add_argument("--narrate", action="store_true",
+                        help="With --map: voice each section's 'narration' with Silero, fit scenes to the speech, "
+                             "write <episode>_voice.mp4")
+    parser.add_argument("--open", action="store_true", help="Open the finished MP4 (macOS)")
     parser.add_argument("--speaker", help="Silero voice for --voiceover (aidar, eugene, baya, kseniya, xenia)")
     parser.add_argument("--plan-only", action="store_true", help="Only write storyboard.json, no video")
     args = parser.parse_args(argv)
 
     style = load_style(args.style) if args.style else DEFAULT_STYLE
-    audio = _voice_track(args) if not args.plan_only else None
+    audio = _voice_track(args) if not (args.plan_only or args.narrate) else None
     pipeline = Pipeline(style=style, spec=VideoSpec(fps=args.fps), max_scenes=args.max_scenes)
     started = time.monotonic()
 
-    if args.map:
+    if args.map and args.narrate:
+        result = narrate_track_map(args.map, args.out or Path("output"), style, VideoSpec(fps=args.fps),
+                                   args.speaker)
+    elif args.map:
         result = render_track_map(args.map, (args.out or Path("output")) / f"{args.map.stem}.mp4", style,
                                   VideoSpec(fps=args.fps), audio)
     elif args.from_plan:
@@ -66,7 +73,19 @@ def main(argv: list[str] | None = None) -> int:
         save_storyboard(storyboard, out_dir / STORYBOARD_NAME)
         result = out_dir / STORYBOARD_NAME if args.plan_only else pipeline.render(storyboard, out_dir / VIDEO_NAME, audio)
     print(f"Wrote {result}  ({time.monotonic() - started:.0f}s)")
+    if args.open and str(result).endswith(".mp4"):
+        _open(result)
     return 0
+
+
+def _open(path: Path) -> None:
+    import platform
+    import subprocess
+
+    if platform.system() == "Darwin":
+        subprocess.run(["open", str(path)], check=False)
+    else:
+        print(f"--open works on macOS only; the file is at {path}")
 
 
 def _voice_track(args) -> Path | None:
@@ -84,13 +103,30 @@ def _voice_track(args) -> Path | None:
     return path
 
 
-def render_track_map(path: Path, out_path: Path, style, spec: VideoSpec, audio: Path | None = None) -> Path:
+def narrate_track_map(path: Path, out_dir: Path, style, spec: VideoSpec, speaker: str | None) -> Path:
+    """Voice an episode with Silero, stretch scenes to the speech, render <episode>_voice.mp4."""
+    from prokv.content.track_map import Episode
+    from prokv.voice import SileroTTS, VoiceConfig, narrate_episode, wav_duration
+
+    ep = Episode.load(path)
+    config = VoiceConfig(speaker=speaker) if speaker else VoiceConfig()
+    wav = config.output_dir / f"{path.stem}_voice.wav"
+    narration = narrate_episode(ep, SileroTTS(config), wav)
+    print(f"Voice {config.speaker}: {wav} ({wav_duration(wav):.1f}s); text: {narration.text_file}")
+    for s in narration.sections:
+        stretched = f" (was {s.original_length:.1f}s)" if s.length > s.original_length + 0.01 else ""
+        print(f"  {s.start:5.1f}s  {s.type:<12} {s.length:4.1f}s{stretched}  speech {s.speech_length:4.1f}s")
+    return render_track_map(path, out_dir / f"{path.stem}_voice.mp4", style, spec, wav, episode=narration.episode)
+
+
+def render_track_map(path: Path, out_path: Path, style, spec: VideoSpec, audio: Path | None = None,
+                     episode=None) -> Path:
     from prokv.content.track_map import Episode
     from prokv.export import encode_mp4
     from prokv.layout.maps import build_episode
     from prokv.render.stage_renderer import StageRenderer
 
-    ep = Episode.load(path)
+    ep = episode or Episode.load(path)
     stage, overlay = build_episode(ep, style, spec)
     renderer = StageRenderer(stage, spec.fps, style.grain, overlay)
     print(f"№{ep.number:03d} {ep.track} — {stage.duration:.1f}s, {len(ep.sections)} sections, "

@@ -212,6 +212,20 @@ cut to the video length.
 python -m prokv --map examples/maps/002_get_lucky.json --voiceover-file voice.txt --speaker eugene
 ```
 
+**Narrated track-map episodes**: each section of an episode can carry a
+`"narration"` text (numbers in words, names in Cyrillic). Then
+
+```bash
+python -m prokv --map examples/maps/001_billie_jean.json --narrate --speaker eugene --open
+```
+
+voices every section separately, lengthens a section when its speech does not
+fit (never shortens it, never speeds the voice up, never cuts a sentence), lays
+the clips on one track so each starts with its scene, and renders
+`output/001_billie_jean_voice.mp4` next to the untouched original. The track
+and the spoken text are saved as `voiceover/001_billie_jean_voice.wav` / `.txt`;
+`--open` opens the video on macOS.
+
 **Mac compatibility**: Apple Silicon (M1–M4) with Python 3.10–3.14 — current
 PyTorch. Intel Macs — PyTorch exists only up to 2.2.2 and Python ≤ 3.12 (use
 Python 3.12). **Licence**: Silero's Russian v5 models are CC BY-NC

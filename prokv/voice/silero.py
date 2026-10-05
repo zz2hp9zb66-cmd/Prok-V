@@ -89,8 +89,8 @@ class SileroTTS:
 
     # -- synthesis -----------------------------------------------------------
 
-    def synthesize(self, text: str, out_path: Path | str | None = None) -> Path:
-        """Speak `text` and write a mono 16-bit WAV. Returns the file path."""
+    def speak(self, text: str) -> list[float]:
+        """Samples of `text` spoken sentence by sentence, with a short pause between sentences."""
         text = " ".join(text.split())
         if not text:
             raise ValueError("The text is empty")
@@ -104,11 +104,18 @@ class SileroTTS:
         cfg = self.config
         silence = [0.0] * int(cfg.pause_s * cfg.sample_rate)
         samples: list[float] = []
-        for i, chunk in enumerate(split_text(text)):
+        chunks = [c for sentence in re.split(r"(?<=[.!?…])\s+", text) for c in split_text(sentence)]
+        for i, chunk in enumerate(chunks):
             audio = model.apply_tts(text=chunk, speaker=cfg.speaker, sample_rate=cfg.sample_rate)
             if i:
                 samples.extend(silence)
             samples.extend(audio.tolist() if hasattr(audio, "tolist") else list(audio))
+        return samples
+
+    def synthesize(self, text: str, out_path: Path | str | None = None) -> Path:
+        """Speak `text` and write a mono 16-bit WAV. Returns the file path."""
+        samples = self.speak(text)
+        cfg = self.config
         path = Path(out_path) if out_path else cfg.output_dir / f"{slug(text)}_{cfg.speaker}.wav"
         write_wav(path, samples, cfg.sample_rate)
         return path

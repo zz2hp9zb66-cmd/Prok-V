@@ -31,8 +31,9 @@ class VoiceModuleTest(unittest.TestCase):
             path = SileroTTS(config, model=fake).synthesize("Привет! Это проверка озвучки.")
             self.assertEqual(path.parent, config.output_dir)
             self.assertTrue(path.name.endswith("_baya.wav"))
-            self.assertAlmostEqual(wav_duration(path), 0.5, places=2)
-            self.assertEqual(fake.calls, [("Привет! Это проверка озвучки.", "baya", 24000)])
+            # Two sentences: spoken separately with a pause between them.
+            self.assertAlmostEqual(wav_duration(path), 0.5 + config.pause_s + 0.5, places=2)
+            self.assertEqual(fake.calls, [("Привет!", "baya", 24000), ("Это проверка озвучки.", "baya", 24000)])
 
     def test_long_text_is_split_with_pauses(self):
         text = " ".join(f"Предложение номер {'раз' * 20} {i}." for i in range(40))
@@ -71,6 +72,43 @@ class VoiceModuleTest(unittest.TestCase):
             codecs = {s["codec_type"]: s["codec_name"] for s in probe["streams"]}
             self.assertEqual(codecs, {"video": "h264", "audio": "aac"})
             self.assertAlmostEqual(float(probe["format"]["duration"]), 2.0, delta=0.1)
+
+
+class NarrationTest(unittest.TestCase):
+    EPISODE = Path(__file__).resolve().parent.parent / "examples" / "maps" / "001_billie_jean.json"
+
+    def test_scenes_stretch_to_speech_and_never_shrink(self):
+        import wave
+
+        from prokv.content.track_map import Episode
+        from prokv.voice import narrate_episode
+
+        ep = Episode.load(self.EPISODE)
+        self.assertTrue(all(sec.data.get("narration") for sec in ep.sections))
+        with tempfile.TemporaryDirectory() as tmp:
+            config = VoiceConfig(sample_rate=8000, output_dir=Path(tmp))
+            result = narrate_episode(ep, SileroTTS(config, model=FakeSilero()), Path(tmp) / "ep_voice.wav")
+            self.assertAlmostEqual(wav_duration(result.wav), result.duration, places=2)
+            self.assertTrue(result.text_file.read_text(encoding="utf-8").strip())
+            prev_end = 0.0
+            for old, new, rep in zip(ep.sections, result.episode.sections, result.sections):
+                self.assertAlmostEqual(new.start, prev_end)           # back to back
+                self.assertGreaterEqual(new.length, old.length - 1e-9)  # never shorter
+                self.assertLessEqual(rep.speech_start + rep.speech_length, new.end + 1e-6)  # speech fits
+                self.assertGreaterEqual(rep.speech_start, new.start)
+                prev_end = new.end
+            # Speech starts after its section starts: the audio before it is silent.
+            first = result.sections[0]
+            with wave.open(str(result.wav)) as f:
+                head = f.readframes(int(first.speech_start * f.getframerate()) - 10)
+            self.assertEqual(set(head), {0})
+
+    def test_narration_text_is_speakable(self):
+        import re
+
+        data = json.loads(self.EPISODE.read_text(encoding="utf-8"))
+        for sec in data["sections"]:
+            self.assertIsNone(re.search(r"[0-9A-Za-z]", sec["narration"]), sec["narration"])
 
 
 @unittest.skipUnless(os.environ.get("PROKV_SILERO_TEST") == "1",
