@@ -32,9 +32,9 @@ class Pipeline:
         """Analyse text into a storyboard (scenes, templates, wording, timing)."""
         return self.analyzer.analyze(text, self.spec)
 
-    def render(self, storyboard: Storyboard, out_path: Path) -> Path:
+    def render(self, storyboard: Storyboard, out_path: Path, audio: Path | None = None) -> Path:
         renderer = StoryboardRenderer(storyboard, self.style)
-        return encode_mp4(renderer.frames(), storyboard.spec, out_path)
+        return encode_mp4(renderer.frames(), storyboard.spec, out_path, audio=audio)
 
     def run(self, text: str, out_dir: Path = Path("output"), plan_only: bool = False) -> Path:
         storyboard = self.plan(text)

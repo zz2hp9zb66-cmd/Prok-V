@@ -10,6 +10,9 @@ readme = "README.md"
 requires-python = ">=3.10"
 dependencies = ["pillow>=10.1"]  # FFmpeg must also be installed (system binary).
 
+[project.optional-dependencies]
+tts = ["torch>=2.0"]   # Silero TTS (local Russian voiceover): pip install -e ".[tts]"
+
 [project.scripts]
 prokv = "prokv.cli:main"
 

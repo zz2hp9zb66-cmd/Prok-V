@@ -4,3 +4,6 @@ __pycache__/
 *.egg-info/
 output/
 .env
+models/
+voiceover/*
+!voiceover/README.md

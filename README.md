@@ -176,6 +176,47 @@ No photos are used: the sleeve is typographic and cities are abstract grids.
 you have the rights to use it. No audio is added. `sources` and `notes` keep the
 research with the episode; they are not rendered.
 
+## Voiceover: Silero TTS (local Russian speech)
+
+`prokv/voice/` turns Russian text into a WAV voice track with the official
+[Silero TTS](https://github.com/snakers4/silero-models) models, on your own
+computer, on CPU, with no API keys. The only extra dependency is PyTorch.
+
+```bash
+pip install -e ".[tts]"                      # adds PyTorch (only for voiceover)
+python -m prokv.voice --check                 # Python / PyTorch / model / FFmpeg status
+python -m prokv.voice --test                  # → voiceover/test_ru.wav
+python -m prokv.voice "Текст для озвучки"     # → voiceover/<name>_aidar.wav
+python -m prokv.voice --samples               # one sample per voice, to choose by ear
+```
+
+The first run downloads the model (`v5_5_ru`) once into `models/silero/`;
+after that it works offline. Generated audio goes to `voiceover/` (not committed).
+
+**Voices**: `aidar` (default, male), `eugene` (male), `baya`, `kseniya`, `xenia`
+(female). Change with `--speaker baya`, or in code
+`SileroTTS(VoiceConfig(speaker="baya"))`; model, sample rate (8000/24000/48000)
+and pauses are also in `VoiceConfig`. Long texts are split by sentences with a
+short pause between them. Write numbers in words: Silero may skip digits.
+
+**Voice track in the video**: any render command accepts
+
+- `--voice FILE.wav` — use an existing audio file, or
+- `--voiceover "текст"` / `--voiceover-file text.txt` (+ `--speaker`) — synthesise
+  with Silero first.
+
+FFmpeg muxes it as AAC; a shorter track is padded with silence, a longer one is
+cut to the video length.
+
+```bash
+python -m prokv --map examples/maps/002_get_lucky.json --voiceover-file voice.txt --speaker eugene
+```
+
+**Mac compatibility**: Apple Silicon (M1–M4) with Python 3.10–3.14 — current
+PyTorch. Intel Macs — PyTorch exists only up to 2.2.2 and Python ≤ 3.12 (use
+Python 3.12). **Licence**: Silero's Russian v5 models are CC BY-NC
+(non-commercial); check the Silero terms before monetised use.
+
 ## Adding a template
 
 Create `prokv/layout/templates/t10_mine.py` with a function decorated by
