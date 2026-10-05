@@ -1,0 +1,221 @@
+{
+  "number": 1,
+  "track": "Billie Jean",
+  "artist": "Michael Jackson",
+  "album": "Thriller",
+  "year": "1982",
+  "label": "Epic",
+  "bpm": 117,
+  "sections": [
+    {
+      "type": "hook",
+      "start": "0:00",
+      "end": "0:03",
+      "lines": [
+        "ТЫ УЗНАЕШЬ ЕГО",
+        "ЗА НЕСКОЛЬКО СЕКУНД."
+      ],
+      "question": "НО КТО СОЗДАЛ ЭТОТ ЗВУК?",
+      "object": "vinyl",
+      "narration": "Ты узнаёшь его за несколько секунд. Но кто создал этот звук?"
+    },
+    {
+      "type": "object",
+      "start": "0:03",
+      "end": "0:06",
+      "above": "MICHAEL JACKSON",
+      "below": "ANATOMY OF A RECORD / 1982",
+      "narration": "Майкл Джексон. «Билли Джин». Тысяча девятьсот восемьдесят второй."
+    },
+    {
+      "type": "coordinates",
+      "start": "0:06",
+      "end": "0:10",
+      "keep": true,
+      "items": [
+        {
+          "label": "ARTIST",
+          "value": "Michael Jackson",
+          "side": "left"
+        },
+        {
+          "label": "ALBUM",
+          "value": "Thriller",
+          "side": "right"
+        },
+        {
+          "label": "YEAR",
+          "value": "1982",
+          "side": "top"
+        },
+        {
+          "label": "LABEL",
+          "value": "Epic",
+          "side": "bottom"
+        }
+      ],
+      "narration": "Альбом — «Триллер». Лейбл — «Эпик»."
+    },
+    {
+      "type": "places",
+      "start": "0:10",
+      "end": "0:14",
+      "places": [
+        {
+          "city": "LOS ANGELES",
+          "place": "WESTLAKE RECORDING STUDIOS",
+          "caption": "RECORDED / 1982"
+        }
+      ],
+      "narration": "Записано в Лос-Анджелесе, в студии Уэстлейк."
+    },
+    {
+      "type": "branches",
+      "start": "0:14",
+      "end": "0:19",
+      "outro": "THAT'S ONLY THE BEGINNING.",
+      "items": [
+        {
+          "name": "MICHAEL JACKSON",
+          "role": "songwriter / vocals / co-producer"
+        },
+        {
+          "name": "QUINCY JONES",
+          "role": "producer"
+        },
+        {
+          "name": "BRUCE SWEDIEN",
+          "role": "recording + mixing"
+        }
+      ],
+      "narration": "Автор и сопродюсер — сам Джексон. Продюсер — Куинси Джонс. Запись и сведение — Брюс Сведиен. И это только начало."
+    },
+    {
+      "type": "musicians",
+      "start": "0:19",
+      "end": "0:25",
+      "keep": true,
+      "items": [
+        {
+          "instrument": "DRUMS",
+          "name": "Leon “Ndugu” Chancler",
+          "texture": "drums"
+        },
+        {
+          "instrument": "BASS",
+          "name": "Louis Johnson",
+          "texture": "bass"
+        },
+        {
+          "instrument": "GUITAR",
+          "name": "David Williams",
+          "texture": "guitar"
+        },
+        {
+          "instrument": "RHODES / SYNTH",
+          "name": "Greg Phillinganes",
+          "texture": "rhodes"
+        },
+        {
+          "instrument": "SYNTH",
+          "name": "Bill Wolfer",
+          "texture": "synth"
+        },
+        {
+          "instrument": "LYRICON",
+          "name": "Tom Scott",
+          "texture": "lyricon"
+        }
+      ],
+      "narration": "Ударные — Ндугу Чанслер. Бас — Луис Джонсон. Гитара — Дэвид Уильямс. Клавиши и синтезаторы — Грег Филлинганес и Билл Вулфер. Лирикон — Том Скотт."
+    },
+    {
+      "type": "core",
+      "start": "0:25",
+      "end": "0:29",
+      "pair": [
+        "DRUMS",
+        "BASS"
+      ],
+      "pair_label": "CHANCLER × JOHNSON",
+      "text": [
+        "И ВОТ ПОЧЕМУ",
+        "ТЕБЕ ХВАТАЕТ ПАРЫ СЕКУНД."
+      ],
+      "narration": "Вот почему тебе хватает пары секунд: барабаны Чанслера и бас Джонсона."
+    },
+    {
+      "type": "afterlife",
+      "start": "0:29",
+      "end": "0:33",
+      "question": "WHAT HAPPENED NEXT?",
+      "caption": "BILLIE JEAN → SAMPLED · REUSED · REINTERPRETED",
+      "items": [
+        {
+          "artist": "AALIYAH",
+          "year": "1996"
+        },
+        {
+          "artist": "SNOOP DOGG / GOLDIE LOC",
+          "year": "1999"
+        },
+        {
+          "artist": "CEELO GREEN",
+          "year": "2010"
+        }
+      ],
+      "narration": "А дальше песню семплировали и переосмысляли: Алия, Голди Лок со Снуп Доггом, Си Ло Грин."
+    },
+    {
+      "type": "final_map",
+      "start": "0:33",
+      "end": "0:37",
+      "inner": [
+        "MICHAEL JACKSON",
+        "EPIC",
+        "1982",
+        "LOS ANGELES",
+        "QUINCY JONES",
+        "BRUCE SWEDIEN",
+        "LOUIS JOHNSON",
+        "NDUGU CHANCLER",
+        "DAVID WILLIAMS",
+        "GREG PHILLINGANES"
+      ],
+      "outer": [
+        "COVERS",
+        "SAMPLES",
+        "REMIXES",
+        "POP",
+        "R&B",
+        "HIP-HOP"
+      ],
+      "narration": "Одна запись — и целая карта связей: от студии до хип-хопа."
+    },
+    {
+      "type": "outro",
+      "start": "0:37",
+      "end": "0:40",
+      "lines": [
+        "ONE SONG.",
+        "DOZENS OF CONNECTIONS."
+      ],
+      "cta": "What should we map next?",
+      "narration": "Одна песня. Десятки связей. Какой трек разобрать следующим?"
+    }
+  ],
+  "notes": {
+    "afterlife": [
+      "Aaliyah feat. Slick Rick — “Got to Give It Up” (1996): drums from Billie Jean",
+      "Goldie Loc feat. Snoop Dogg — “Let's Roll” (1999)",
+      "CeeLo Green — “Bright Lights Bigger City” (The Lady Killer, 2010): bass line interpolated"
+    ]
+  },
+  "sources": [
+    "https://www.whosampled.com/Michael-Jackson/Billie-Jean/",
+    "https://www.whosampled.com/sample/5041/Aaliyah-Slick-Rick-Got-to-Give-It-Up-Michael-Jackson-Billie-Jean/",
+    "https://www.whosampled.com/sample/13317/Goldie-Loc-Snoop-Dogg-Let's-Roll-Michael-Jackson-Billie-Jean/",
+    "https://en.wikipedia.org/wiki/Bright_Lights_Bigger_City",
+    "https://en.wikipedia.org/wiki/Billie_Jean"
+  ]
+}
