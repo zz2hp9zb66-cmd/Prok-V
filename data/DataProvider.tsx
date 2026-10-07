@@ -1,22 +1,15 @@
-import { SQLiteProvider, useSQLiteContext } from 'expo-sqlite';
-import { createContext, type ReactNode, useContext, useMemo } from 'react';
-import { type Clock, systemClock } from '@/services/time';
-import { type IdGenerator, uuidGenerator } from '@/services/ids';
-import { type FeedbackService, noopFeedback } from '@/services/feedback';
+import { type SQLiteDatabase, SQLiteProvider, useSQLiteContext } from 'expo-sqlite';
+import { type ReactNode, useMemo } from 'react';
+import { noopFeedback } from '@/services/feedback';
+import { uuidGenerator } from '@/services/ids';
+import { systemClock } from '@/services/time';
 import { createExpoDatabase } from './db/expoDatabase';
 import { migrate } from './db/migrations';
-import type { SqlDatabase } from './db/types';
+import { type AppServices, ServicesProvider } from './ServicesContext';
+
+export { useServices, type AppServices } from './ServicesContext';
 
 export const DATABASE_NAME = 'tobi-habit.db';
-
-export interface AppServices {
-  db: SqlDatabase;
-  clock: Clock;
-  ids: IdGenerator;
-  feedback: FeedbackService;
-}
-
-const ServicesContext = createContext<AppServices | null>(null);
 
 function ServicesBridge({ children }: { children: ReactNode }) {
   const sqlite = useSQLiteContext();
@@ -24,10 +17,10 @@ function ServicesBridge({ children }: { children: ReactNode }) {
     () => ({ db: createExpoDatabase(sqlite), clock: systemClock, ids: uuidGenerator, feedback: noopFeedback }),
     [sqlite],
   );
-  return <ServicesContext.Provider value={services}>{children}</ServicesContext.Provider>;
+  return <ServicesProvider value={services}>{children}</ServicesProvider>;
 }
 
-async function initDatabase(sqlite: Parameters<typeof createExpoDatabase>[0]) {
+async function initDatabase(sqlite: SQLiteDatabase) {
   await sqlite.execAsync('PRAGMA journal_mode = WAL');
   await migrate(createExpoDatabase(sqlite));
 }
@@ -39,10 +32,4 @@ export function DataProvider({ children }: { children: ReactNode }) {
       <ServicesBridge>{children}</ServicesBridge>
     </SQLiteProvider>
   );
-}
-
-export function useServices(): AppServices {
-  const services = useContext(ServicesContext);
-  if (!services) throw new Error('useServices must be used inside <DataProvider>.');
-  return services;
 }

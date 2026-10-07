@@ -1,6 +1,6 @@
 import { Redirect } from 'expo-router';
 import { useEffect, useState } from 'react';
-import { useServices } from '@/data/DataProvider';
+import { useServices } from '@/data/ServicesContext';
 import { settingsRepository } from '@/data/repositories/settingsRepository';
 
 /** Launch gate (§5–6): onboarding on first launch, otherwise always «Задачи». */
