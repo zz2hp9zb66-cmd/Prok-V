@@ -1,8 +1,9 @@
 /**
  * Color tokens — Design System §22.
  * Brand and neutral values are approved by the spec.
- * Functional (success/warning/error/info) values are PROVISIONAL: the spec
- * requires them to be centralized but does not define them.
+ * Functional colors are fixed by owner decision D7 (docs/decisions.md):
+ * success — positive/available state, warning — warning, error — error or
+ * destructive action, info — informational state.
  */
 export const palette = {
   brand: {
@@ -19,10 +20,10 @@ export const palette = {
     lightGray: '#D4D4D4',
   },
   functional: {
-    success: '#4CAF7A',
-    warning: '#FFB347',
-    error: '#D9534F',
-    info: '#4A90C2',
+    success: '#4F8A5B',
+    warning: '#E6A23C',
+    error: '#D95C5C',
+    info: '#5F7F9F',
   },
 } as const;
 
