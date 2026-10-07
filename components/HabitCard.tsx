@@ -25,16 +25,31 @@ export function HabitCard({ view, onPress, onComplete, busy }: HabitCardProps) {
   const disabled = !view.canComplete || busy;
   const inactive = !view.canComplete;
   return (
-    <Card onPress={onPress} muted={inactive} accessibilityLabel={view.habit.name}>
+    <Card muted={inactive}>
       <View style={styles.row}>
-        <View style={styles.info}>
+        <Pressable
+          accessibilityRole="button"
+          accessibilityLabel={view.habit.name}
+          onPress={onPress}
+          style={({ pressed }) => [styles.info, pressed && styles.pressed]}
+        >
           <AppText variant="h3" color={inactive ? 'textSecondary' : 'textPrimary'} numberOfLines={2}>
             {view.habit.name}
           </AppText>
           <AppText variant="caption" color={view.scheduledToday && view.canComplete ? 'accentDark' : 'textSecondary'}>
             {statusText(view)}
           </AppText>
-        </View>
+          {view.scheduledToday ? (
+            <View style={styles.progress}>
+              <View style={styles.bar}>
+                <ProgressBar progress={view.completedToday / view.dailyLimit} color={inactive ? 'success' : 'primary'} />
+              </View>
+              <AppText variant="caption" color="textSecondary">
+                {view.completedToday}/{view.dailyLimit}
+              </AppText>
+            </View>
+          ) : null}
+        </Pressable>
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={`Выполнить: ${view.habit.name}`}
@@ -47,16 +62,6 @@ export function HabitCard({ view, onPress, onComplete, busy }: HabitCardProps) {
           <Icon name="checkmark-outline" color={disabled ? 'textSecondary' : 'textOnPrimary'} size={sizes.iconLg} />
         </Pressable>
       </View>
-      {view.scheduledToday ? (
-        <View style={styles.progress}>
-          <View style={styles.bar}>
-            <ProgressBar progress={view.completedToday / view.dailyLimit} color={inactive ? 'success' : 'primary'} />
-          </View>
-          <AppText variant="caption" color="textSecondary">
-            {view.completedToday}/{view.dailyLimit}
-          </AppText>
-        </View>
-      ) : null}
     </Card>
   );
 }
@@ -74,6 +79,6 @@ const styles = StyleSheet.create({
   },
   checkDisabled: { backgroundColor: colors.border },
   pressed: { opacity: 0.85 },
-  progress: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
+  progress: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs, paddingTop: spacing.xxs },
   bar: { flex: 1 },
 });

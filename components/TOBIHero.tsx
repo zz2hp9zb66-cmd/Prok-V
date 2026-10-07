@@ -1,7 +1,7 @@
 import { Image, StyleSheet, View } from 'react-native';
 import type { TobiState } from '@/features/tobi/states';
 import { tobiImages } from '@/features/tobi/tobiAssets';
-import { colors, componentRadius } from '@/theme';
+import { colors, componentRadius, spacing } from '@/theme';
 import { AppText } from './AppText';
 
 export interface TOBIHeroProps {
@@ -20,7 +20,7 @@ export function TOBIHero({ state, size = 160 }: TOBIHeroProps) {
   }
   return (
     <View style={[styles.placeholder, { width: size, height: size }]} accessibilityLabel="TOBI">
-      <AppText variant="small" color="textSecondary" align="center">
+      <AppText variant="small" color="textSecondary" align="center" numberOfLines={2}>
         {state}
       </AppText>
     </View>
@@ -32,6 +32,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     alignItems: 'center',
     justifyContent: 'center',
+    padding: spacing.xs,
     borderRadius: componentRadius.panel,
     borderWidth: 1,
     borderStyle: 'dashed',

@@ -1,4 +1,5 @@
 import type { SQLiteDatabase } from 'expo-sqlite';
+import { Platform } from 'react-native';
 import type { SqlDatabase, SqlExecutor, SqlValue } from './types';
 
 function wrapExecutor(db: SQLiteDatabase): SqlExecutor {
@@ -19,6 +20,13 @@ export function createExpoDatabase(db: SQLiteDatabase): SqlDatabase {
     ...wrapExecutor(db),
     transaction: async (task) => {
       let result: Awaited<ReturnType<typeof task>> | undefined;
+      if (Platform.OS === 'web') {
+        // Web is only a preview target; exclusive transactions are unsupported there.
+        await db.withTransactionAsync(async () => {
+          result = await task(wrapExecutor(db));
+        });
+        return result as Awaited<ReturnType<typeof task>>;
+      }
       // Exclusive transaction: other queries cannot interleave with it.
       await db.withExclusiveTransactionAsync(async (txn) => {
         result = await task(wrapExecutor(txn));

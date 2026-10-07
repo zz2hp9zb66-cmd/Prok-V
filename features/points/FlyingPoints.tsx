@@ -45,7 +45,6 @@ export function FlyingPoints({ amount, from, to, onDone }: FlyingPointsProps) {
 
   return (
     <Animated.View
-      pointerEvents="none"
       style={[styles.container, { opacity, transform: [{ translateX }, { translateY }, { scale }] }]}
     >
       <AppText variant="h2" color="primary">
@@ -56,5 +55,5 @@ export function FlyingPoints({ amount, from, to, onDone }: FlyingPointsProps) {
 }
 
 const styles = StyleSheet.create({
-  container: { position: 'absolute', left: 0, top: 0 },
+  container: { position: 'absolute', left: 0, top: 0, pointerEvents: 'none' },
 });

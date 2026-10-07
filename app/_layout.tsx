@@ -1,8 +1,11 @@
-import { Stack } from 'expo-router';
+import { type ErrorBoundaryProps, Stack } from 'expo-router';
+import { StyleSheet, View } from 'react-native';
+import { AppText } from '@/components/AppText';
+import { PrimaryButton } from '@/components/PrimaryButton';
 import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { DataProvider } from '@/data/DataProvider';
-import { colors, typography } from '@/theme';
+import { colors, spacing, typography } from '@/theme';
 
 const detailHeader = (title: string) => ({
   headerShown: true,
@@ -34,3 +37,22 @@ export default function RootLayout() {
     </SafeAreaProvider>
   );
 }
+
+/** Shown if something unexpected fails (e.g. the local database cannot be opened). */
+export function ErrorBoundary({ retry }: ErrorBoundaryProps) {
+  return (
+    <View style={styles.error}>
+      <AppText variant="h2" align="center">
+        Что-то пошло не так
+      </AppText>
+      <AppText color="textSecondary" align="center">
+        Твои данные хранятся на устройстве. Попробуй ещё раз.
+      </AppText>
+      <PrimaryButton title="Повторить" onPress={retry} />
+    </View>
+  );
+}
+
+const styles = StyleSheet.create({
+  error: { flex: 1, justifyContent: 'center', gap: spacing.sm, padding: spacing.md, backgroundColor: colors.background },
+});

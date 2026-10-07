@@ -44,7 +44,7 @@ export function useFlyingPoints() {
   }, [finish]);
 
   const overlay = (
-    <View ref={overlayRef} style={StyleSheet.absoluteFill} pointerEvents="none" collapsable={false}>
+    <View ref={overlayRef} style={[StyleSheet.absoluteFill, styles.passThrough]} collapsable={false}>
       {flights.map((f) =>
         f.path ? (
           <FlyingPoints key={f.id} amount={f.amount} from={f.path.from} to={f.path.to} onDone={() => finish(f.id)} />
@@ -56,3 +56,7 @@ export function useFlyingPoints() {
   const pendingAmount = flights.reduce((sum, f) => sum + f.amount, 0);
   return { overlay, targetRef, launch, pendingAmount };
 }
+
+const styles = StyleSheet.create({
+  passThrough: { pointerEvents: 'none' },
+});
