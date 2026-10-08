@@ -1,5 +1,5 @@
 import { Pressable, StyleSheet } from 'react-native';
-import { colors, radius, sizes } from '@/theme';
+import { colors, radius, shadows, sizes } from '@/theme';
 import { Icon, type IconName } from './Icon';
 
 export interface IconButtonProps {
@@ -7,10 +7,13 @@ export interface IconButtonProps {
   onPress: () => void;
   accessibilityLabel: string;
   disabled?: boolean;
+  /** `surface` = white round button over images (e.g. back). */
+  tone?: 'primary' | 'surface';
 }
 
 /** Round primary icon button (e.g. contextual `+`). */
-export function IconButton({ icon, onPress, accessibilityLabel, disabled }: IconButtonProps) {
+export function IconButton({ icon, onPress, accessibilityLabel, disabled, tone = 'primary' }: IconButtonProps) {
+  const surface = tone === 'surface';
   return (
     <Pressable
       accessibilityRole="button"
@@ -19,9 +22,9 @@ export function IconButton({ icon, onPress, accessibilityLabel, disabled }: Icon
       disabled={disabled}
       onPress={onPress}
       hitSlop={8}
-      style={({ pressed }) => [styles.button, disabled && styles.disabled, pressed && styles.pressed]}
+      style={({ pressed }) => [styles.button, surface && styles.surface, disabled && styles.disabled, pressed && styles.pressed]}
     >
-      <Icon name={icon} color="textOnPrimary" />
+      <Icon name={icon} color={surface ? 'textPrimary' : 'textOnPrimary'} />
     </Pressable>
   );
 }
@@ -35,6 +38,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  surface: { backgroundColor: colors.surface, ...shadows.card },
   disabled: { backgroundColor: colors.disabled },
   pressed: { opacity: 0.85 },
 });

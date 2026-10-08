@@ -1,7 +1,6 @@
 import { router } from 'expo-router';
 import { StyleSheet, View } from 'react-native';
 import { AppText } from '@/components/AppText';
-import { PrimaryButton } from '@/components/PrimaryButton';
 import { Screen } from '@/components/Screen';
 import { TOBIHero } from '@/components/TOBIHero';
 import { useServices } from '@/data/ServicesContext';
@@ -9,7 +8,7 @@ import { RewardType } from '@/data/db/schema';
 import { settingsRepository } from '@/data/repositories/settingsRepository';
 import { useAction } from '@/data/useAction';
 import { spacing } from '@/theme';
-import { HabitForm } from '../habits/HabitForm';
+import { HabitCreateView } from '../habits/HabitCreateScreen';
 import { createHabit } from '../habits/habitsService';
 import { RewardForm } from '../rewards/RewardForm';
 import { createReward } from '../rewards/rewardsService';
@@ -72,6 +71,7 @@ export function OnboardingWishScreen() {
   return <RewardStep type={RewardType.Wish} next={() => router.push('/onboarding/habit')} />;
 }
 
+/** Onboarding step 3 of 3 (goal → wish → habit, §5): task creation design. */
 export function OnboardingHabitScreen() {
   const services = useServices();
   const { busy, run } = useAction();
@@ -82,24 +82,18 @@ export function OnboardingHabitScreen() {
   };
 
   return (
-    <Screen edges={['top', 'bottom']}>
-      <StepHeader
-        tobi="tobi_habit_create"
-        title="Твоя первая привычка"
-        text="Выбери дни, баллы за выполнение и сколько раз в день её можно выполнить."
-      />
-      <HabitForm
-        submitTitle="Создать"
-        busy={busy}
-        onSubmit={(input) =>
-          run(async () => {
-            await createHabit(services, input);
-            await finish();
-          })
-        }
-        secondary={{ title: SKIP, onPress: () => run(finish) }}
-      />
-    </Screen>
+    <HabitCreateView
+      step={{ current: 3, total: 3 }}
+      busy={busy}
+      onBack={() => router.back()}
+      onSubmit={(input) =>
+        run(async () => {
+          await createHabit(services, input);
+          await finish();
+        })
+      }
+      onSkip={() => run(finish)}
+    />
   );
 }
 

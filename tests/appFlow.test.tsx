@@ -54,14 +54,15 @@ describe('main user flow', () => {
     fireEvent.press(screen.getByText('Пропустить'));
 
     // Habit step: create a habit for every day, 10 points, limit 2.
-    await screen.findByText('Твоя первая привычка');
-    await typeInto('Название', 'Зарядка');
+    await screen.findByText('Давай создадим\nтвою задачу!');
+    expect(screen.getByLabelText('Шаг 3 из 3')).toBeTruthy();
+    await typeInto('Название задачи', 'Зарядка');
     for (const day of ['Понедельник', 'Вторник', 'Среда', 'Четверг', 'Пятница', 'Суббота', 'Воскресенье']) {
       fireEvent.press(screen.getByLabelText(day));
     }
-    await typeInto('Баллы за выполнение', '10');
+    await typeInto('Стоимость задачи', '10');
     await typeInto('Лимит выполнений в день', '2');
-    fireEvent.press(screen.getByText('Создать'));
+    fireEvent.press(screen.getByText('Продолжить'));
 
     // Tasks screen.
     await waitFor(() => expect(app.getPathname()).toBe('/tasks'));
@@ -145,5 +146,51 @@ describe('main user flow', () => {
     expect(await settingsRepository.isOnboardingCompleted(mockServices.db)).toBe(true);
     expect(await mockServices.db.getAllAsync('SELECT * FROM point_transactions')).toEqual(before);
     expect(await mockServices.db.getAllAsync('SELECT * FROM habits WHERE deleted_at IS NULL')).toHaveLength(1);
+  });
+
+  it('creates a task from «Задачи» with the task creation screen', async () => {
+    await settingsRepository.setOnboardingCompleted(mockServices.db);
+    const app = renderRouter('./app', { initialUrl: '/tasks' });
+    fireEvent.press(await screen.findByText('Создать первую привычку'));
+    await screen.findByText('Новая задача');
+    expect(screen.queryByLabelText(/^Шаг /)).toBeNull(); // no onboarding step outside onboarding
+    expect(screen.getByLabelText('Лимит выполнений в день').props.value).toBe('1'); // default limit
+
+    // Empty form: nothing is saved, errors are shown.
+    fireEvent.press(screen.getByText('Продолжить'));
+    await screen.findByText('Введи название задачи');
+    expect(screen.getByText('Укажи целое число баллов, минимум 1')).toBeTruthy();
+    expect(screen.getByText('Выбери хотя бы один день')).toBeTruthy();
+
+    // Name: counter and 60-char limit; points: digits only, zero rejected.
+    await typeInto('Название задачи', 'Читать книгу');
+    expect(screen.getByText('12/60')).toBeTruthy();
+    expect(screen.getByLabelText('Название задачи').props.maxLength).toBe(60);
+    await typeInto('Стоимость задачи', '0');
+    fireEvent.press(screen.getByLabelText('Среда'));
+    fireEvent.press(screen.getByText('Продолжить'));
+    await screen.findByText('Укажи целое число баллов, минимум 1');
+    expect(await mockServices.db.getAllAsync('SELECT * FROM habits')).toHaveLength(0);
+
+    await typeInto('Стоимость задачи', '-2.5');
+    expect(screen.getByLabelText('Стоимость задачи').props.value).toBe('25');
+    expect(screen.getByLabelText('Стоимость задачи').props.keyboardType).toBe('number-pad');
+
+    fireEvent.press(screen.getByText('Продолжить'));
+    await waitFor(() => expect(app.getPathname()).toBe('/tasks'));
+    await screen.findByText('Читать книгу');
+    const [habit] = await mockServices.db.getAllAsync<{ points_per_completion: number; daily_limit: number; selected_weekdays: number }>(
+      'SELECT * FROM habits',
+    );
+    expect(habit).toMatchObject({ points_per_completion: 25, daily_limit: 1, selected_weekdays: 0b100 });
+  });
+
+  it('keeps the onboarding task step skippable', async () => {
+    const app = renderRouter('./app', { initialUrl: '/onboarding/habit' });
+    await screen.findByText('Давай создадим\nтвою задачу!');
+    fireEvent.press(screen.getByText('Пропустить'));
+    await waitFor(() => expect(app.getPathname()).toBe('/tasks'));
+    expect(await settingsRepository.isOnboardingCompleted(mockServices.db)).toBe(true);
+    expect(await mockServices.db.getAllAsync('SELECT * FROM habits')).toHaveLength(0);
   });
 });

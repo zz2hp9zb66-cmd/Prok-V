@@ -13,7 +13,11 @@ export const tobiImages: Partial<Record<TobiState, ImageSourcePropType>> = {};
  * `null` until the file is added to `assets/tobi/`; screens then fall back
  * to the plain cream background.
  */
-export const tobiScenes: { welcomeRoom: ImageSourcePropType | null } = {
+const welcomeRoom: ImageSourcePropType = require('@/assets/tobi/welcome_room.webp');
+
+export const tobiScenes: { welcomeRoom: ImageSourcePropType | null; taskCreateRoom: ImageSourcePropType | null } = {
   // Original file from the product owner, unmodified (WebP, 853×1844).
-  welcomeRoom: require('@/assets/tobi/welcome_room.webp'),
+  welcomeRoom,
+  // Task creation header. Uses TOBI's room until a dedicated scene is provided.
+  taskCreateRoom: welcomeRoom,
 };

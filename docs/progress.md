@@ -32,3 +32,9 @@
 - Фон подключён: `assets/tobi/welcome_room.webp` — оригинальный файл владельца без изменений (WebP 853×1844),
   зарегистрирован в `features/tobi/tobiAssets.ts` (`tobiScenes.welcomeRoom`).
 - Слой TOBI (`tobi_wave`) заканчивается на 64% высоты экрана — на линии пола комнаты (≈62% изображения 853×1844).
+
+## Экран «Создание задачи»
+- `features/habits/HabitCreateScreen.tsx` — общий для онбординга (`/onboarding/habit`) и обычного создания (`/habit/new`).
+- Ожидают ассеты: TOBI с блокнотом/карандашом (`tobi_habit_create`, слот `task-create-tobi-layer`),
+  отдельная сцена комнаты для этого экрана (`tobiScenes.taskCreateRoom`, сейчас = `welcome_room.webp`),
+  облачко-«мысль» с иконкой из макета — часть будущего рендера TOBI.

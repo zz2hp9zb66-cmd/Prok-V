@@ -9,35 +9,33 @@ import { ProgressBar } from '@/components/ProgressBar';
 import { Screen } from '@/components/Screen';
 import { SecondaryButton } from '@/components/SecondaryButton';
 import { PrimaryButton } from '@/components/PrimaryButton';
-import { TOBIHero } from '@/components/TOBIHero';
 import { useServices } from '@/data/ServicesContext';
 import { useAction } from '@/data/useAction';
 import { useScreenData } from '@/data/useScreenData';
 import { formatPoints, formatTime, formatTimes, formatWeekdays } from '@/services/format';
 import { spacing } from '@/theme';
 import { getBalance } from '../points/pointsService';
+import { HabitCreateView } from './HabitCreateScreen';
 import { HabitForm } from './HabitForm';
 import { canReverse, createHabit, deleteHabit, getHabitDetails, reverseCompletion, updateHabit } from './habitsService';
 
 const EDIT_NOTE = 'Новые баллы и лимит начнут действовать с завтрашнего дня. Название и дни недели меняются сразу.';
 
+/** Regular task creation (outside onboarding): no step indicator, back returns to «Задачи». */
 export function HabitCreateScreen() {
   const services = useServices();
   const { busy, run } = useAction();
   return (
-    <Screen edges={['bottom']}>
-      <TOBIHero state="tobi_habit_create" size={140} />
-      <HabitForm
-        submitTitle="Создать привычку"
-        busy={busy}
-        onSubmit={(input) =>
-          run(async () => {
-            await createHabit(services, input);
-            router.back();
-          })
-        }
-      />
-    </Screen>
+    <HabitCreateView
+      busy={busy}
+      onBack={() => router.back()}
+      onSubmit={(input) =>
+        run(async () => {
+          await createHabit(services, input);
+          router.back();
+        })
+      }
+    />
   );
 }
 

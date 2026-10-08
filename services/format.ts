@@ -22,6 +22,8 @@ export function formatTimes(n: number): string {
 }
 
 export const WEEKDAY_SHORT: Record<Weekday, string> = { 0: 'ПН', 1: 'ВТ', 2: 'СР', 3: 'ЧТ', 4: 'ПТ', 5: 'СБ', 6: 'ВС' };
+/** Title case for day toggles (Пн | Вт | …). */
+export const WEEKDAY_TITLE: Record<Weekday, string> = { 0: 'Пн', 1: 'Вт', 2: 'Ср', 3: 'Чт', 4: 'Пт', 5: 'Сб', 6: 'Вс' };
 export const WEEKDAY_LONG: Record<Weekday, string> = {
   0: 'Понедельник',
   1: 'Вторник',
