@@ -29,6 +29,6 @@
 
 ## Фон приветственного экрана
 - Экран: `features/onboarding/WelcomeScreen.tsx`, слои: комната → прозрачный слой TOBI → текст и «Начать».
-- Подключение: положить `assets/tobi/welcome_room.png` и в `features/tobi/tobiAssets.ts` заменить
-  `welcomeRoom: null` на `welcomeRoom: require('@/assets/tobi/welcome_room.png')`.
+- Фон подключён: `assets/tobi/welcome_room.webp` — оригинальный файл владельца без изменений (WebP 853×1844),
+  зарегистрирован в `features/tobi/tobiAssets.ts` (`tobiScenes.welcomeRoom`).
 - Слой TOBI (`tobi_wave`) заканчивается на 64% высоты экрана — на линии пола комнаты (≈62% изображения 853×1844).

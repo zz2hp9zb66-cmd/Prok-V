@@ -14,6 +14,6 @@ export const tobiImages: Partial<Record<TobiState, ImageSourcePropType>> = {};
  * to the plain cream background.
  */
 export const tobiScenes: { welcomeRoom: ImageSourcePropType | null } = {
-  // welcomeRoom: require('@/assets/tobi/welcome_room.png'),
-  welcomeRoom: null,
+  // Original file from the product owner, unmodified (WebP, 853×1844).
+  welcomeRoom: require('@/assets/tobi/welcome_room.webp'),
 };
