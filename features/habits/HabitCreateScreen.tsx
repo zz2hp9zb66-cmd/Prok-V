@@ -12,7 +12,7 @@ import { TextInput } from '@/components/TextInput';
 import { TOBIHero } from '@/components/TOBIHero';
 import type { Weekday } from '@/services/time';
 import { colors, componentRadius, radius, spacing } from '@/theme';
-import { tobiImages, tobiScenes } from '../tobi/tobiAssets';
+import { tobiScenes } from '../tobi/tobiAssets';
 import type { HabitInput } from './habitRules';
 
 /** UI limit for the task name (design requirement). */
@@ -82,17 +82,18 @@ export function HabitCreateView({ step, onBack, onSubmit, onSkip, busy }: HabitC
   };
 
   const room = tobiScenes.taskCreateRoom;
-  const tobi = tobiImages.tobi_habit_create;
+  // TOBI fits between the safe area and the panel overlap.
+  const tobiSize = Math.min(sceneHeight - insets.top - componentRadius.panel - spacing.sm, 200);
 
   return (
     <View style={styles.root}>
       <KeyboardAvoidingView style={styles.fill} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.scroll} bounces={false}>
-          {/* TOBI Zone: room background + transparent slot for the TOBI render. */}
+          {/* TOBI Zone: room background + TOBI (`tobi_habit_create` render or placeholder). */}
           <View style={[styles.scene, { height: sceneHeight }]}>
             {room ? <Image source={room} style={styles.sceneImage} resizeMode="cover" /> : null}
             <View style={[styles.tobiLayer, { paddingTop: insets.top }]} testID="task-create-tobi-layer">
-              {tobi ? <TOBIHero state="tobi_habit_create" size={sceneHeight - insets.top - spacing.md} /> : null}
+              <TOBIHero state="tobi_habit_create" size={tobiSize} />
             </View>
           </View>
 

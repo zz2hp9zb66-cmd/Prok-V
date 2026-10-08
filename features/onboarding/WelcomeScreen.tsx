@@ -5,7 +5,7 @@ import { AppText } from '@/components/AppText';
 import { PrimaryButton } from '@/components/PrimaryButton';
 import { TOBIHero } from '@/components/TOBIHero';
 import { colors, componentRadius, shadows, spacing } from '@/theme';
-import { tobiImages, tobiScenes } from '../tobi/tobiAssets';
+import { tobiScenes } from '../tobi/tobiAssets';
 
 /**
  * Onboarding welcome (§5, steps 1–2). Three layers, bottom to top:
@@ -18,7 +18,6 @@ import { tobiImages, tobiScenes } from '../tobi/tobiAssets';
  */
 export function WelcomeScreen({ onStart = () => router.push('/onboarding/goal') }: { onStart?: () => void }) {
   const room = tobiScenes.welcomeRoom;
-  const tobiWave = tobiImages.tobi_wave;
 
   return (
     <View style={styles.root}>
@@ -27,10 +26,10 @@ export function WelcomeScreen({ onStart = () => router.push('/onboarding/goal') 
         <Image source={room} style={styles.background} resizeMode="cover" accessibilityIgnoresInvertColors />
       ) : null}
 
-      {/* Layer 2: TOBI. Over the room only a real TOBI asset is shown, never a placeholder. */}
+      {/* Layer 2: TOBI — the `tobi_wave` render, or the neutral placeholder until it is provided. */}
       <SafeAreaView style={[StyleSheet.absoluteFill, styles.passThrough]} edges={['top']}>
         <View style={styles.tobiSlot} testID="welcome-tobi-layer">
-          {tobiWave || !room ? <TOBIHero state="tobi_wave" size={240} /> : null}
+          <TOBIHero state="tobi_wave" size={240} />
         </View>
       </SafeAreaView>
 
