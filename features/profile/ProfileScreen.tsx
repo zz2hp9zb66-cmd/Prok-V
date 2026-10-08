@@ -1,9 +1,11 @@
 import Constants from 'expo-constants';
+import { router } from 'expo-router';
 import { StyleSheet, Switch, View } from 'react-native';
 import { AppText } from '@/components/AppText';
 import { Card } from '@/components/Card';
 import { Icon, type IconName } from '@/components/Icon';
 import { Screen } from '@/components/Screen';
+import { SecondaryButton } from '@/components/SecondaryButton';
 import { colors, spacing } from '@/theme';
 
 function SettingRow({ icon, title, hint }: { icon: IconName; title: string; hint: string }) {
@@ -55,6 +57,7 @@ export function ProfileScreen() {
           <AppText variant="bodyStrong">{version}</AppText>
         </View>
       </Card>
+      <SecondaryButton title="Посмотреть приветствие" onPress={() => router.push('/welcome')} />
     </Screen>
   );
 }

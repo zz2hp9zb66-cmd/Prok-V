@@ -122,4 +122,28 @@ describe('main user flow', () => {
     fireEvent.press(screen.getByText('Отменить'));
     await screen.findByText('Выполнено 0 из 1');
   });
+
+  it('replays the welcome from Профиль without touching data', async () => {
+    const habit = await createHabit(mockServices, {
+      name: 'Чтение',
+      weekdays: [0, 1, 2, 3, 4, 5, 6],
+      pointsPerCompletion: 4,
+      dailyLimit: 1,
+    });
+    await settingsRepository.setOnboardingCompleted(mockServices.db);
+    await completeHabit(mockServices, habit.id);
+    const before = await mockServices.db.getAllAsync('SELECT * FROM point_transactions');
+
+    const app = renderRouter('./app', { initialUrl: '/profile' });
+    fireEvent.press(await screen.findByText('Посмотреть приветствие'));
+    await screen.findByText('Привет, я TOBI!');
+    expect(app.getPathname()).toBe('/welcome');
+
+    fireEvent.press(screen.getByText('Начать'));
+    await waitFor(() => expect(app.getPathname()).toBe('/profile'));
+
+    expect(await settingsRepository.isOnboardingCompleted(mockServices.db)).toBe(true);
+    expect(await mockServices.db.getAllAsync('SELECT * FROM point_transactions')).toEqual(before);
+    expect(await mockServices.db.getAllAsync('SELECT * FROM habits WHERE deleted_at IS NULL')).toHaveLength(1);
+  });
 });

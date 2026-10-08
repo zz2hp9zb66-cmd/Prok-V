@@ -12,8 +12,11 @@ import { tobiImages, tobiScenes } from '../tobi/tobiAssets';
  *  1. Room background — full screen, also behind the status bar and the home indicator.
  *  2. TOBI layer — transparent slot for the future waving TOBI (`tobi_wave`).
  *  3. Content — title, description and «Начать» inside the safe area.
+ *
+ * `onStart` defaults to continuing onboarding. The replay from Профиль passes
+ * its own handler, so viewing the welcome again never touches any data.
  */
-export function WelcomeScreen() {
+export function WelcomeScreen({ onStart = () => router.push('/onboarding/goal') }: { onStart?: () => void }) {
   const room = tobiScenes.welcomeRoom;
   const tobiWave = tobiImages.tobi_wave;
 
@@ -40,7 +43,7 @@ export function WelcomeScreen() {
           <AppText color="textSecondary" align="center">
             Выполняй привычки, копи баллы и обменивай их на свои цели и желания.
           </AppText>
-          <PrimaryButton title="Начать" onPress={() => router.push('/onboarding/goal')} />
+          <PrimaryButton title="Начать" onPress={onStart} />
         </View>
       </SafeAreaView>
     </View>
@@ -71,3 +74,11 @@ const styles = StyleSheet.create({
     ...shadows.panel,
   },
 });
+
+/**
+ * Replay of the welcome from Профиль. Read-only: does not reset onboarding and
+ * does not create or change any data; «Начать» and the back gesture return to Профиль.
+ */
+export function WelcomeReplayScreen() {
+  return <WelcomeScreen onStart={() => (router.canGoBack() ? router.back() : router.replace('/profile'))} />;
+}

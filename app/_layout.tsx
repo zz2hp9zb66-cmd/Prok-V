@@ -26,6 +26,7 @@ export default function RootLayout() {
           <Stack.Screen name="index" />
           <Stack.Screen name="onboarding" options={{ gestureEnabled: false }} />
           <Stack.Screen name="(tabs)" />
+          <Stack.Screen name="welcome" />
           <Stack.Screen name="habit/new" options={detailHeader('Новая привычка')} />
           <Stack.Screen name="habit/[id]/index" options={detailHeader('Привычка')} />
           <Stack.Screen name="habit/[id]/edit" options={detailHeader('Редактировать привычку')} />
