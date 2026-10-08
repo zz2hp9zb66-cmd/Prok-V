@@ -7,3 +7,13 @@ import type { TobiState } from './states';
  * Animation file format is decided after testing the first real animation (§20).
  */
 export const tobiImages: Partial<Record<TobiState, ImageSourcePropType>> = {};
+
+/**
+ * Full-screen TOBI locations (§19: основная локация — комната TOBI).
+ * `null` until the file is added to `assets/tobi/`; screens then fall back
+ * to the plain cream background.
+ */
+export const tobiScenes: { welcomeRoom: ImageSourcePropType | null } = {
+  // welcomeRoom: require('@/assets/tobi/welcome_room.png'),
+  welcomeRoom: null,
+};

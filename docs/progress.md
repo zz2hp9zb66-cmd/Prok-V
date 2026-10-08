@@ -26,3 +26,9 @@
 1. Положить рендеры в `assets/tobi/` (`tobi_idle.png`, `tobi_wave.png`, …).
 2. Зарегистрировать в `features/tobi/tobiAssets.ts`: `tobi_idle: require('@/assets/tobi/tobi_idle.png')`.
 3. Placeholder исчезнет автоматически для зарегистрированных состояний.
+
+## Фон приветственного экрана
+- Экран: `features/onboarding/WelcomeScreen.tsx`, слои: комната → прозрачный слой TOBI → текст и «Начать».
+- Подключение: положить `assets/tobi/welcome_room.png` и в `features/tobi/tobiAssets.ts` заменить
+  `welcomeRoom: null` на `welcomeRoom: require('@/assets/tobi/welcome_room.png')`.
+- Слой TOBI (`tobi_wave`) заканчивается на 64% высоты экрана — на линии пола комнаты (≈62% изображения 853×1844).

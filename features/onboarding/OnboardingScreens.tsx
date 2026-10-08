@@ -21,22 +21,7 @@ import { createReward } from '../rewards/rewardsService';
 
 const SKIP = 'Пропустить';
 
-export function OnboardingWelcomeScreen() {
-  return (
-    <Screen scroll={false} edges={['top', 'bottom']}>
-      <View style={styles.welcome}>
-        <TOBIHero state="tobi_wave" size={240} />
-        <AppText variant="h1" align="center">
-          Привет, я TOBI!
-        </AppText>
-        <AppText color="textSecondary" align="center">
-          Выполняй привычки, копи баллы и обменивай их на свои цели и желания.
-        </AppText>
-      </View>
-      <PrimaryButton title="Начать" onPress={() => router.push('/onboarding/goal')} />
-    </Screen>
-  );
-}
+export { WelcomeScreen as OnboardingWelcomeScreen } from './WelcomeScreen';
 
 function StepHeader({ title, text, tobi }: { title: string; text: string; tobi: Parameters<typeof TOBIHero>[0]['state'] }) {
   return (
@@ -119,6 +104,5 @@ export function OnboardingHabitScreen() {
 }
 
 const styles = StyleSheet.create({
-  welcome: { flex: 1, justifyContent: 'center', gap: spacing.sm },
   header: { gap: spacing.xs, paddingVertical: spacing.sm },
 });

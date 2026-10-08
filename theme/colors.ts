@@ -44,6 +44,8 @@ export const colors = {
   shadow: palette.brand.brown,
   /** neutral.black at 35% — modal backdrop. */
   overlay: 'rgba(46, 46, 46, 0.35)',
+  /** neutral.cream at 92% — readable panel over full-screen scenes. */
+  surfaceTranslucent: 'rgba(255, 249, 243, 0.92)',
   ...palette.functional,
 } as const;
 
