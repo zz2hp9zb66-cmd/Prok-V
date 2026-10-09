@@ -196,7 +196,7 @@ describe('main user flow', () => {
   });
 
   it.each([
-    ['/tasks', false],
+    ['/tasks', true],
     ['/rewards', false],
     ['/statistics', false],
     ['/habit/new', true],

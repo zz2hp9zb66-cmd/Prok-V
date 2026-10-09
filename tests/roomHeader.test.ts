@@ -99,4 +99,24 @@ describe.each(Object.entries(DEVICES))('room header on %s', (_, d) => {
     // Back button (16..60 px) only meets the transparent top-left of the render (ear and tail start lower).
     expect(f.left + f.width * 0.15).toBeGreaterThan(60);
   });
+
+  it('shows tobi_tasks in the «Задачи» header with the crown, cloud and raised paw visible', () => {
+    const r = tobiRenders.tobi_tasks!;
+    const headerHeight = roomHeaderHeight('section', d.height, d.top);
+    const panelTop = headerHeight - ROOM_PANEL_OVERLAP;
+    const f = computeRoomCharacterFrame({
+      screenWidth: d.width,
+      insetTop: d.top,
+      headerHeight,
+      aspect: r.width / r.height,
+      scale: r.placement?.scale,
+      offsetY: r.placement?.offsetY,
+    });
+    expect(f.width / f.height).toBeCloseTo(r.width / r.height);
+    expect(f.top + f.height * 0.07).toBeGreaterThanOrEqual(d.top); // crown and cloud (below the transparent 7%) under the status bar
+    expect(f.top + f.height * 0.72).toBeLessThanOrEqual(panelTop + 0.5); // raised paw above the panel
+    expect(f.left).toBeGreaterThanOrEqual(0);
+    expect(f.left + f.width).toBeLessThanOrEqual(d.width);
+    expect(f.width).toBeGreaterThan(d.width * 0.55);
+  });
 });

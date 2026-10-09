@@ -17,7 +17,7 @@ export interface TobiRender {
 /**
  * Registry of TOBI renders (§20). To connect a new render:
  *  1. put the transparent PNG/WebP into `assets/tobi/`;
- *  2. add one entry here: `tobi_tasks: { source: require('@/assets/tobi/tobi_tasks.png'), width: …, height: … }`.
+ *  2. add one entry here: `tobi_statistics: { source: require('@/assets/tobi/tobi_statistics.png'), width: …, height: … }`.
  * Screens pick it up automatically; states without an entry show no character
  * in the room headers (and a neutral placeholder only in `TOBIHero`).
  */
@@ -41,6 +41,15 @@ export const tobiRenders: Partial<Record<TobiState, TobiRender>> = {
     width: 1426,
     height: 1103,
     placement: { scale: 1 / 0.84, offsetY: 1 - 0.84 },
+  },
+  // Product owner's render, unmodified (WebP with transparency): thumbs up, crown, heart speech cloud.
+  // 74% stays above the panel: face, raised paw (ends at ≈72%), crown and cloud visible; hoodie behind the panel.
+  // The top 7% of the render is transparent, so it may sit in the status bar area: the crown starts under it.
+  tobi_tasks: {
+    source: require('@/assets/tobi/tobi_tasks.webp'),
+    width: 1488,
+    height: 1057,
+    placement: { scale: 1 / (0.74 - 0.07), offsetY: 1 - 0.74 },
   },
 };
 
