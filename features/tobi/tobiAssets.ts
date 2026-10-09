@@ -6,7 +6,10 @@ import type { TobiState } from './states';
  * assets; components fall back to a neutral placeholder meanwhile.
  * Animation file format is decided after testing the first real animation (§20).
  */
-export const tobiImages: Partial<Record<TobiState, ImageSourcePropType>> = {};
+export const tobiImages: Partial<Record<TobiState, ImageSourcePropType>> = {
+  // Product owner's render, unmodified (WebP with transparency, 1024×1536).
+  tobi_wave: require('@/assets/tobi/tobi_wave.webp'),
+};
 
 /**
  * Full-screen TOBI locations (§19: основная локация — комната TOBI).

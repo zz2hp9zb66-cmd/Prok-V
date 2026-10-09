@@ -1,5 +1,6 @@
 import { router } from 'expo-router';
-import { Image, StyleSheet, View } from 'react-native';
+import { useState } from 'react';
+import { Image, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { AppText } from '@/components/AppText';
 import { PrimaryButton } from '@/components/PrimaryButton';
@@ -18,6 +19,13 @@ import { tobiScenes } from '../tobi/tobiAssets';
  */
 export function WelcomeScreen({ onStart = () => router.push('/onboarding/goal') }: { onStart?: () => void }) {
   const room = tobiScenes.welcomeRoom;
+  const window = useWindowDimensions();
+  // TOBI box scales with the screen (render is 2:3, `contain` keeps proportions).
+  const tobiSize = Math.round(Math.min(window.height * 0.44, window.width * 0.95, 420));
+  // Top of the text panel, measured on layout; TOBI never stands behind it.
+  const [panelTop, setPanelTop] = useState<number | null>(null);
+  // Feet on the room floor (≈69% of the screen with `cover`), but always above the panel.
+  const tobiBottom = Math.min(window.height * FLOOR_LINE, panelTop ?? window.height * FLOOR_LINE);
 
   return (
     <View style={styles.root}>
@@ -27,15 +35,15 @@ export function WelcomeScreen({ onStart = () => router.push('/onboarding/goal') 
       ) : null}
 
       {/* Layer 2: TOBI — the `tobi_wave` render, or the neutral placeholder until it is provided. */}
-      <SafeAreaView style={[StyleSheet.absoluteFill, styles.passThrough]} edges={['top']}>
-        <View style={styles.tobiSlot} testID="welcome-tobi-layer">
-          <TOBIHero state="tobi_wave" size={240} />
+      <View style={[StyleSheet.absoluteFill, styles.passThrough]}>
+        <View style={[styles.tobiSlot, { height: tobiBottom }]} testID="welcome-tobi-layer">
+          <TOBIHero state="tobi_wave" size={tobiSize} />
         </View>
-      </SafeAreaView>
+      </View>
 
       {/* Layer 3: content */}
       <SafeAreaView style={styles.content} edges={['top', 'bottom']}>
-        <View style={styles.panel}>
+        <View style={styles.panel} onLayout={(e) => setPanelTop(e.nativeEvent.layout.y)}>
           <AppText variant="h1" align="center">
             Привет, я TOBI!
           </AppText>
@@ -49,18 +57,19 @@ export function WelcomeScreen({ onStart = () => router.push('/onboarding/goal') 
   );
 }
 
+/** Share of the screen height where TOBI's box ends (floor/rug area of the room). */
+const FLOOR_LINE = 0.69;
+
 const styles = StyleSheet.create({
   root: { flex: 1, backgroundColor: colors.background },
   // Explicit size so the asset's intrinsic dimensions never override the full-screen fill.
   background: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' },
   passThrough: { pointerEvents: 'none' },
-  // TOBI stands on the room floor (≈62% of the image height), above the content panel.
   tobiSlot: {
     position: 'absolute',
     top: 0,
     left: 0,
     right: 0,
-    height: '64%',
     alignItems: 'center',
     justifyContent: 'flex-end',
   },

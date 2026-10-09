@@ -15,7 +15,7 @@
 | 11 | Rewards + archive | ✅ |
 | 12 | Statistics | ✅ |
 | 13 | Profile/settings | ✅ (D5) |
-| 14 | TOBI assets | ⏳ ждём ассеты от владельца; сейчас нейтральные placeholders |
+| 14 | TOBI assets | 🟡 `tobi_wave` подключён (`assets/tobi/tobi_wave.webp`); остальные состояния — placeholders, ждём рендеры |
 | 15 | TOBI/UI animations | 🟡 UI-анимация «+N → счётчик» и переключение состояний TOBI готовы; анимации самого TOBI — после ассетов и выбора формата (§20) |
 | 16 | Tests | ✅ домен (§30) + сквозной UI-сценарий DoD (§35) |
 | 17 | Offline verification | ✅ в коде нет сетевых вызовов; все данные в локальной SQLite |
@@ -38,3 +38,8 @@
 - Ожидают ассеты: TOBI с блокнотом/карандашом (`tobi_habit_create`, слот `task-create-tobi-layer`),
   отдельная сцена комнаты для этого экрана (`tobiScenes.taskCreateRoom`, сейчас = `welcome_room.webp`),
   облачко-«мысль» с иконкой из макета — часть будущего рендера TOBI.
+
+## TOBI-рендеры
+- ✅ `tobi_wave` — `assets/tobi/tobi_wave.webp` (оригинал владельца, WebP с прозрачностью, 1024×1536), приветственный экран.
+- ⏳ Ждут прозрачных PNG/WebP: `tobi_habit_create`, `tobi_goal_create`, `tobi_wish_create`, `tobi_idle`,
+  `tobi_habit_complete`, `tobi_reward`, `tobi_statistics`.
