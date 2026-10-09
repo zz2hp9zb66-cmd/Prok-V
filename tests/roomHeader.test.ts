@@ -139,4 +139,24 @@ describe.each(Object.entries(DEVICES))('room header on %s', (_, d) => {
     expect(f.left + f.width).toBeLessThanOrEqual(d.width); // heart cloud on screen
     expect(f.width).toBeGreaterThan(d.width * 0.5);
   });
+
+  it('shows tobi_statistics in the «Статистика» header with the strokes, fist and face visible', () => {
+    const r = tobiRenders.tobi_statistics!;
+    const headerHeight = roomHeaderHeight('section', d.height, d.top);
+    const panelTop = headerHeight - ROOM_PANEL_OVERLAP;
+    const f = computeRoomCharacterFrame({
+      screenWidth: d.width,
+      insetTop: d.top,
+      headerHeight,
+      aspect: r.width / r.height,
+      scale: r.placement?.scale,
+      offsetY: r.placement?.offsetY,
+    });
+    expect(f.width / f.height).toBeCloseTo(r.width / r.height);
+    expect(f.top).toBeGreaterThanOrEqual(d.top); // strokes above the fist under the status bar
+    expect(f.top + f.height * 0.7).toBeLessThanOrEqual(panelTop + 0.5); // face above the panel
+    expect(f.left).toBeGreaterThanOrEqual(0);
+    expect(f.left + f.width).toBeLessThanOrEqual(d.width);
+    expect(f.width).toBeGreaterThan(d.width * 0.55);
+  });
 });

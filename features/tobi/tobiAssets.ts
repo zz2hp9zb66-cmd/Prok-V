@@ -17,7 +17,7 @@ export interface TobiRender {
 /**
  * Registry of TOBI renders (§20). To connect a new render:
  *  1. put the transparent PNG/WebP into `assets/tobi/`;
- *  2. add one entry here: `tobi_statistics: { source: require('@/assets/tobi/tobi_statistics.png'), width: …, height: … }`.
+ *  2. add one entry here: `tobi_reward: { source: require('@/assets/tobi/tobi_reward.png'), width: …, height: … }`.
  * Screens pick it up automatically; states without an entry show no character
  * in the room headers (and a neutral placeholder only in `TOBIHero`).
  */
@@ -59,6 +59,14 @@ export const tobiRenders: Partial<Record<TobiState, TobiRender>> = {
     width: 1569,
     height: 1002,
     placement: { scale: 1 / (0.84 - 0.027), offsetY: 1 - 0.84 },
+  },
+  // Product owner's render, unmodified (WebP with transparency): raised fist with orange strokes.
+  // 72% stays above the panel: strokes, fist and face (ends at ≈70%) visible; hoodie behind the panel.
+  tobi_statistics: {
+    source: require('@/assets/tobi/tobi_statistics.webp'),
+    width: 1575,
+    height: 998,
+    placement: { scale: 1 / 0.72, offsetY: 1 - 0.72 },
   },
 };
 

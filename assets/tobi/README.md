@@ -6,7 +6,7 @@ TOBI is never generated or redesigned in code (§20, §33).
 ## How to connect a render
 1. Put the file here, e.g. `assets/tobi/tobi_tasks.png`.
 2. Add one entry to `tobiRenders` in `features/tobi/tobiAssets.ts`:
-   `tobi_statistics: { source: require('@/assets/tobi/tobi_statistics.png'), width: <px>, height: <px> }`.
+   `tobi_reward: { source: require('@/assets/tobi/tobi_reward.png'), width: <px>, height: <px> }`.
 3. The screen picks it up automatically. Until then the room headers show only the room.
 
 | State | Screen |
@@ -17,7 +17,7 @@ TOBI is never generated or redesigned in code (§20, §33).
 | `tobi_wish_create` ✅ | Wish creation (onboarding + «Новое желание») |
 | `tobi_tasks` ✅ | «Задачи» header |
 | `tobi_rewards` ✅ | «Награды» header |
-| `tobi_statistics` | «Статистика» header |
+| `tobi_statistics` ✅ | «Статистика» header |
 | `tobi_habit_complete` | short reaction on «Задачи» after a completion |
 
 Position/size can be set once per render with `placement: { scale, offsetX, offsetY }` in `tobiRenders`,
