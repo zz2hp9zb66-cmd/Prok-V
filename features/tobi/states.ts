@@ -15,6 +15,7 @@ export const TOBI_STATES = [
   'tobi_statistics', // статистика — показывает вверх (анимация желательна)
   'tobi_tasks', // шапка раздела «Задачи» (статично)
   'tobi_rewards', // шапка раздела «Награды» (статично)
+  'tobi_reward_edit', // редактирование цели или желания (статично)
 ] as const;
 
 export type TobiState = (typeof TOBI_STATES)[number];

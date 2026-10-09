@@ -68,6 +68,15 @@ export const tobiRenders: Partial<Record<TobiState, TobiRender>> = {
     height: 998,
     placement: { scale: 1 / 0.86, offsetY: 1 - 0.86 },
   },
+  // Product owner's render, unmodified (WebP with transparency): full-height TOBI with pencil and notebook.
+  // The whole character (alpha 4.9%…95.5% of the height) fits between the status bar and the panel;
+  // only transparent margins extend beyond.
+  tobi_reward_edit: {
+    source: require('@/assets/tobi/tobi_reward_edit.webp'),
+    width: 1024,
+    height: 1536,
+    placement: { scale: 1 / (0.955 - 0.049), offsetY: 1 - 0.955 },
+  },
 };
 
 /**

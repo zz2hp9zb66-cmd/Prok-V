@@ -47,6 +47,7 @@
 - ✅ `tobi_tasks` — `assets/tobi/tobi_tasks.webp` (оригинал владельца, WebP с прозрачностью, 1488×1057), шапка «Задачи».
 - ✅ `tobi_rewards` — `assets/tobi/tobi_rewards.webp` (оригинал владельца, WebP с прозрачностью, 1569×1002), шапка «Награды».
 - ✅ `tobi_statistics` — `assets/tobi/tobi_statistics.webp` (оригинал владельца, WebP с прозрачностью, 1575×998), шапка «Статистика».
+- ✅ `tobi_reward_edit` — `assets/tobi/tobi_reward_edit.webp` (оригинал владельца, WebP с прозрачностью, 1024×1536), редактирование цели и желания.
 - ⏳ Ждут прозрачных PNG/WebP: `tobi_idle`,
   `tobi_habit_complete`, `tobi_reward` (экран награды и реакция после выполнения).
 

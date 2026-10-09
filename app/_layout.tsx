@@ -46,7 +46,7 @@ export default function RootLayout() {
           <Stack.Screen name="habit/[id]/edit" options={detailHeader('Редактировать привычку')} />
           <Stack.Screen name="reward/new" options={{ headerShown: false }} />
           <Stack.Screen name="reward/[id]/index" options={detailHeader('Награда')} />
-          <Stack.Screen name="reward/[id]/edit" options={detailHeader('Редактировать награду')} />
+          <Stack.Screen name="reward/[id]/edit" options={{ headerShown: false }} />
         </Stack>
       </DataProvider>
     </SafeAreaProvider>

@@ -2,6 +2,7 @@ import { act, fireEvent, renderRouter, screen, waitFor } from 'expo-router/testi
 import { settingsRepository } from '@/data/repositories/settingsRepository';
 import type { AppServices } from '@/data/ServicesContext';
 import { completeHabit, createHabit } from '@/features/habits/habitsService';
+import { createReward, getReward } from '@/features/rewards/rewardsService';
 import { TOBI_ROOM_SHARED } from '@/features/tobi/tobiAssets';
 import { noopFeedback } from '@/services/feedback';
 import { createTestContext, type FakeClock } from './helpers/testContext';
@@ -325,3 +326,54 @@ describe('cold start: welcome for 3 s, then onboarding or «Задачи»', () 
     }
   });
 });
+
+describe('editing a goal or wish', () => {
+  it.each([
+    ['goal', 'Кино', 50],
+    ['wish', 'Кофе', 10],
+  ] as const)('edits an existing %s in place with TOBI and the notebook in the room', async (type, name, cost) => {
+    await settingsRepository.setOnboardingCompleted(mockServices.db);
+    const reward = await createReward(mockServices, type, { name, cost });
+    const app = renderRouter('./app', { initialUrl: `/reward/${reward.id}` });
+    await screen.findByText(name);
+    fireEvent.press(screen.getByText('Редактировать'));
+
+    await screen.findByText('Редактировать награду');
+    const room = screen.getByTestId('room-background');
+    expect(room.props.source).toBe(TOBI_ROOM_SHARED);
+    expect(screen.getAllByTestId('room-character')).toHaveLength(1);
+    expect(screen.getByLabelText('Название').props.value).toBe(name); // current data shown
+    expect(screen.getByLabelText('Стоимость в баллах').props.value).toBe(String(cost));
+
+    await typeInto('Название', `${name} с друзьями`);
+    await typeInto('Стоимость в баллах', String(cost * 2));
+    fireEvent.press(screen.getByText('Сохранить'));
+    await screen.findByText(`${name} с друзьями`); // back on the reward screen with the new name
+    expect(app.getPathname()).toBe(`/reward/${reward.id}`);
+    expect(await getReward(mockServices, reward.id)).toMatchObject({ name: `${name} с друзьями`, cost: cost * 2, type, status: 'active' });
+    expect(await mockServices.db.getAllAsync('SELECT * FROM rewards')).toHaveLength(1); // updated, not duplicated
+
+    // Reopen: saved values are shown.
+    app.unmount();
+    renderRouter('./app', { initialUrl: `/reward/${reward.id}` });
+    await screen.findByText(`${name} с друзьями`);
+    fireEvent.press(screen.getByText('Редактировать'));
+    await screen.findByText('Редактировать награду');
+    expect(screen.getByLabelText('Название').props.value).toBe(`${name} с друзьями`);
+    expect(screen.getByLabelText('Стоимость в баллах').props.value).toBe(String(cost * 2));
+  });
+
+  it('leaving with «Назад» does not save changes', async () => {
+    await settingsRepository.setOnboardingCompleted(mockServices.db);
+    const reward = await createReward(mockServices, 'goal', { name: 'Кино', cost: 50 });
+    renderRouter('./app', { initialUrl: `/reward/${reward.id}` });
+    await screen.findByText('Кино');
+    fireEvent.press(screen.getByText('Редактировать'));
+    await screen.findByText('Редактировать награду');
+    await typeInto('Название', 'Другое');
+    fireEvent.press(screen.getByLabelText('Назад'));
+    await waitFor(() => expect(screen.queryByText('Редактировать награду')).toBeNull());
+    expect(await getReward(mockServices, reward.id)).toMatchObject({ name: 'Кино', cost: 50 });
+  });
+});
+

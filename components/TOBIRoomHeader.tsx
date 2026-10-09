@@ -7,8 +7,9 @@ import { colors, componentRadius } from '@/theme';
 /**
  * `form` — creation screens (goal, wish, task): taller room, TOBI is the hero.
  * `section` — tab sections (Задачи, Награды, Статистика): shorter room so the content starts higher.
+ * `hero` — screens with a short form and a full-height TOBI (editing a goal or wish).
  */
-export type RoomHeaderVariant = 'form' | 'section';
+export type RoomHeaderVariant = 'form' | 'section' | 'hero';
 
 /** How far the cream content panel overlaps the bottom of the room. */
 export const ROOM_PANEL_OVERLAP = componentRadius.panel;
@@ -16,6 +17,7 @@ export const ROOM_PANEL_OVERLAP = componentRadius.panel;
 const HEIGHT_RULES: Record<RoomHeaderVariant, { share: number; min: number; max: number }> = {
   form: { share: 0.26, min: 170, max: 280 },
   section: { share: 0.2, min: 140, max: 210 },
+  hero: { share: 0.38, min: 240, max: 360 },
 };
 const GAP_UNDER_STATUS_BAR = 4;
 const MAX_CHARACTER_WIDTH = 0.96;

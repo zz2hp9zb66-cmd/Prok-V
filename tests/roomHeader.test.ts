@@ -159,4 +159,24 @@ describe.each(Object.entries(DEVICES))('room header on %s', (_, d) => {
     expect(f.left + f.width).toBeLessThanOrEqual(d.width);
     expect(f.width).toBeGreaterThan(d.width * 0.5);
   });
+
+  it('shows the full-height tobi_reward_edit entirely in the taller «hero» header', () => {
+    const r = tobiRenders.tobi_reward_edit!;
+    const headerHeight = roomHeaderHeight('hero', d.height, d.top);
+    const panelTop = headerHeight - ROOM_PANEL_OVERLAP;
+    const f = computeRoomCharacterFrame({
+      screenWidth: d.width,
+      insetTop: d.top,
+      headerHeight,
+      aspect: r.width / r.height,
+      scale: r.placement?.scale,
+      offsetY: r.placement?.offsetY,
+    });
+    expect(f.width / f.height).toBeCloseTo(r.width / r.height);
+    expect(f.top + f.height * 0.049).toBeGreaterThanOrEqual(d.top); // ears under the status bar
+    expect(f.top + f.height * 0.955).toBeLessThanOrEqual(panelTop + 0.5); // feet above the panel: whole TOBI visible
+    expect(f.left).toBeGreaterThanOrEqual(0);
+    expect(f.left + f.width).toBeLessThanOrEqual(d.width);
+    expect(f.height * (0.955 - 0.049)).toBeGreaterThan(d.height * 0.3); // large enough to read pencil and notebook
+  });
 });

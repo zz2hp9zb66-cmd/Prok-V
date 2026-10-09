@@ -162,7 +162,8 @@ export function RewardEditScreen() {
 
   if (!data) return null;
   return (
-    <Screen edges={['bottom']}>
+    <RoomScreen variant="hero" tobiState="tobi_reward_edit" onBack={() => router.back()} bottomSafeArea>
+      <PanelHeading title="Редактировать награду" />
       <RewardForm
         type={data.type}
         initial={{ name: data.name, cost: data.cost }}
@@ -175,7 +176,7 @@ export function RewardEditScreen() {
           })
         }
       />
-    </Screen>
+    </RoomScreen>
   );
 }
 
