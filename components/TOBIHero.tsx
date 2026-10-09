@@ -1,6 +1,6 @@
 import { Image, StyleSheet, View } from 'react-native';
 import type { TobiState } from '@/features/tobi/states';
-import { tobiImages } from '@/features/tobi/tobiAssets';
+import { tobiRenders } from '@/features/tobi/tobiAssets';
 import { colors, componentRadius, spacing } from '@/theme';
 import { AppText } from './AppText';
 
@@ -17,7 +17,7 @@ export interface TOBIHeroProps {
  * provided it renders a neutral placeholder (TOBI is never drawn in code).
  */
 export function TOBIHero({ state, size = 160, width = size, height = size }: TOBIHeroProps) {
-  const source = tobiImages[state];
+  const source = tobiRenders[state]?.source;
   if (source) {
     return <Image source={source} style={{ width, height }} resizeMode="contain" accessibilityLabel="TOBI" />;
   }

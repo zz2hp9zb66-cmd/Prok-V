@@ -2,24 +2,27 @@ import { router } from 'expo-router';
 import type { GestureResponderEvent } from 'react-native';
 import { EmptyState } from '@/components/EmptyState';
 import { HabitCard } from '@/components/HabitCard';
-import { Screen } from '@/components/Screen';
+import { RoomScreen } from '@/components/RoomScreen';
 import { SectionHeader } from '@/components/SectionHeader';
 import { TOBIHeader } from '@/components/TOBIHeader';
 import { useAction } from '@/data/useAction';
 import { useScreenData } from '@/data/useScreenData';
 import { getBalance } from '../points/pointsService';
 import { useFlyingPoints } from '../points/useFlyingPoints';
+import { tobiRenders } from '../tobi/tobiAssets';
 import { useTobiReaction } from '../tobi/useTobiReaction';
 import { completeHabit, listHabitsForToday } from './habitsService';
 
-/** «Задачи» (§18): TOBI, greeting, balance and today's habits. */
+/** «Задачи» (§18): TOBI's room, greeting, balance and today's habits. */
 export function TasksScreen() {
   const { data, reload, services } = useScreenData(async (ctx) => ({
     habits: await listHabitsForToday(ctx),
     balance: await getBalance(ctx.db),
   }));
   const { busy, run } = useAction();
-  const [tobiState, reactTobi] = useTobiReaction('tobi_idle');
+  const [tobiState, reactTobi] = useTobiReaction('tobi_tasks');
+  // A reaction is shown only if its render exists; otherwise the section's TOBI stays.
+  const headerTobi = tobiRenders[tobiState] ? tobiState : 'tobi_tasks';
   const flying = useFlyingPoints();
 
   const complete = (habitId: string, event: GestureResponderEvent) => {
@@ -39,8 +42,8 @@ export function TasksScreen() {
   const balance = (data?.balance ?? 0) - flying.pendingAmount;
 
   return (
-    <Screen overlay={flying.overlay}>
-      <TOBIHeader ref={flying.targetRef} tobiState={tobiState} title="Привет!" subtitle="Что сделаем сегодня?" balance={balance} />
+    <RoomScreen variant="section" tobiState={headerTobi} overlay={flying.overlay}>
+      <TOBIHeader ref={flying.targetRef} title="Привет!" subtitle="Что сделаем сегодня?" balance={balance} />
       <SectionHeader title="Привычки" onAdd={openCreate} addLabel="Создать привычку" />
       {data && data.habits.length === 0 ? (
         <EmptyState
@@ -59,6 +62,6 @@ export function TasksScreen() {
           onComplete={(event) => complete(view.habit.id, event)}
         />
       ))}
-    </Screen>
+    </RoomScreen>
   );
 }

@@ -1,13 +1,10 @@
 import { router } from 'expo-router';
-import { StyleSheet, View } from 'react-native';
-import { AppText } from '@/components/AppText';
-import { Screen } from '@/components/Screen';
-import { TOBIHero } from '@/components/TOBIHero';
+import { PanelHeading } from '@/components/PanelHeading';
+import { RoomScreen } from '@/components/RoomScreen';
 import { useServices } from '@/data/ServicesContext';
 import { RewardType } from '@/data/db/schema';
 import { settingsRepository } from '@/data/repositories/settingsRepository';
 import { useAction } from '@/data/useAction';
-import { spacing } from '@/theme';
 import { HabitCreateView } from '../habits/HabitCreateScreen';
 import { createHabit } from '../habits/habitsService';
 import { RewardForm } from '../rewards/RewardForm';
@@ -22,28 +19,18 @@ const SKIP = 'Пропустить';
 
 export { WelcomeScreen as OnboardingWelcomeScreen } from './WelcomeScreen';
 
-function StepHeader({ title, text, tobi }: { title: string; text: string; tobi: Parameters<typeof TOBIHero>[0]['state'] }) {
-  return (
-    <View style={styles.header}>
-      <TOBIHero state={tobi} size={150} />
-      <AppText variant="h2" align="center">
-        {title}
-      </AppText>
-      <AppText color="textSecondary" align="center">
-        {text}
-      </AppText>
-    </View>
-  );
-}
-
 function RewardStep({ type, next }: { type: RewardType; next: () => void }) {
   const services = useServices();
   const { busy, run } = useAction();
   const isGoal = type === RewardType.Goal;
   return (
-    <Screen edges={['top', 'bottom']}>
-      <StepHeader
-        tobi={isGoal ? 'tobi_goal_create' : 'tobi_wish_create'}
+    <RoomScreen
+      variant="form"
+      tobiState={isGoal ? 'tobi_goal_create' : 'tobi_wish_create'}
+      onBack={() => router.back()}
+      bottomSafeArea
+    >
+      <PanelHeading
         title={isGoal ? 'Твоя первая цель' : 'Твоё первое желание'}
         text={isGoal ? 'Что-то большое, ради чего стоит копить баллы.' : 'Небольшая радость, которую можно получить за баллы.'}
       />
@@ -59,7 +46,7 @@ function RewardStep({ type, next }: { type: RewardType; next: () => void }) {
         }
         secondary={{ title: SKIP, onPress: next }}
       />
-    </Screen>
+    </RoomScreen>
   );
 }
 
@@ -96,7 +83,3 @@ export function OnboardingHabitScreen() {
     />
   );
 }
-
-const styles = StyleSheet.create({
-  header: { gap: spacing.xs, paddingVertical: spacing.sm },
-});

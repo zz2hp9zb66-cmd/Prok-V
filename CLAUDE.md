@@ -49,4 +49,5 @@ tests/        Jest: доменные тесты на in-memory node:sqlite; appF
 - UI только на русском (D6), обращение на «ты».
 - Миграции не редактировать после релиза — только добавлять новые.
 - В экранах не хардкодить цвета/отступы/радиусы/шрифты — брать из `theme/`.
-- TOBI — только готовые ассеты из `assets/tobi/` (реестр `features/tobi/tobiAssets.ts`).
+- TOBI — только готовые ассеты из `assets/tobi/` (реестр `tobiRenders` в `features/tobi/tobiAssets.ts`).
+- Шапки разделов — общая комната `assets/backgrounds/tobi_room_shared.webp` через `RoomScreen`/`TOBIRoomHeader`; персонаж — отдельный слой.

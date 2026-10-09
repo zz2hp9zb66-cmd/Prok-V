@@ -1,20 +1,17 @@
 import { useState } from 'react';
-import { Image, KeyboardAvoidingView, Platform, Pressable, ScrollView, StyleSheet, useWindowDimensions, View } from 'react-native';
-import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Pressable, StyleSheet, View } from 'react-native';
 import { AppText } from '@/components/AppText';
 import { DaySelector } from '@/components/DaySelector';
 import { Icon } from '@/components/Icon';
-import { IconButton } from '@/components/IconButton';
 import { PointsInput } from '@/components/PointsInput';
 import { PrimaryButton } from '@/components/PrimaryButton';
 import { StepIndicator } from '@/components/StepIndicator';
 import { TextInput } from '@/components/TextInput';
-import { TOBIHero } from '@/components/TOBIHero';
+import { RoomScreen } from '@/components/RoomScreen';
 import type { Weekday } from '@/services/time';
-import { colors, componentRadius, radius, spacing } from '@/theme';
-import { tobiScenes } from '../tobi/tobiAssets';
+import { colors, radius, spacing } from '@/theme';
+import { HABIT_CREATE_TOBI_SCALE, HABIT_CREATE_TOBI_VISIBLE } from './habitCreateTobi';
 import type { HabitInput } from './habitRules';
-import { computeTaskCreateTobiFrame } from './taskCreateLayout';
 
 /** UI limit for the task name (design requirement). */
 export const HABIT_NAME_MAX_LENGTH = 60;
@@ -64,10 +61,6 @@ export interface HabitCreateViewProps {
  * above the keyboard.
  */
 export function HabitCreateView({ step, onBack, onSubmit, onSkip, busy }: HabitCreateViewProps) {
-  const insets = useSafeAreaInsets();
-  const { width: screenWidth, height } = useWindowDimensions();
-  const sceneHeight = Math.round(Math.min(Math.max(height * 0.26, 170), 280)) + insets.top;
-
   const [name, setName] = useState('');
   const [points, setPoints] = useState<number | null>(null);
   const [weekdays, setWeekdays] = useState<Weekday[]>([]);
@@ -82,97 +75,16 @@ export function HabitCreateView({ step, onBack, onSubmit, onSkip, busy }: HabitC
     onSubmit({ name, weekdays, pointsPerCompletion: points!, dailyLimit: limit! });
   };
 
-  const room = tobiScenes.taskCreateRoom;
-  // TOBI with the notebook: under the status bar, hem tucked behind the panel's top edge.
-  const tobi = computeTaskCreateTobiFrame({
-    screenWidth,
-    insetTop: insets.top,
-    panelTop: sceneHeight - componentRadius.panel,
-  });
-
   return (
-    <View style={styles.root}>
-      <KeyboardAvoidingView style={styles.fill} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
-        <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.scroll} bounces={false}>
-          {/* TOBI Zone: room background + TOBI with the notebook (`tobi_habit_create`, `contain`). */}
-          <View style={[styles.scene, { height: sceneHeight }]}>
-            {room ? <Image source={room} style={styles.sceneImage} resizeMode="cover" /> : null}
-            <View
-              style={[styles.tobiLayer, { left: tobi.left, top: tobi.top }]}
-              testID="task-create-tobi-layer"
-            >
-              <TOBIHero state="tobi_habit_create" width={tobi.width} height={tobi.height} />
-            </View>
-          </View>
-
-          {/* UI Zone: form panel. */}
-          <View style={styles.panel}>
-            {step ? <StepIndicator step={step.current} total={step.total} /> : null}
-            <View style={styles.heading}>
-              <AppText variant="h1" align="center" accessibilityRole="header">
-                {step ? COPY.onboardingTitle : COPY.regularTitle}
-              </AppText>
-              <AppText color="textSecondary" align="center">
-                {COPY.subtitle}
-              </AppText>
-            </View>
-
-            <TextInput
-              label="Название задачи"
-              labelVariant="heading"
-              placeholder="Например: Читать книгу"
-              value={name}
-              onChangeText={setName}
-              maxLength={HABIT_NAME_MAX_LENGTH}
-              showCounter
-              error={errors.name}
-              returnKeyType="next"
-            />
-
-            <PointsInput
-              label="Стоимость задачи"
-              labelVariant="heading"
-              withStar
-              placeholder="Напиши любое количество баллов"
-              value={points}
-              onChange={setPoints}
-              error={errors.points}
-              hint={showHelp ? COPY.pointsHelp : null}
-              labelAccessory={
-                <Pressable
-                  accessibilityRole="button"
-                  accessibilityLabel="Что такое стоимость задачи"
-                  accessibilityState={{ expanded: showHelp }}
-                  hitSlop={10}
-                  onPress={() => setShowHelp((v) => !v)}
-                  style={styles.help}
-                >
-                  <Icon name="help-outline" size={18} color="textSecondary" />
-                </Pressable>
-              }
-            />
-
-            <View style={styles.field}>
-              <AppText variant="h3">Повторение</AppText>
-              <DaySelector value={weekdays} onChange={setWeekdays} />
-              {errors.weekdays ? (
-                <AppText variant="small" color="error">
-                  {errors.weekdays}
-                </AppText>
-              ) : null}
-            </View>
-
-            <PointsInput
-              label="Лимит выполнений в день"
-              labelVariant="heading"
-              value={limit}
-              onChange={setLimit}
-              error={errors.limit}
-            />
-          </View>
-        </ScrollView>
-
-        <View style={[styles.footer, { paddingBottom: Math.max(insets.bottom, spacing.sm) }]}>
+    <RoomScreen
+      variant="form"
+      tobiState="tobi_habit_create"
+      // Head under the status bar, hoodie hem tucked behind the panel, notebook (≈94%) visible.
+      characterScale={HABIT_CREATE_TOBI_SCALE}
+      characterOffsetY={1 - HABIT_CREATE_TOBI_VISIBLE}
+      onBack={onBack}
+      footer={
+        <>
           <PrimaryButton title="Продолжить" trailingIcon="arrow-forward-outline" onPress={submit} disabled={busy} />
           {onSkip ? (
             <Pressable accessibilityRole="button" onPress={onSkip} disabled={busy} style={styles.skip} hitSlop={8}>
@@ -181,37 +93,76 @@ export function HabitCreateView({ step, onBack, onSubmit, onSkip, busy }: HabitC
               </AppText>
             </Pressable>
           ) : null}
-        </View>
-      </KeyboardAvoidingView>
-
-      <View style={[styles.back, { top: insets.top + spacing.xs }]}>
-        <IconButton icon="chevron-back-outline" tone="surface" onPress={onBack} accessibilityLabel="Назад" />
+        </>
+      }
+    >
+      {step ? <StepIndicator step={step.current} total={step.total} /> : null}
+      <View style={styles.heading}>
+        <AppText variant="h1" align="center" accessibilityRole="header">
+          {step ? COPY.onboardingTitle : COPY.regularTitle}
+        </AppText>
+        <AppText color="textSecondary" align="center">
+          {COPY.subtitle}
+        </AppText>
       </View>
-    </View>
+
+      <TextInput
+        label="Название задачи"
+        labelVariant="heading"
+        placeholder="Например: Читать книгу"
+        value={name}
+        onChangeText={setName}
+        maxLength={HABIT_NAME_MAX_LENGTH}
+        showCounter
+        error={errors.name}
+        returnKeyType="next"
+      />
+
+      <PointsInput
+        label="Стоимость задачи"
+        labelVariant="heading"
+        withStar
+        placeholder="Напиши любое количество баллов"
+        value={points}
+        onChange={setPoints}
+        error={errors.points}
+        hint={showHelp ? COPY.pointsHelp : null}
+        labelAccessory={
+          <Pressable
+            accessibilityRole="button"
+            accessibilityLabel="Что такое стоимость задачи"
+            accessibilityState={{ expanded: showHelp }}
+            hitSlop={10}
+            onPress={() => setShowHelp((v) => !v)}
+            style={styles.help}
+          >
+            <Icon name="help-outline" size={18} color="textSecondary" />
+          </Pressable>
+        }
+      />
+
+      <View style={styles.field}>
+        <AppText variant="h3">Повторение</AppText>
+        <DaySelector value={weekdays} onChange={setWeekdays} />
+        {errors.weekdays ? (
+          <AppText variant="small" color="error">
+            {errors.weekdays}
+          </AppText>
+        ) : null}
+      </View>
+
+      <PointsInput
+        label="Лимит выполнений в день"
+        labelVariant="heading"
+        value={limit}
+        onChange={setLimit}
+        error={errors.limit}
+      />
+    </RoomScreen>
   );
 }
 
-/** Side gutter of the form panel (between spacing.sm and spacing.md, as in the design). */
-const GUTTER = spacing.sm + spacing.xxs;
-
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: colors.background },
-  fill: { flex: 1 },
-  scroll: { flexGrow: 1 },
-  scene: { overflow: 'hidden', backgroundColor: colors.surfaceMuted },
-  sceneImage: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' },
-  tobiLayer: { position: 'absolute', pointerEvents: 'none' },
-  panel: {
-    flexGrow: 1,
-    marginTop: -componentRadius.panel,
-    borderTopLeftRadius: radius.xl + spacing.sm,
-    borderTopRightRadius: radius.xl + spacing.sm,
-    backgroundColor: colors.background,
-    paddingHorizontal: GUTTER,
-    paddingTop: spacing.lg,
-    paddingBottom: spacing.md,
-    gap: GUTTER,
-  },
   heading: { gap: spacing.xs },
   field: { gap: spacing.xs },
   help: {
@@ -222,12 +173,5 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  footer: {
-    backgroundColor: colors.background,
-    paddingHorizontal: GUTTER,
-    paddingTop: spacing.xs,
-    gap: spacing.xs,
-  },
   skip: { alignSelf: 'center', paddingVertical: spacing.xs },
-  back: { position: 'absolute', left: spacing.sm },
 });

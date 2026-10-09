@@ -1,22 +1,20 @@
 import { StyleSheet, View } from 'react-native';
 import { AppText } from '@/components/AppText';
 import { Card } from '@/components/Card';
-import { Screen } from '@/components/Screen';
+import { RoomScreen } from '@/components/RoomScreen';
 import { StatisticCard } from '@/components/StatisticCard';
 import { StreakBadge } from '@/components/StreakBadge';
-import { TOBIHero } from '@/components/TOBIHero';
 import { useScreenData } from '@/data/useScreenData';
 import { spacing } from '@/theme';
 import { getStatistics } from './statisticsService';
 import { WeekChart } from './WeekChart';
 
-/** «Статистика» (§17–18): TOBI on top, weekly line chart, key numbers, streak. */
+/** «Статистика» (§17–18): TOBI's room on top, weekly line chart, key numbers, streak. */
 export function StatisticsScreen() {
   const { data: stats, today } = useScreenData(getStatistics);
 
   return (
-    <Screen>
-      <TOBIHero state="tobi_statistics" size={140} />
+    <RoomScreen variant="section" tobiState="tobi_statistics">
       <AppText variant="h1">Статистика</AppText>
       {stats ? (
         <>
@@ -34,7 +32,7 @@ export function StatisticsScreen() {
           </View>
         </>
       ) : null}
-    </Screen>
+    </RoomScreen>
   );
 }
 

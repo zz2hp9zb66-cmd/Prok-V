@@ -13,6 +13,8 @@ export const TOBI_STATES = [
   'tobi_wish_create', // создание желания — мечтает (статично)
   'tobi_habit_create', // создание привычки — список (статично)
   'tobi_statistics', // статистика — показывает вверх (анимация желательна)
+  'tobi_tasks', // шапка раздела «Задачи» (статично)
+  'tobi_rewards', // шапка раздела «Награды» (статично)
 ] as const;
 
 export type TobiState = (typeof TOBI_STATES)[number];

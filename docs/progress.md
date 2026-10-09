@@ -44,3 +44,8 @@
 - ✅ `tobi_habit_create` — `assets/tobi/tobi_habit_create.png` (PNG с прозрачностью, 1554×1012, пиксели идентичны присланному файлу), экран «Создание задачи».
 - ⏳ Ждут прозрачных PNG/WebP: `tobi_goal_create`, `tobi_wish_create`, `tobi_idle`,
   `tobi_habit_complete`, `tobi_reward`, `tobi_statistics`.
+
+## Единая комната (D13)
+- Фон: `assets/backgrounds/tobi_room_shared.webp`, подключён один раз в `TOBI_ROOM_SHARED` (`features/tobi/tobiAssets.ts`).
+- Шапка: `components/TOBIRoomHeader.tsx`; экраны: `components/RoomScreen.tsx`.
+- Подключение персонажей — см. `assets/tobi/README.md`.

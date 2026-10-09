@@ -2,7 +2,7 @@ import { router } from 'expo-router';
 import { useState } from 'react';
 import { EmptyState } from '@/components/EmptyState';
 import { ArchivedRewardCard, RewardCard } from '@/components/RewardCard';
-import { Screen } from '@/components/Screen';
+import { RoomScreen } from '@/components/RoomScreen';
 import { SectionHeader } from '@/components/SectionHeader';
 import { SegmentedControl } from '@/components/SegmentedControl';
 import { TOBIHeader } from '@/components/TOBIHeader';
@@ -41,8 +41,8 @@ export function RewardsScreen() {
   const onAdd = tab === 'archive' ? undefined : () => router.push({ pathname: '/reward/new', params: { type: tab } });
 
   return (
-    <Screen>
-      <TOBIHeader tobiState="tobi_idle" title="Награды" subtitle="Копи баллы на то, что важно." balance={balance} />
+    <RoomScreen variant="section" tobiState="tobi_rewards">
+      <TOBIHeader title="Награды" subtitle="Копи баллы на то, что важно." balance={balance} />
       <SegmentedControl options={TABS} value={tab} onChange={setTab} />
       <SectionHeader
         title={TABS.find((t) => t.value === tab)!.label}
@@ -68,6 +68,6 @@ export function RewardsScreen() {
           />
         ),
       )}
-    </Screen>
+    </RoomScreen>
   );
 }

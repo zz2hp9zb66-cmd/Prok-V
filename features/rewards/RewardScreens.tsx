@@ -1,4 +1,4 @@
-import { router, Stack, useLocalSearchParams } from 'expo-router';
+import { router, useLocalSearchParams } from 'expo-router';
 import { useState } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { AppText } from '@/components/AppText';
@@ -8,7 +8,9 @@ import { EmptyState } from '@/components/EmptyState';
 import { PointsBadge } from '@/components/PointsBadge';
 import { PrimaryButton } from '@/components/PrimaryButton';
 import { ProgressBar } from '@/components/ProgressBar';
+import { PanelHeading } from '@/components/PanelHeading';
 import { REWARD_TYPE_LABEL } from '@/components/RewardCard';
+import { RoomScreen } from '@/components/RoomScreen';
 import { Screen } from '@/components/Screen';
 import { SecondaryButton } from '@/components/SecondaryButton';
 import { TOBIHero } from '@/components/TOBIHero';
@@ -32,9 +34,13 @@ export function RewardCreateScreen() {
   const services = useServices();
   const { busy, run } = useAction();
   return (
-    <Screen edges={['bottom']}>
-      <Stack.Screen options={{ title: type === RewardType.Goal ? 'Новая цель' : 'Новое желание' }} />
-      <TOBIHero state={type === RewardType.Goal ? 'tobi_goal_create' : 'tobi_wish_create'} size={140} />
+    <RoomScreen
+      variant="form"
+      tobiState={type === RewardType.Goal ? 'tobi_goal_create' : 'tobi_wish_create'}
+      onBack={() => router.back()}
+      bottomSafeArea
+    >
+      <PanelHeading title={type === RewardType.Goal ? 'Новая цель' : 'Новое желание'} />
       <RewardForm
         type={type}
         submitTitle={type === RewardType.Goal ? 'Создать цель' : 'Создать желание'}
@@ -46,7 +52,7 @@ export function RewardCreateScreen() {
           })
         }
       />
-    </Screen>
+    </RoomScreen>
   );
 }
 

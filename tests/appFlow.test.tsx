@@ -2,6 +2,7 @@ import { act, fireEvent, renderRouter, screen, waitFor } from 'expo-router/testi
 import { settingsRepository } from '@/data/repositories/settingsRepository';
 import type { AppServices } from '@/data/ServicesContext';
 import { completeHabit, createHabit } from '@/features/habits/habitsService';
+import { TOBI_ROOM_SHARED } from '@/features/tobi/tobiAssets';
 import { noopFeedback } from '@/services/feedback';
 import { createTestContext, type FakeClock } from './helpers/testContext';
 
@@ -192,5 +193,23 @@ describe('main user flow', () => {
     await waitFor(() => expect(app.getPathname()).toBe('/tasks'));
     expect(await settingsRepository.isOnboardingCompleted(mockServices.db)).toBe(true);
     expect(await mockServices.db.getAllAsync('SELECT * FROM habits')).toHaveLength(0);
+  });
+
+  it.each([
+    ['/tasks', false],
+    ['/rewards', false],
+    ['/statistics', false],
+    ['/habit/new', true],
+    ['/reward/new?type=goal', false],
+    ['/reward/new?type=wish', false],
+    ['/onboarding/goal', false],
+    ['/onboarding/wish', false],
+  ])('%s uses the shared room; TOBI only when its render exists', async (url, hasRender) => {
+    await settingsRepository.setOnboardingCompleted(mockServices.db);
+    renderRouter('./app', { initialUrl: url });
+    const room = await screen.findByTestId('room-background');
+    expect(room.props.source).toBe(TOBI_ROOM_SHARED);
+    expect(screen.queryAllByTestId('room-character')).toHaveLength(hasRender ? 1 : 0);
+    expect(screen.queryByText(/^tobi_/)).toBeNull(); // no placeholder squares
   });
 });
