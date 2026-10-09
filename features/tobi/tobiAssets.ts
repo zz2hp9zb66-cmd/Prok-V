@@ -61,12 +61,12 @@ export const tobiRenders: Partial<Record<TobiState, TobiRender>> = {
     placement: { scale: 1 / (0.84 - 0.027), offsetY: 1 - 0.84 },
   },
   // Product owner's render, unmodified (WebP with transparency): raised fist with orange strokes.
-  // 72% stays above the panel: strokes, fist and face (ends at ≈70%) visible; hoodie behind the panel.
+  // 86% stays above the panel: strokes, fist, face, backpack straps and the hoodie down to the pocket visible.
   tobi_statistics: {
     source: require('@/assets/tobi/tobi_statistics.webp'),
     width: 1575,
     height: 998,
-    placement: { scale: 1 / 0.72, offsetY: 1 - 0.72 },
+    placement: { scale: 1 / 0.86, offsetY: 1 - 0.86 },
   },
 };
 

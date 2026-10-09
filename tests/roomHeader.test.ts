@@ -154,9 +154,9 @@ describe.each(Object.entries(DEVICES))('room header on %s', (_, d) => {
     });
     expect(f.width / f.height).toBeCloseTo(r.width / r.height);
     expect(f.top).toBeGreaterThanOrEqual(d.top); // strokes above the fist under the status bar
-    expect(f.top + f.height * 0.7).toBeLessThanOrEqual(panelTop + 0.5); // face above the panel
+    expect(f.top + f.height * 0.85).toBeLessThanOrEqual(panelTop + 0.5); // face, straps and hoodie above the panel
     expect(f.left).toBeGreaterThanOrEqual(0);
     expect(f.left + f.width).toBeLessThanOrEqual(d.width);
-    expect(f.width).toBeGreaterThan(d.width * 0.55);
+    expect(f.width).toBeGreaterThan(d.width * 0.5);
   });
 });
