@@ -40,9 +40,9 @@ describe('main user flow', () => {
   it('onboarding → habit → points → reward → archive → statistics → reopen', async () => {
     const app = renderRouter('./app', { initialUrl: '/' });
 
-    // First launch: onboarding.
+    // First launch: welcome for 3 s, then onboarding automatically.
     await screen.findByText('Привет!');
-    fireEvent.press(screen.getByText('Начать'));
+    act(() => jest.advanceTimersByTime(3000));
 
     // Goal step: create a goal.
     await screen.findByText('Твоя первая цель');
@@ -104,6 +104,8 @@ describe('main user flow', () => {
     // Reopen: onboarding is not shown again, data persisted.
     screen.unmount();
     const reopened = renderRouter('./app', { initialUrl: '/' });
+    await screen.findByText('Привет!'); // welcome on every cold start
+    act(() => jest.advanceTimersByTime(3000));
     await screen.findByText('Зарядка');
     expect(reopened.getPathname()).toBe('/tasks');
     expect(screen.getByLabelText('Баланс: 5 баллов')).toBeTruthy();
@@ -211,5 +213,115 @@ describe('main user flow', () => {
     expect(room.props.source).toBe(TOBI_ROOM_SHARED);
     expect(screen.queryAllByTestId('room-character')).toHaveLength(hasRender ? 1 : 0);
     expect(screen.queryByText(/^tobi_/)).toBeNull(); // no placeholder squares
+  });
+});
+
+describe('cold start: welcome for 3 s, then onboarding or «Задачи»', () => {
+  const { router } = jest.requireActual('expo-router') as typeof import('expo-router');
+  const { startupDestination, WELCOME_SPLASH_MS } = jest.requireActual(
+    '@/features/onboarding/startup',
+  ) as typeof import('@/features/onboarding/startup');
+
+  afterEach(() => jest.restoreAllMocks());
+
+  it('maps the persisted flag to the destination', () => {
+    expect(WELCOME_SPLASH_MS).toBe(3000);
+    expect(startupDestination(false)).toBe('/onboarding/goal');
+    expect(startupDestination(true)).toBe('/tasks');
+  });
+
+  it('new user: welcome without «Начать» for 3 s, then the goal step (no way back to the welcome)', async () => {
+    const replace = jest.spyOn(router, 'replace');
+    const app = renderRouter('./app', { initialUrl: '/' });
+    await screen.findByText('Привет!');
+    expect(screen.getByText('Я ТОБИ — твой напарник\nв больших и маленьких\nдостижениях.')).toBeTruthy();
+    expect(screen.queryByRole('button', { name: 'Начать' })).toBeNull(); // hidden: no tap needed to continue
+
+    act(() => jest.advanceTimersByTime(2999));
+    expect(app.getPathname()).toBe('/');
+    act(() => jest.advanceTimersByTime(1));
+    await screen.findByText('Твоя первая цель');
+    expect(app.getPathname()).toBe('/onboarding/goal');
+    expect(replace).toHaveBeenCalledTimes(1);
+    expect(router.canGoBack()).toBe(false);
+    expect(screen.queryByLabelText('Назад')).toBeNull(); // first step: nothing to go back to
+  });
+
+  it('existing user: welcome, then «Задачи» with the data kept', async () => {
+    await settingsRepository.setOnboardingCompleted(mockServices.db);
+    await createHabit(mockServices, { name: 'Вода', weekdays: [0, 1, 2, 3, 4, 5, 6], pointsPerCompletion: 3, dailyLimit: 1 });
+    const app = renderRouter('./app', { initialUrl: '/' });
+    await screen.findByText('Привет!');
+    act(() => jest.advanceTimersByTime(3000));
+    await screen.findByText('Вода');
+    expect(app.getPathname()).toBe('/tasks');
+    expect(screen.queryByText('Твоя первая цель')).toBeNull();
+  });
+
+  it('existing user who deleted all habits does not get onboarding again', async () => {
+    await settingsRepository.setOnboardingCompleted(mockServices.db);
+    const app = renderRouter('./app', { initialUrl: '/' });
+    act(() => jest.advanceTimersByTime(3000));
+    await screen.findByText('Создать первую привычку');
+    expect(app.getPathname()).toBe('/tasks');
+  });
+
+  it('skipping every optional step still completes onboarding', async () => {
+    const app = renderRouter('./app', { initialUrl: '/' });
+    act(() => jest.advanceTimersByTime(3000));
+    await screen.findByText('Твоя первая цель');
+    fireEvent.press(screen.getByText('Пропустить'));
+    await screen.findByText('Твоё первое желание');
+    fireEvent.press(screen.getByText('Пропустить'));
+    await screen.findByText('Давай создадим\nтвою задачу!');
+    fireEvent.press(screen.getByText('Пропустить'));
+    await waitFor(() => expect(app.getPathname()).toBe('/tasks'));
+    expect(await settingsRepository.isOnboardingCompleted(mockServices.db)).toBe(true);
+  });
+
+  it('slow storage: waits for the state after 3 s instead of guessing', async () => {
+    await settingsRepository.setOnboardingCompleted(mockServices.db);
+    let resolve!: (v: boolean) => void;
+    jest.spyOn(settingsRepository, 'isOnboardingCompleted').mockReturnValue(new Promise((r) => (resolve = r)));
+    const replace = jest.spyOn(router, 'replace');
+    const app = renderRouter('./app', { initialUrl: '/' });
+    await screen.findByText('Привет!');
+    act(() => jest.advanceTimersByTime(5000));
+    expect(app.getPathname()).toBe('/');
+    expect(replace).not.toHaveBeenCalled();
+    await act(async () => resolve(true));
+    await waitFor(() => expect(app.getPathname()).toBe('/tasks'));
+    expect(replace).toHaveBeenCalledTimes(1);
+  });
+
+  it('closing during the welcome: no navigation and no errors after unmount', async () => {
+    const replace = jest.spyOn(router, 'replace');
+    const errors = jest.spyOn(console, 'error');
+    const app = renderRouter('./app', { initialUrl: '/' });
+    await screen.findByText('Привет!');
+    act(() => jest.advanceTimersByTime(1000));
+    app.unmount();
+    act(() => jest.advanceTimersByTime(5000));
+    expect(replace).not.toHaveBeenCalled();
+    expect(errors).not.toHaveBeenCalled();
+  });
+
+  it('switching tabs never shows the welcome again', async () => {
+    await settingsRepository.setOnboardingCompleted(mockServices.db);
+    renderRouter('./app', { initialUrl: '/' });
+    act(() => jest.advanceTimersByTime(3000));
+    await screen.findByText('Привычки');
+    const tabs: [string, string][] = [
+      ['Награды', 'Пока нет целей'],
+      ['Статистика', 'Эта неделя'],
+      ['Профиль', 'Посмотреть приветствие'],
+      ['Задачи', 'Создать первую привычку'],
+    ];
+    for (const [tab, content] of tabs) {
+      fireEvent.press(screen.getByLabelText(tab));
+      await screen.findByText(content);
+      act(() => jest.advanceTimersByTime(3000));
+      expect(screen.queryByText(/Я ТОБИ — твой напарник/)).toBeNull();
+    }
   });
 });

@@ -22,10 +22,11 @@ const SUBTITLE = 'Я ТОБИ — твой напарник\nв больших �
  *    proportions (see welcomeLayout.ts);
  *  - «Привет!» + subtitle top-left, «Начать →» and step dots at the bottom.
  *
- * `onStart` defaults to continuing onboarding. The replay from Профиль passes
- * its own handler, so viewing the welcome again never touches any data.
+ * `onStart` is the «Начать» handler (replay from Профиль: back to Профиль).
+ * `null` hides the button for the automatic cold-start welcome; its space is
+ * kept so the layout and TOBI's size stay exactly the same.
  */
-export function WelcomeScreen({ onStart = () => router.push('/onboarding/goal') }: { onStart?: () => void }) {
+export function WelcomeScreen({ onStart }: { onStart: (() => void) | null }) {
   const room = tobiScenes.welcomeRoom;
   const insets = useSafeAreaInsets();
   const { width, height } = useWindowDimensions();
@@ -102,13 +103,21 @@ export function WelcomeScreen({ onStart = () => router.push('/onboarding/goal') 
         <View style={styles.spacer} />
 
         <View style={styles.footer} onLayout={(e) => setButtonTop(e.nativeEvent.layout.y)}>
-          <PrimaryButton title="Начать" trailingIcon="arrow-forward-outline" onPress={onStart} />
+          <View
+            style={onStart ? undefined : styles.hidden}
+            accessibilityElementsHidden={!onStart}
+            importantForAccessibility={onStart ? 'auto' : 'no-hide-descendants'}
+          >
+            <PrimaryButton title="Начать" trailingIcon="arrow-forward-outline" onPress={onStart ?? noop} disabled={!onStart} />
+          </View>
           <PageDots count={3} active={0} />
         </View>
       </View>
     </View>
   );
 }
+
+const noop = () => {};
 
 const STROKE_LENGTH = spacing.md - spacing.xxs;
 
@@ -133,6 +142,7 @@ const styles = StyleSheet.create({
   strokeLower: { left: spacing.sm + spacing.xs, top: spacing.sm + 2, transform: [{ rotate: '65deg' }] },
   spacer: { flex: 1 },
   footer: { paddingHorizontal: spacing.md, gap: spacing.md - spacing.xxs },
+  hidden: { opacity: 0, pointerEvents: 'none' },
 });
 
 /**

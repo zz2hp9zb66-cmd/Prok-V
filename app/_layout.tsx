@@ -1,4 +1,5 @@
-import { type ErrorBoundaryProps, Stack } from 'expo-router';
+import { type ErrorBoundaryProps, SplashScreen, Stack } from 'expo-router';
+import { useEffect } from 'react';
 import { StyleSheet, View } from 'react-native';
 import { AppText } from '@/components/AppText';
 import { PrimaryButton } from '@/components/PrimaryButton';
@@ -6,6 +7,18 @@ import { StatusBar } from 'expo-status-bar';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { DataProvider } from '@/data/DataProvider';
 import { colors, spacing, typography } from '@/theme';
+
+// Keep the native splash until the local database is open, so the cold start
+// goes splash → welcome screen without a blank frame in between.
+SplashScreen.preventAutoHideAsync();
+
+/** Rendered once the DataProvider is ready (DB opened and migrated). */
+function HideNativeSplash() {
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
+  return null;
+}
 
 const detailHeader = (title: string) => ({
   headerShown: true,
@@ -21,9 +34,10 @@ export default function RootLayout() {
   return (
     <SafeAreaProvider>
       <DataProvider>
+        <HideNativeSplash />
         <StatusBar style="dark" />
         <Stack screenOptions={{ headerShown: false, contentStyle: { backgroundColor: colors.background } }}>
-          <Stack.Screen name="index" />
+          <Stack.Screen name="index" options={{ animation: 'none' }} />
           <Stack.Screen name="onboarding" options={{ gestureEnabled: false }} />
           <Stack.Screen name="(tabs)" />
           <Stack.Screen name="welcome" />
@@ -41,6 +55,9 @@ export default function RootLayout() {
 
 /** Shown if something unexpected fails (e.g. the local database cannot be opened). */
 export function ErrorBoundary({ retry }: ErrorBoundaryProps) {
+  useEffect(() => {
+    SplashScreen.hide();
+  }, []);
   return (
     <View style={styles.error}>
       <AppText variant="h2" align="center">

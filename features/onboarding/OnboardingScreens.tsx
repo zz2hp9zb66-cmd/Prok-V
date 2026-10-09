@@ -11,13 +11,12 @@ import { RewardForm } from '../rewards/RewardForm';
 import { createReward } from '../rewards/rewardsService';
 
 /**
- * Onboarding (§5): welcome → goal → wish → habit → Задачи.
- * Every creation step can be skipped; `onboardingCompleted` is saved at the end.
+ * Onboarding (§5): goal → wish → habit → Задачи. The welcome is shown by the
+ * cold-start screen (StartupScreen) before this flow. Every creation step can
+ * be skipped; `onboardingCompleted` is saved at the end.
  */
 
 const SKIP = 'Пропустить';
-
-export { WelcomeScreen as OnboardingWelcomeScreen } from './WelcomeScreen';
 
 function RewardStep({ type, next }: { type: RewardType; next: () => void }) {
   const services = useServices();
@@ -27,7 +26,8 @@ function RewardStep({ type, next }: { type: RewardType; next: () => void }) {
     <RoomScreen
       variant="form"
       tobiState={isGoal ? 'tobi_goal_create' : 'tobi_wish_create'}
-      onBack={() => router.back()}
+      // The first step has nothing behind it (the welcome was replaced): no back button there.
+      onBack={router.canGoBack() ? () => router.back() : undefined}
       bottomSafeArea
     >
       <PanelHeading
