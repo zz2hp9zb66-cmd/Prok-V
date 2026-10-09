@@ -51,6 +51,15 @@ export const tobiRenders: Partial<Record<TobiState, TobiRender>> = {
     height: 1057,
     placement: { scale: 1 / (0.74 - 0.07), offsetY: 1 - 0.74 },
   },
+  // Product owner's render, unmodified (WebP with transparency): golden star, heart cloud.
+  // 84% stays above the panel: face, heart cloud and the whole star (ends at ≈80%) visible; hoodie behind the panel.
+  // The top ≈2.7% of the render is transparent and may sit in the status bar area.
+  tobi_rewards: {
+    source: require('@/assets/tobi/tobi_rewards.webp'),
+    width: 1569,
+    height: 1002,
+    placement: { scale: 1 / (0.84 - 0.027), offsetY: 1 - 0.84 },
+  },
 };
 
 /**
