@@ -15,7 +15,7 @@
 | 11 | Rewards + archive | ✅ |
 | 12 | Statistics | ✅ |
 | 13 | Profile/settings | ✅ (D5) |
-| 14 | TOBI assets | 🟡 подключены `tobi_wave`, `tobi_habit_create`, `tobi_goal_create`; остальные ждут рендеры |
+| 14 | TOBI assets | 🟡 подключены `tobi_wave`, `tobi_habit_create`, `tobi_goal_create`, `tobi_wish_create`; остальные ждут рендеры |
 | 15 | TOBI/UI animations | 🟡 UI-анимация «+N → счётчик» и переключение состояний TOBI готовы; анимации самого TOBI — после ассетов и выбора формата (§20) |
 | 16 | Tests | ✅ домен (§30) + сквозной UI-сценарий DoD (§35) |
 | 17 | Offline verification | ✅ в коде нет сетевых вызовов; все данные в локальной SQLite |
@@ -43,7 +43,8 @@
 - ✅ `tobi_wave` — `assets/tobi/tobi_wave.webp` (оригинал владельца, WebP с прозрачностью, 1024×1536), приветственный экран.
 - ✅ `tobi_habit_create` — `assets/tobi/tobi_habit_create.png` (PNG с прозрачностью, 1554×1012, пиксели идентичны присланному файлу), экран «Создание задачи».
 - ✅ `tobi_goal_create` — `assets/tobi/tobi_goal_create.webp` (оригинал владельца, WebP с прозрачностью, 1426×1103), шаг онбординга «цель» и «Новая цель».
-- ⏳ Ждут прозрачных PNG/WebP: `tobi_wish_create`, `tobi_idle`,
+- ✅ `tobi_wish_create` — `assets/tobi/tobi_wish_create.webp` (оригинал владельца, WebP с прозрачностью, 1426×1103), шаг онбординга «желание» и «Новое желание».
+- ⏳ Ждут прозрачных PNG/WebP: `tobi_tasks`, `tobi_rewards`, `tobi_idle`,
   `tobi_habit_complete`, `tobi_reward`, `tobi_statistics`.
 
 ## Единая комната (D13)

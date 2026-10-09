@@ -77,4 +77,26 @@ describe.each(Object.entries(DEVICES))('room header on %s', (_, d) => {
     // Back button (16..60 px) only meets the transparent left edge of the render (tail starts below 55%).
     expect(f.left + f.width * 0.25).toBeGreaterThan(60);
   });
+
+  it('shows tobi_wish_create with all thought clouds and paws visible', () => {
+    const r = tobiRenders.tobi_wish_create!;
+    const headerHeight = roomHeaderHeight('form', d.height, d.top);
+    const panelTop = headerHeight - ROOM_PANEL_OVERLAP;
+    const f = computeRoomCharacterFrame({
+      screenWidth: d.width,
+      insetTop: d.top,
+      headerHeight,
+      aspect: r.width / r.height,
+      scale: r.placement?.scale,
+      offsetY: r.placement?.offsetY,
+    });
+    expect(f.width / f.height).toBeCloseTo(r.width / r.height);
+    expect(f.top).toBeGreaterThanOrEqual(d.top); // top cloud under the status bar
+    expect(f.top + f.height * 0.78).toBeLessThanOrEqual(panelTop + 0.5); // clouds and paws above the panel
+    expect(f.left).toBeGreaterThanOrEqual(0);
+    expect(f.left + f.width).toBeLessThanOrEqual(d.width); // right-hand clouds stay on screen
+    expect(f.width).toBeGreaterThan(d.width * 0.5);
+    // Back button (16..60 px) only meets the transparent top-left of the render (ear and tail start lower).
+    expect(f.left + f.width * 0.15).toBeGreaterThan(60);
+  });
 });

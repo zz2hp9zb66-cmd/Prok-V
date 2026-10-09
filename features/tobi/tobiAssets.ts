@@ -34,6 +34,14 @@ export const tobiRenders: Partial<Record<TobiState, TobiRender>> = {
     height: 1103,
     placement: { scale: 1 / 0.86, offsetY: 1 - 0.86 },
   },
+  // Product owner's render, unmodified (WebP with transparency): dreaming TOBI with three thought clouds.
+  // 84% stays above the panel: all clouds and both paws visible (they end at ≈78%), hoodie hem behind the panel.
+  tobi_wish_create: {
+    source: require('@/assets/tobi/tobi_wish_create.webp'),
+    width: 1426,
+    height: 1103,
+    placement: { scale: 1 / 0.84, offsetY: 1 - 0.84 },
+  },
 };
 
 /**

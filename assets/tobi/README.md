@@ -14,7 +14,7 @@ TOBI is never generated or redesigned in code (§20, §33).
 | `tobi_wave` ✅ | Welcome |
 | `tobi_habit_create` ✅ | Task creation |
 | `tobi_goal_create` ✅ | Goal creation (onboarding + «Новая цель») |
-| `tobi_wish_create` | Wish creation (onboarding + «Новое желание») |
+| `tobi_wish_create` ✅ | Wish creation (onboarding + «Новое желание») |
 | `tobi_tasks` | «Задачи» header |
 | `tobi_rewards` | «Награды» header |
 | `tobi_statistics` | «Статистика» header |
