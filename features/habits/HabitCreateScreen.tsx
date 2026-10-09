@@ -14,6 +14,7 @@ import type { Weekday } from '@/services/time';
 import { colors, componentRadius, radius, spacing } from '@/theme';
 import { tobiScenes } from '../tobi/tobiAssets';
 import type { HabitInput } from './habitRules';
+import { computeTaskCreateTobiFrame } from './taskCreateLayout';
 
 /** UI limit for the task name (design requirement). */
 export const HABIT_NAME_MAX_LENGTH = 60;
@@ -64,7 +65,7 @@ export interface HabitCreateViewProps {
  */
 export function HabitCreateView({ step, onBack, onSubmit, onSkip, busy }: HabitCreateViewProps) {
   const insets = useSafeAreaInsets();
-  const { height } = useWindowDimensions();
+  const { width: screenWidth, height } = useWindowDimensions();
   const sceneHeight = Math.round(Math.min(Math.max(height * 0.26, 170), 280)) + insets.top;
 
   const [name, setName] = useState('');
@@ -82,18 +83,25 @@ export function HabitCreateView({ step, onBack, onSubmit, onSkip, busy }: HabitC
   };
 
   const room = tobiScenes.taskCreateRoom;
-  // TOBI fits between the safe area and the panel overlap.
-  const tobiSize = Math.min(sceneHeight - insets.top - componentRadius.panel - spacing.sm, 200);
+  // TOBI with the notebook: under the status bar, hem tucked behind the panel's top edge.
+  const tobi = computeTaskCreateTobiFrame({
+    screenWidth,
+    insetTop: insets.top,
+    panelTop: sceneHeight - componentRadius.panel,
+  });
 
   return (
     <View style={styles.root}>
       <KeyboardAvoidingView style={styles.fill} behavior={Platform.OS === 'ios' ? 'padding' : undefined}>
         <ScrollView keyboardShouldPersistTaps="handled" contentContainerStyle={styles.scroll} bounces={false}>
-          {/* TOBI Zone: room background + TOBI (`tobi_habit_create` render or placeholder). */}
+          {/* TOBI Zone: room background + TOBI with the notebook (`tobi_habit_create`, `contain`). */}
           <View style={[styles.scene, { height: sceneHeight }]}>
             {room ? <Image source={room} style={styles.sceneImage} resizeMode="cover" /> : null}
-            <View style={[styles.tobiLayer, { paddingTop: insets.top }]} testID="task-create-tobi-layer">
-              <TOBIHero state="tobi_habit_create" size={tobiSize} />
+            <View
+              style={[styles.tobiLayer, { left: tobi.left, top: tobi.top }]}
+              testID="task-create-tobi-layer"
+            >
+              <TOBIHero state="tobi_habit_create" width={tobi.width} height={tobi.height} />
             </View>
           </View>
 
@@ -192,16 +200,7 @@ const styles = StyleSheet.create({
   scroll: { flexGrow: 1 },
   scene: { overflow: 'hidden', backgroundColor: colors.surfaceMuted },
   sceneImage: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' },
-  tobiLayer: {
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: componentRadius.panel,
-    alignItems: 'center',
-    justifyContent: 'flex-end',
-    pointerEvents: 'none',
-  },
+  tobiLayer: { position: 'absolute', pointerEvents: 'none' },
   panel: {
     flexGrow: 1,
     marginTop: -componentRadius.panel,

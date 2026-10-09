@@ -9,6 +9,8 @@ import type { TobiState } from './states';
 export const tobiImages: Partial<Record<TobiState, ImageSourcePropType>> = {
   // Product owner's render, unmodified (WebP with transparency, 1024×1536).
   tobi_wave: require('@/assets/tobi/tobi_wave.webp'),
+  // Product owner's render (PNG with transparency, 1554×1012): thumbs up + plan notebook.
+  tobi_habit_create: require('@/assets/tobi/tobi_habit_create.png'),
 };
 
 /**
