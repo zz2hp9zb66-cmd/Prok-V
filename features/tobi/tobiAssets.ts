@@ -35,21 +35,21 @@ export const tobiRenders: Partial<Record<TobiState, TobiRender>> = {
     placement: { scale: 1 / 0.86, offsetY: 1 - 0.86 },
   },
   // Product owner's render, unmodified (WebP with transparency): dreaming TOBI with three thought clouds.
-  // 84% stays above the panel: all clouds and both paws visible (they end at ≈78%), hoodie hem behind the panel.
+  // 96% stays above the panel: all clouds, both paws and the hoodie visible; only the bottom edge touches the panel.
   tobi_wish_create: {
     source: require('@/assets/tobi/tobi_wish_create.webp'),
     width: 1426,
     height: 1103,
-    placement: { scale: 1 / 0.84, offsetY: 1 - 0.84 },
+    placement: { scale: 1 / 0.96, offsetY: 1 - 0.96 },
   },
   // Product owner's render, unmodified (WebP with transparency): thumbs up, crown, heart speech cloud.
-  // 74% stays above the panel: face, raised paw (ends at ≈72%), crown and cloud visible; hoodie behind the panel.
+  // 86% stays above the panel: face, raised paw, crown, cloud, backpack straps and the hoodie visible.
   // The top 7% of the render is transparent, so it may sit in the status bar area: the crown starts under it.
   tobi_tasks: {
     source: require('@/assets/tobi/tobi_tasks.webp'),
     width: 1488,
     height: 1057,
-    placement: { scale: 1 / (0.74 - 0.07), offsetY: 1 - 0.74 },
+    placement: { scale: 1 / (0.86 - 0.07), offsetY: 1 - 0.86 },
   },
   // Product owner's render, unmodified (WebP with transparency): golden star, heart cloud.
   // 84% stays above the panel: face, heart cloud and the whole star (ends at ≈80%) visible; hoodie behind the panel.
