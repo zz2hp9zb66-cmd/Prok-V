@@ -6,6 +6,12 @@ export interface TobiRender {
   source: ImageSourcePropType;
   width: number;
   height: number;
+  /**
+   * Default placement in room headers (see `computeRoomCharacterFrame`):
+   * scale 1 = from the status bar to the panel edge; offsetY as a share of the
+   * character height (+ = lower part tucks behind the panel). Screen props override it.
+   */
+  placement?: { scale?: number; offsetX?: number; offsetY?: number };
 }
 
 /**
@@ -20,6 +26,14 @@ export const tobiRenders: Partial<Record<TobiState, TobiRender>> = {
   tobi_wave: { source: require('@/assets/tobi/tobi_wave.webp'), width: 1024, height: 1536 },
   // Product owner's render (PNG with transparency): thumbs up + plan notebook.
   tobi_habit_create: { source: require('@/assets/tobi/tobi_habit_create.png'), width: 1554, height: 1012 },
+  // Product owner's render, unmodified (WebP with transparency): pencil + goal thought cloud.
+  // 86% stays above the panel: cloud, pencil and both paws visible (paws end at ≈83%), pocket behind the panel.
+  tobi_goal_create: {
+    source: require('@/assets/tobi/tobi_goal_create.webp'),
+    width: 1426,
+    height: 1103,
+    placement: { scale: 1 / 0.86, offsetY: 1 - 0.86 },
+  },
 };
 
 /**

@@ -13,15 +13,15 @@ TOBI is never generated or redesigned in code (§20, §33).
 |---|---|
 | `tobi_wave` ✅ | Welcome |
 | `tobi_habit_create` ✅ | Task creation |
-| `tobi_goal_create` | Goal creation (onboarding + «Новая цель») |
+| `tobi_goal_create` ✅ | Goal creation (onboarding + «Новая цель») |
 | `tobi_wish_create` | Wish creation (onboarding + «Новое желание») |
 | `tobi_tasks` | «Задачи» header |
 | `tobi_rewards` | «Награды» header |
 | `tobi_statistics` | «Статистика» header |
 | `tobi_habit_complete` | short reaction on «Задачи» after a completion |
 
-Position/size per screen can be tuned with `characterScale`, `characterOffsetX`, `characterOffsetY`
-on `RoomScreen` / `TOBIRoomHeader`.
+Position/size can be set once per render with `placement: { scale, offsetX, offsetY }` in `tobiRenders`,
+or per screen with `characterScale`, `characterOffsetX`, `characterOffsetY` on `RoomScreen` / `TOBIRoomHeader`.
 
 Shared room for all these headers: `assets/backgrounds/tobi_room_shared.webp`.
 The welcome screen keeps its own scene `assets/tobi/welcome_room.webp`.

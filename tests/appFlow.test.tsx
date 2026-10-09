@@ -200,9 +200,9 @@ describe('main user flow', () => {
     ['/rewards', false],
     ['/statistics', false],
     ['/habit/new', true],
-    ['/reward/new?type=goal', false],
+    ['/reward/new?type=goal', true],
     ['/reward/new?type=wish', false],
-    ['/onboarding/goal', false],
+    ['/onboarding/goal', true],
     ['/onboarding/wish', false],
   ])('%s uses the shared room; TOBI only when its render exists', async (url, hasRender) => {
     await settingsRepository.setOnboardingCompleted(mockServices.db);

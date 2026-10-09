@@ -52,9 +52,9 @@ export function RoomScreen({
             variant={variant}
             characterSource={render?.source}
             characterAspect={render ? render.width / render.height : undefined}
-            characterScale={characterScale}
-            characterOffsetX={characterOffsetX}
-            characterOffsetY={characterOffsetY}
+            characterScale={characterScale ?? render?.placement?.scale}
+            characterOffsetX={characterOffsetX ?? render?.placement?.offsetX}
+            characterOffsetY={characterOffsetY ?? render?.placement?.offsetY}
           />
           <View style={[styles.panel, bottomSafeArea && !footer ? { paddingBottom: spacing.md + insets.bottom } : null]}>
             {children}
