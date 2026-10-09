@@ -40,7 +40,7 @@ describe('main user flow', () => {
     const app = renderRouter('./app', { initialUrl: '/' });
 
     // First launch: onboarding.
-    await screen.findByText('Привет, я TOBI!');
+    await screen.findByText('Привет!');
     fireEvent.press(screen.getByText('Начать'));
 
     // Goal step: create a goal.
@@ -137,7 +137,7 @@ describe('main user flow', () => {
 
     const app = renderRouter('./app', { initialUrl: '/profile' });
     fireEvent.press(await screen.findByText('Посмотреть приветствие'));
-    await screen.findByText('Привет, я TOBI!');
+    await screen.findByText('Привет!');
     expect(app.getPathname()).toBe('/welcome');
 
     fireEvent.press(screen.getByText('Начать'));

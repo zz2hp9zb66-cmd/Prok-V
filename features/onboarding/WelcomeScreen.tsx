@@ -1,86 +1,138 @@
-import { router } from 'expo-router';
-import { useState } from 'react';
+import { router, useFocusEffect } from 'expo-router';
+import { setStatusBarStyle } from 'expo-status-bar';
+import { useCallback, useState } from 'react';
 import { Image, StyleSheet, useWindowDimensions, View } from 'react-native';
-import { SafeAreaView } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import Svg, { Defs, LinearGradient, Rect, Stop } from 'react-native-svg';
 import { AppText } from '@/components/AppText';
+import { PageDots } from '@/components/PageDots';
 import { PrimaryButton } from '@/components/PrimaryButton';
 import { TOBIHero } from '@/components/TOBIHero';
-import { colors, componentRadius, shadows, spacing } from '@/theme';
+import { colors, radius, spacing } from '@/theme';
 import { tobiScenes } from '../tobi/tobiAssets';
+import { computeTobiFrame } from './welcomeLayout';
+
+const SUBTITLE = 'Я ТОБИ — твой напарник\nв больших и маленьких\nдостижениях.';
 
 /**
- * Onboarding welcome (§5, steps 1–2). Three layers, bottom to top:
- *  1. Room background — full screen, also behind the status bar and the home indicator.
- *  2. TOBI layer — transparent slot for the future waving TOBI (`tobi_wave`).
- *  3. Content — title, description and «Начать» inside the safe area.
+ * Onboarding welcome (§5, steps 1–2), approved reference layout:
+ *  - TOBI's room fills the whole screen (behind status bar and home indicator),
+ *    with soft dark gradients at the top (white title) and bottom (button);
+ *  - large TOBI (`tobi_wave`) in the room, sized and placed from the screen
+ *    proportions (see welcomeLayout.ts);
+ *  - «Привет!» + subtitle top-left, «Начать →» and step dots at the bottom.
  *
  * `onStart` defaults to continuing onboarding. The replay from Профиль passes
  * its own handler, so viewing the welcome again never touches any data.
  */
 export function WelcomeScreen({ onStart = () => router.push('/onboarding/goal') }: { onStart?: () => void }) {
   const room = tobiScenes.welcomeRoom;
-  const window = useWindowDimensions();
-  // TOBI box scales with the screen (render is 2:3, `contain` keeps proportions).
-  const tobiSize = Math.round(Math.min(window.height * 0.44, window.width * 0.95, 420));
-  // Top of the text panel, measured on layout; TOBI never stands behind it.
-  const [panelTop, setPanelTop] = useState<number | null>(null);
-  // Feet on the room floor (≈69% of the screen with `cover`), but always above the panel.
-  const tobiBottom = Math.min(window.height * FLOOR_LINE, panelTop ?? window.height * FLOOR_LINE);
+  const insets = useSafeAreaInsets();
+  const { width, height } = useWindowDimensions();
+  const [textBottom, setTextBottom] = useState<number | null>(null);
+  const [buttonTop, setButtonTop] = useState<number | null>(null);
+
+  // White status bar over the dark top of the room, only while this screen is focused.
+  useFocusEffect(
+    useCallback(() => {
+      setStatusBarStyle('light');
+      return () => setStatusBarStyle('dark');
+    }, []),
+  );
+
+  const tobi = textBottom !== null && buttonTop !== null ? computeTobiFrame({ width, height, textBottom, buttonTop }) : null;
+  const sideGutter = Math.min(Math.max(width * 0.12, spacing.md), spacing.xl);
 
   return (
     <View style={styles.root}>
-      {/* Layer 1: background */}
-      {room ? (
-        <Image source={room} style={styles.background} resizeMode="cover" accessibilityIgnoresInvertColors />
+      {/* Layer 1: room */}
+      {room ? <Image source={room} style={styles.fill} resizeMode="cover" accessibilityIgnoresInvertColors /> : null}
+
+      {/* Layer 2: readability gradients (top for the title, bottom for the button) */}
+      <Svg width={width} height={height} style={[styles.fill, styles.passThrough]}>
+        <Defs>
+          <LinearGradient id="welcomeTop" x1="0" y1="0" x2="0" y2="1">
+            <Stop offset="0" stopColor={colors.scrim} stopOpacity={0.55} />
+            <Stop offset="1" stopColor={colors.scrim} stopOpacity={0} />
+          </LinearGradient>
+          <LinearGradient id="welcomeBottom" x1="0" y1="0" x2="0" y2="1">
+            <Stop offset="0" stopColor={colors.scrim} stopOpacity={0} />
+            <Stop offset="1" stopColor={colors.scrim} stopOpacity={0.35} />
+          </LinearGradient>
+        </Defs>
+        <Rect x={0} y={0} width={width} height={height * 0.4} fill="url(#welcomeTop)" />
+        <Rect x={0} y={height * 0.72} width={width} height={height * 0.28} fill="url(#welcomeBottom)" />
+      </Svg>
+
+      {/* Layer 3: TOBI in the room (transparent render, `contain`) */}
+      {tobi ? (
+        <View
+          style={[styles.passThrough, { position: 'absolute', left: tobi.left, top: tobi.top }]}
+          testID="welcome-tobi-layer"
+        >
+          <TOBIHero state="tobi_wave" width={tobi.width} height={tobi.height} />
+        </View>
       ) : null}
 
-      {/* Layer 2: TOBI — the `tobi_wave` render, or the neutral placeholder until it is provided. */}
-      <View style={[StyleSheet.absoluteFill, styles.passThrough]}>
-        <View style={[styles.tobiSlot, { height: tobiBottom }]} testID="welcome-tobi-layer">
-          <TOBIHero state="tobi_wave" size={tobiSize} />
+      {/* Layer 4: content */}
+      <View
+        style={[
+          styles.content,
+          { paddingTop: insets.top + spacing.sm, paddingBottom: Math.max(insets.bottom, spacing.sm) + spacing.sm },
+        ]}
+      >
+        <View
+          style={[styles.header, { paddingHorizontal: sideGutter }]}
+          onLayout={(e) => setTextBottom(e.nativeEvent.layout.y + e.nativeEvent.layout.height)}
+        >
+          <View style={styles.titleRow}>
+            <AppText variant="display" color="textOnImage" accessibilityRole="header">
+              Привет!
+            </AppText>
+            <View style={styles.sparkle} accessibilityElementsHidden importantForAccessibility="no-hide-descendants">
+              <View style={[styles.stroke, styles.strokeUpper]} />
+              <View style={[styles.stroke, styles.strokeLower]} />
+            </View>
+          </View>
+          <AppText variant="lead" color="textOnImageSecondary">
+            {SUBTITLE}
+          </AppText>
+        </View>
+
+        <View style={styles.spacer} />
+
+        <View style={styles.footer} onLayout={(e) => setButtonTop(e.nativeEvent.layout.y)}>
+          <PrimaryButton title="Начать" trailingIcon="arrow-forward-outline" onPress={onStart} />
+          <PageDots count={3} active={0} />
         </View>
       </View>
-
-      {/* Layer 3: content */}
-      <SafeAreaView style={styles.content} edges={['top', 'bottom']}>
-        <View style={styles.panel} onLayout={(e) => setPanelTop(e.nativeEvent.layout.y)}>
-          <AppText variant="h1" align="center">
-            Привет, я TOBI!
-          </AppText>
-          <AppText color="textSecondary" align="center">
-            Выполняй привычки, копи баллы и обменивай их на свои цели и желания.
-          </AppText>
-          <PrimaryButton title="Начать" onPress={onStart} />
-        </View>
-      </SafeAreaView>
     </View>
   );
 }
 
-/** Share of the screen height where TOBI's box ends (floor/rug area of the room). */
-const FLOOR_LINE = 0.69;
+const STROKE_LENGTH = spacing.md - spacing.xxs;
 
 const styles = StyleSheet.create({
-  root: { flex: 1, backgroundColor: colors.background },
+  root: { flex: 1, backgroundColor: colors.accentDark },
   // Explicit size so the asset's intrinsic dimensions never override the full-screen fill.
-  background: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' },
+  fill: { position: 'absolute', top: 0, left: 0, width: '100%', height: '100%' },
   passThrough: { pointerEvents: 'none' },
-  tobiSlot: {
+  content: { flex: 1 },
+  header: { gap: spacing.xs },
+  titleRow: { flexDirection: 'row', alignItems: 'flex-start' },
+  // Two small orange accent strokes next to the title (reference detail).
+  sparkle: { width: spacing.xl, height: spacing.xl, marginLeft: spacing.xxs },
+  stroke: {
     position: 'absolute',
-    top: 0,
-    left: 0,
-    right: 0,
-    alignItems: 'center',
-    justifyContent: 'flex-end',
+    width: spacing.xxs + 1,
+    height: STROKE_LENGTH,
+    borderRadius: radius.pill,
+    backgroundColor: colors.primary,
   },
-  content: { flex: 1, justifyContent: 'flex-end', padding: spacing.sm },
-  panel: {
-    gap: spacing.sm,
-    padding: spacing.md,
-    borderRadius: componentRadius.panel,
-    backgroundColor: colors.surfaceTranslucent,
-    ...shadows.panel,
-  },
+  strokeUpper: { left: spacing.xs + 2, top: spacing.xxs, transform: [{ rotate: '30deg' }] },
+  strokeLower: { left: spacing.sm + spacing.xs, top: spacing.sm + 2, transform: [{ rotate: '65deg' }] },
+  spacer: { flex: 1 },
+  footer: { paddingHorizontal: spacing.md, gap: spacing.md - spacing.xxs },
 });
 
 /**

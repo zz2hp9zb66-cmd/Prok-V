@@ -6,20 +6,23 @@ import { AppText } from './AppText';
 
 export interface TOBIHeroProps {
   state: TobiState;
+  /** Square box side. `width`/`height` override it for non-square renders. */
   size?: number;
+  width?: number;
+  height?: number;
 }
 
 /**
  * TOBI Zone. Shows the pre-rendered asset for `state`; until assets are
  * provided it renders a neutral placeholder (TOBI is never drawn in code).
  */
-export function TOBIHero({ state, size = 160 }: TOBIHeroProps) {
+export function TOBIHero({ state, size = 160, width = size, height = size }: TOBIHeroProps) {
   const source = tobiImages[state];
   if (source) {
-    return <Image source={source} style={{ width: size, height: size }} resizeMode="contain" accessibilityLabel="TOBI" />;
+    return <Image source={source} style={{ width, height }} resizeMode="contain" accessibilityLabel="TOBI" />;
   }
   return (
-    <View style={[styles.placeholder, { width: size, height: size }]} accessibilityLabel="TOBI">
+    <View style={[styles.placeholder, { width, height }]} accessibilityLabel="TOBI">
       <AppText variant="small" color="textSecondary" align="center" numberOfLines={2}>
         {state}
       </AppText>

@@ -44,8 +44,12 @@ export const colors = {
   shadow: palette.brand.brown,
   /** neutral.black at 35% — modal backdrop. */
   overlay: 'rgba(46, 46, 46, 0.35)',
-  /** neutral.cream at 92% — readable panel over full-screen scenes. */
-  surfaceTranslucent: 'rgba(255, 249, 243, 0.92)',
+  /** Text placed directly on scene images (TOBI's room). */
+  textOnImage: palette.neutral.white,
+  textOnImageSecondary: 'rgba(255, 255, 255, 0.9)',
+  textOnImageMuted: 'rgba(255, 255, 255, 0.45)',
+  /** Base color of the soft readability gradients over scene images (used with opacity). */
+  scrim: palette.neutral.black,
   ...palette.functional,
 } as const;
 
