@@ -89,6 +89,9 @@ class Node(Animated):
         self.pulse: tuple[float, float, float, float] | None = None  # (start, end, beat seconds, amount)
         self._cache: dict = {}
 
+    def sprite_at(self, t: float) -> Image.Image:
+        return self.sprite
+
     def show(self, t: float, dur: float = 0.6, dy: float = 30, scale_from: float | None = None,
              rise: bool = False, easing: str = "ease_out_quart") -> "Node":
         t = max(t, self.keys[-1].t)
@@ -127,6 +130,25 @@ class Node(Animated):
             return 1.0
         phase = ((t - start) % beat) / beat
         return 1.0 + amount * (1 - phase) ** 3
+
+
+class DynamicNode(Node):
+    """A node whose picture changes over time: `draw(t)` returns its sprite.
+
+    Frames are cached per 1/30 s, so a counter or a moving waveform is drawn once per frame.
+    """
+
+    def __init__(self, draw, x: float, y: float, z: int = 0, fixed: bool = False, **kwargs) -> None:
+        super().__init__(draw(0.0), x, y, z=z, fixed=fixed, **kwargs)
+        self.draw = draw
+        self._frame: tuple[int, Image.Image] | None = None
+
+    def sprite_at(self, t: float) -> Image.Image:
+        key = round(t * 30)
+        if self._frame is None or self._frame[0] != key:
+            self._frame = (key, self.draw(t))
+            self._cache.clear()
+        return self._frame[1]
 
 
 @dataclass
@@ -174,6 +196,11 @@ class Stage:
 
     def node(self, sprite: Image.Image, x: float, y: float, **kwargs) -> Node:
         n = Node(sprite, x, y, **kwargs)
+        self.nodes.append(n)
+        return n
+
+    def dynamic(self, draw, x: float, y: float, **kwargs) -> DynamicNode:
+        n = DynamicNode(draw, x, y, **kwargs)
         self.nodes.append(n)
         return n
 

@@ -176,6 +176,42 @@ No photos are used: the sleeve is typographic and cities are abstract grids.
 you have the rights to use it. No audio is added. `sources` and `notes` keep the
 research with the episode; they are not rendered.
 
+## Documentary Reels (voice + music cards + facts)
+
+A third format for longer, timed music documentaries such as
+`examples/documentary/music_1990_2000.json` («1990–2000: десятилетие, которое
+изменило музыку», 95 s). Burgundy background, cream text, olive accents.
+
+```bash
+python -m prokv --doc examples/documentary/music_1990_2000.json   # → output/music_1990_2000_reels.mp4
+```
+
+Every scene has a fixed start/end and three independent layers:
+
+1. **Narration** (`narration`, plus `tts` when the spoken form differs: names in
+   Cyrillic, numbers in words) — voiced with Silero (`speaker`, default eugene).
+2. **Music cards** (`cards`: ARTIST / TRACK / YEAR) — one at a time, 2–4 s each
+   (`cards_at`, `card_s`).
+3. **Fact** (`fact`, `fact_at`) — its own area under the cards.
+
+Order inside a scene: title → voice → visual → card 1 → card 2 → fact; scenes
+crossfade, a decade timeline at the top moves its marker to each scene's `year`.
+Visual types (`visual.type`): `decade_counter`, `rough_wave`, `sampling`,
+`europe_map`, `voice_wave`, `split`, `flow`, `autotune`, `formats`, `finale`
+(`prokv/layout/documentary/visuals.py`). A new video = a new JSON file.
+
+**Voice fitting**: each scene's text is a separate Silero segment starting after
+the title. Too long → spoken again with shorter pauses → still too long → no
+speed-up and no cuts: the next segments move later and
+`voiceover/<id>/edits_proposal.md` suggests shorter wording (from `notes.edits`).
+`voiceover/<id>/narration.md` lists timings; `scene_XX.txt/.wav` are the
+segments. Without PyTorch/Silero the video is still built with silent voice slots
+and the segment texts are saved (`--no-voice` forces that).
+
+**Music**: `assets/music/<id>.cues.json` lists each card's track with start, end,
+file name, `offset` and `gain_db`. Put licensed fragments in `assets/music/`;
+missing files are skipped and their slots stay silent. Nothing is downloaded.
+
 ## Voiceover: Silero TTS (local Russian speech)
 
 `prokv/voice/` turns Russian text into a WAV voice track with the official

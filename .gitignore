@@ -7,3 +7,6 @@ output/
 models/
 voiceover/*
 !voiceover/README.md
+assets/music/*
+!assets/music/README.md
+!assets/music/*.cues.json

@@ -66,11 +66,12 @@ class StageRenderer:
         if scale <= 0.01:
             return
         angle = node.angle(t, v["rot"])
-        key = round(scale, 3)
+        sprite = node.sprite_at(t)
+        key = (round(scale, 3), id(sprite))
         img = node._cache.get(key)
         if img is None:
-            w, h = node.sprite.size
-            img = node.sprite if abs(scale - 1) < 1e-3 else node.sprite.resize(
+            w, h = sprite.size
+            img = sprite if abs(scale - 1) < 1e-3 else sprite.resize(
                 (max(1, round(w * scale)), max(1, round(h * scale))), Image.Resampling.LANCZOS)
             if len(node._cache) > 64:
                 node._cache.clear()

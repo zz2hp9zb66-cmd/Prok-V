@@ -34,6 +34,9 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--max-scenes", type=int, default=12, help="Upper limit on the number of scenes")
     parser.add_argument("--fps", type=int, default=30, help="Frames per second (default 30)")
     parser.add_argument("--map", type=Path, metavar="EPISODE", help="Render a one-track map episode (JSON)")
+    parser.add_argument("--doc", type=Path, metavar="SCENARIO",
+                        help="Render a documentary Reels scenario (JSON): voice + music cards + facts")
+    parser.add_argument("--no-voice", action="store_true", help="With --doc: skip TTS (silent voice slots)")
     parser.add_argument("--voice", type=Path, metavar="WAV", help="Use this audio file as the voice track")
     parser.add_argument("--voiceover", metavar="TEXT", help="Russian text to speak (Silero TTS) as the voice track")
     parser.add_argument("--voiceover-file", metavar="TXT", help="Read the voiceover text from a file")
@@ -50,7 +53,10 @@ def main(argv: list[str] | None = None) -> int:
     pipeline = Pipeline(style=style, spec=VideoSpec(fps=args.fps), max_scenes=args.max_scenes)
     started = time.monotonic()
 
-    if args.map and args.narrate:
+    if args.doc:
+        result = render_documentary(args.doc, args.out or Path("output"), style, VideoSpec(fps=args.fps),
+                                    args.speaker, use_voice=not args.no_voice)
+    elif args.map and args.narrate:
         result = narrate_track_map(args.map, args.out or Path("output"), style, VideoSpec(fps=args.fps),
                                    args.speaker)
     elif args.map:
@@ -101,6 +107,44 @@ def _voice_track(args) -> Path | None:
     path = SileroTTS(config).synthesize(text)
     print(f"Voiceover: {path} ({wav_duration(path):.1f}s, voice {config.speaker})")
     return path
+
+
+def render_documentary(path: Path, out_dir: Path, style, spec: VideoSpec, speaker: str | None,
+                       use_voice: bool = True) -> Path:
+    """Scenario -> voice (Silero, if available) -> music cues -> soundtrack -> MP4."""
+    from prokv.content.documentary import Documentary
+    from prokv.export import encode_mp4
+    from prokv.export.soundtrack import load_cues, mix_soundtrack
+    from prokv.layout.documentary import build_documentary
+    from prokv.render.stage_renderer import StageRenderer
+    from prokv.voice.documentary import build_voice_track
+    from prokv.voice.silero import PROJECT_ROOT
+
+    doc = Documentary.load(path)
+    folder = PROJECT_ROOT / "voiceover" / doc.id
+    if use_voice:
+        voice = build_voice_track(doc, folder, speaker)
+    else:
+        from prokv.voice.documentary import VoiceTrack, _plan, _write_reports
+        voice = VoiceTrack(_plan(doc), None, folder, "voice disabled (--no-voice)")
+        folder.mkdir(parents=True, exist_ok=True)
+        for seg in voice.segments:
+            (folder / f"scene_{seg.index:02d}.txt").write_text(seg.spoken + "\n", encoding="utf-8")
+            seg.start = seg.planned_start
+        _write_reports(doc, voice)
+    print(f"Voice: {'Silero ' + (speaker or doc.speaker) if voice.available else 'not available — ' + voice.reason}")
+    for seg in voice.segments:
+        flag = "" if seg.overflow <= 0.01 else f"  OVER by {seg.overflow:.1f}s"
+        kind = "" if not seg.estimated else " (est.)"
+        print(f"  {seg.index:2d}  {seg.start:5.1f}s  {seg.length:4.1f}s{kind} / window {seg.window:4.1f}s{flag}")
+    print(f"Voice files and reports: {folder}")
+    cues = load_cues(doc.music_cue_path())
+    soundtrack, used, missing = mix_soundtrack(doc.duration, folder / "soundtrack.wav", voice.wav, cues)
+    print(f"Music: {len(used)} cues mixed, {len(missing)} without a file (silent slots) — "
+          f"see {doc.music_cue_path()}")
+    stage, overlay = build_documentary(doc, style, spec)
+    renderer = StageRenderer(stage, spec.fps, style.grain, overlay)
+    return encode_mp4(renderer.frames(), spec, out_dir / doc.output, audio=soundtrack)
 
 
 def narrate_track_map(path: Path, out_dir: Path, style, spec: VideoSpec, speaker: str | None) -> Path:
