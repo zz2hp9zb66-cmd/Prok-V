@@ -171,6 +171,7 @@ class Link:
     easing: str = "ease_in_out"
     offset_a: tuple[float, float] = (0.0, 0.0)
     offset_b: tuple[float, float] = (0.0, 0.0)
+    above: bool = False         # draw over the nodes (annotations on images) instead of under them
 
     def progress(self, t: float) -> float:
         if t < self.t_draw:

@@ -10,3 +10,10 @@ voiceover/*
 assets/music/*
 !assets/music/README.md
 !assets/music/*.cues.json
+blue_note_reels/assets/blue_note/*
+!blue_note_reels/assets/blue_note/README.md
+blue_note_reels/assets/music/*
+!blue_note_reels/assets/music/music.json
+blue_note_reels/audio/
+blue_note_reels/renders/
+blue_note_reels/output/

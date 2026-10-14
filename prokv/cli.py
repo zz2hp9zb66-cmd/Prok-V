@@ -36,6 +36,8 @@ def main(argv: list[str] | None = None) -> int:
     parser.add_argument("--map", type=Path, metavar="EPISODE", help="Render a one-track map episode (JSON)")
     parser.add_argument("--doc", type=Path, metavar="SCENARIO",
                         help="Render a documentary Reels scenario (JSON): voice + music cards + facts")
+    parser.add_argument("--story", type=Path, metavar="SCENARIO",
+                        help="Render a photo-led documentary (scenario JSON + image manifest), with QC report")
     parser.add_argument("--no-voice", action="store_true", help="With --doc: skip TTS (silent voice slots)")
     parser.add_argument("--voice", type=Path, metavar="WAV", help="Use this audio file as the voice track")
     parser.add_argument("--voiceover", metavar="TEXT", help="Russian text to speak (Silero TTS) as the voice track")
@@ -53,7 +55,10 @@ def main(argv: list[str] | None = None) -> int:
     pipeline = Pipeline(style=style, spec=VideoSpec(fps=args.fps), max_scenes=args.max_scenes)
     started = time.monotonic()
 
-    if args.doc:
+    if args.story:
+        from prokv.story import render_story
+        result = render_story(args.story, args.speaker, use_voice=not args.no_voice, fps=args.fps)
+    elif args.doc:
         result = render_documentary(args.doc, args.out or Path("output"), style, VideoSpec(fps=args.fps),
                                     args.speaker, use_voice=not args.no_voice)
     elif args.map and args.narrate:

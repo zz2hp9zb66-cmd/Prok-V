@@ -50,9 +50,10 @@ class StageRenderer:
         cam = self._camera(t)
         for node in (n for n in self.nodes if n.z < 0):
             self._draw_node(frame, node, t, cam)
-        self._draw_links(frame, t, cam)
+        self._draw_links(frame, t, cam, above=False)
         for node in (n for n in self.nodes if n.z >= 0):
             self._draw_node(frame, node, t, cam)
+        self._draw_links(frame, t, cam, above=True)
         if self.overlay:
             self.overlay(frame, t)
         return frame
@@ -110,8 +111,9 @@ class StageRenderer:
         ex, ey = sx + ux * usable * p, sy + uy * usable * p
         return self._to_screen(sx, sy, cam), self._to_screen(ex, ey, cam), alpha, p
 
-    def _draw_links(self, frame: Image.Image, t: float, cam) -> None:
-        segments = [(link, s) for link in self.stage.links if (s := self._segment(link, t, cam))]
+    def _draw_links(self, frame: Image.Image, t: float, cam, above: bool = False) -> None:
+        segments = [(link, s) for link in self.stage.links
+                    if link.above == above and (s := self._segment(link, t, cam))]
         if not segments:
             return
         pad = 30
