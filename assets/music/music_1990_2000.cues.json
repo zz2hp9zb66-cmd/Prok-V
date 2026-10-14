@@ -1,0 +1,165 @@
+{
+  "_readme": "Music cues for music_1990_2000. Put a licensed audio fragment at each 'file' path (relative to this folder; mp3/wav/m4a). 'offset' = where to start inside the file. Missing files are skipped and the slot stays silent.",
+  "cues": [
+    {
+      "artist": "NIRVANA",
+      "track": "SMELLS LIKE TEEN SPIRIT",
+      "year": "1991",
+      "start": 9.2,
+      "end": 12.2,
+      "file": "nirvana_smells_like_teen_spirit.mp3",
+      "offset": 0.0,
+      "gain_db": -16
+    },
+    {
+      "artist": "R.E.M.",
+      "track": "LOSING MY RELIGION",
+      "year": "1991",
+      "start": 12.4,
+      "end": 15.4,
+      "file": "r_e_m_losing_my_religion.mp3",
+      "offset": 0.0,
+      "gain_db": -16
+    },
+    {
+      "artist": "DR. DRE FEAT. SNOOP DOGG",
+      "track": "NUTHIN' BUT A 'G' THANG",
+      "year": "1992",
+      "start": 19.4,
+      "end": 22.2,
+      "file": "dr_dre_feat_snoop_dogg_nuthin_but_a_g_thang.mp3",
+      "offset": 0.0,
+      "gain_db": -16
+    },
+    {
+      "artist": "2PAC FEAT. DR. DRE",
+      "track": "CALIFORNIA LOVE",
+      "year": "1995",
+      "start": 22.5,
+      "end": 25.3,
+      "file": "2pac_feat_dr_dre_california_love.mp3",
+      "offset": 0.0,
+      "gain_db": -16
+    },
+    {
+      "artist": "SNAP!",
+      "track": "RHYTHM IS A DANCER",
+      "year": "1992",
+      "start": 29.0,
+      "end": 31.0,
+      "file": "snap_rhythm_is_a_dancer.mp3",
+      "offset": 0.0,
+      "gain_db": -16
+    },
+    {
+      "artist": "HADDAWAY",
+      "track": "WHAT IS LOVE",
+      "year": "1993",
+      "start": 31.2,
+      "end": 33.2,
+      "file": "haddaway_what_is_love.mp3",
+      "offset": 0.0,
+      "gain_db": -16
+    },
+    {
+      "artist": "ROBERT MILES",
+      "track": "CHILDREN",
+      "year": "1995",
+      "start": 33.4,
+      "end": 35.4,
+      "file": "robert_miles_children.mp3",
+      "offset": 0.0,
+      "gain_db": -16
+    },
+    {
+      "artist": "WHITNEY HOUSTON",
+      "track": "I WILL ALWAYS LOVE YOU",
+      "year": "1992",
+      "start": 38.8,
+      "end": 41.8,
+      "file": "whitney_houston_i_will_always_love_you.mp3",
+      "offset": 0.0,
+      "gain_db": -16
+    },
+    {
+      "artist": "CÉLINE DION",
+      "track": "MY HEART WILL GO ON",
+      "year": "1997",
+      "start": 41.8,
+      "end": 44.8,
+      "file": "c_line_dion_my_heart_will_go_on.mp3",
+      "offset": 0.0,
+      "gain_db": -16
+    },
+    {
+      "artist": "OASIS",
+      "track": "WONDERWALL",
+      "year": "1995",
+      "start": 49.0,
+      "end": 52.0,
+      "file": "oasis_wonderwall.mp3",
+      "offset": 0.0,
+      "gain_db": -16
+    },
+    {
+      "artist": "SPICE GIRLS",
+      "track": "WANNABE",
+      "year": "1996",
+      "start": 50.6,
+      "end": 53.6,
+      "file": "spice_girls_wannabe.mp3",
+      "offset": 0.0,
+      "gain_db": -16
+    },
+    {
+      "artist": "DAFT PUNK",
+      "track": "AROUND THE WORLD",
+      "year": "1997",
+      "start": 59.6,
+      "end": 62.4,
+      "file": "daft_punk_around_the_world.mp3",
+      "offset": 0.0,
+      "gain_db": -16
+    },
+    {
+      "artist": "FATBOY SLIM",
+      "track": "PRAISE YOU",
+      "year": "1998",
+      "start": 62.6,
+      "end": 65.4,
+      "file": "fatboy_slim_praise_you.mp3",
+      "offset": 0.0,
+      "gain_db": -16
+    },
+    {
+      "artist": "CHER",
+      "track": "BELIEVE",
+      "year": "1998",
+      "start": 72.6,
+      "end": 76.6,
+      "file": "cher_believe.mp3",
+      "offset": 0.0,
+      "gain_db": -16
+    },
+    {
+      "artist": "MODJO",
+      "track": "LADY (HEAR ME TONIGHT)",
+      "year": "2000",
+      "start": 84.4,
+      "end": 87.0,
+      "file": "modjo_lady_hear_me_tonight.mp3",
+      "offset": 0.0,
+      "gain_db": -16
+    },
+    {
+      "artist": "DAFT PUNK",
+      "track": "ONE MORE TIME",
+      "year": "2000",
+      "start": 87.1,
+      "end": 89.55,
+      "file": "daft_punk_one_more_time.mp3",
+      "offset": 0.0,
+      "gain_db": -16
+    }
+  ]
+}

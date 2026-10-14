@@ -1,0 +1,7 @@
+{
+  "_readme": "Background music for blue_note_reels. Put a licensed instrumental hard-bop track (piano, double bass, drums) at 'file' — relative to this folder. It plays under the voice at gain_db with fades; replace it any time. Missing file = video with voice only.",
+  "cues": [
+    {"artist": "TBD", "track": "Instrumental hard bop bed", "start": 0, "end": "auto", "file": "background_hard_bop.mp3",
+     "offset": 0.0, "gain_db": -20, "fade_s": 1.5}
+  ]
+}

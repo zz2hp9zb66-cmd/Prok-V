@@ -1,0 +1,348 @@
+{
+  "id": "music_1990_2000",
+  "output": "music_1990_2000_reels.mp4",
+  "timeline": [
+    1990,
+    2000
+  ],
+  "speaker": "eugene",
+  "narration_lead_s": 0.7,
+  "music_cues": "../../assets/music/music_1990_2000.cues.json",
+  "scenes": [
+    {
+      "start": "0:00",
+      "end": "0:06",
+      "year": 1990,
+      "kicker": "НАЧАЛО ЭПОХИ",
+      "title": "",
+      "narration": "Представь десятилетие, в котором гранж, рэп и танцевальная музыка одновременно покоряют планету.",
+      "visual": {
+        "type": "decade_counter",
+        "from": 1990,
+        "to": 2000,
+        "headline": "ДЕСЯТИЛЕТИЕ, КОТОРОЕ ИЗМЕНИЛО МУЗЫКУ",
+        "branches": [
+          "GRUNGE",
+          "HIP-HOP",
+          "DANCE"
+        ]
+      },
+      "voice_at": 0.3
+    },
+    {
+      "start": "0:06",
+      "end": "0:16",
+      "year": 1991,
+      "kicker": "02 / 10",
+      "title": "Рок меняется",
+      "narration": "В начале девяностых рок перестаёт быть отполированным. На первый план выходят шумные гитары, уязвимость и голос целого поколения.",
+      "visual": {
+        "type": "rough_wave",
+        "year": 1991
+      },
+      "cards": [
+        {
+          "artist": "NIRVANA",
+          "track": "SMELLS LIKE TEEN SPIRIT",
+          "year": "1991"
+        },
+        {
+          "artist": "R.E.M.",
+          "track": "LOSING MY RELIGION",
+          "year": "1991"
+        }
+      ],
+      "cards_at": [
+        3.2,
+        6.4
+      ],
+      "card_s": 3.0,
+      "fact": "1991 — альбом Nevermind помог вывести гранж в музыкальный мейнстрим.",
+      "fact_at": 4.2
+    },
+    {
+      "start": "0:16",
+      "end": "0:26",
+      "year": 1992,
+      "kicker": "03 / 10",
+      "title": "Расцвет хип-хопа",
+      "narration": "Хип-хоп выходит за пределы улиц. Рэп становится глобальным, а старые фанк- и соул-пластинки превращаются в основу новых хитов.",
+      "visual": {
+        "type": "sampling",
+        "from": [
+          "1972",
+          "SOUL & FUNK"
+        ],
+        "to": [
+          "1995",
+          "HIP-HOP"
+        ],
+        "label": "SAMPLE"
+      },
+      "cards": [
+        {
+          "artist": "DR. DRE FEAT. SNOOP DOGG",
+          "track": "NUTHIN' BUT A 'G' THANG",
+          "year": "1992"
+        },
+        {
+          "artist": "2PAC FEAT. DR. DRE",
+          "track": "CALIFORNIA LOVE",
+          "year": "1995"
+        }
+      ],
+      "cards_at": [
+        3.4,
+        6.5
+      ],
+      "card_s": 2.8,
+      "fact": "California Love построена на фрагменте Joe Cocker — Woman to Woman (1972): его рифф переигран в студии.",
+      "fact_at": 4.4
+    },
+    {
+      "start": "0:26",
+      "end": "0:36",
+      "year": 1993,
+      "kicker": "04 / 10",
+      "title": "Европа начинает танцевать",
+      "narration": "Европа отвечает своим звучанием: синтезаторы, быстрый ритм и мелодии, которые одинаково легко узнают в разных странах.",
+      "visual": {
+        "type": "europe_map",
+        "words": [
+          "EURODANCE",
+          "HOUSE",
+          "TECHNO"
+        ],
+        "bpm": 128
+      },
+      "cards": [
+        {
+          "artist": "SNAP!",
+          "track": "RHYTHM IS A DANCER",
+          "year": "1992"
+        },
+        {
+          "artist": "HADDAWAY",
+          "track": "WHAT IS LOVE",
+          "year": "1993"
+        },
+        {
+          "artist": "ROBERT MILES",
+          "track": "CHILDREN",
+          "year": "1995"
+        }
+      ],
+      "cards_at": [
+        3.0,
+        5.2,
+        7.4
+      ],
+      "card_s": 2.0,
+      "fact": "Children достиг второго места британского чарта в 1996 году.",
+      "fact_at": 7.6
+    },
+    {
+      "start": "0:36",
+      "end": "0:46",
+      "year": 1995,
+      "kicker": "05 / 10",
+      "title": "Эра больших голосов",
+      "narration": "Поп-музыка живёт по своим законам: сильнейшие голоса, масштабные баллады, клипы и песни, которые знают наизусть.",
+      "visual": {
+        "type": "voice_wave",
+        "marks": [
+          "1992",
+          "1997"
+        ]
+      },
+      "cards": [
+        {
+          "artist": "WHITNEY HOUSTON",
+          "track": "I WILL ALWAYS LOVE YOU",
+          "year": "1992"
+        },
+        {
+          "artist": "CÉLINE DION",
+          "track": "MY HEART WILL GO ON",
+          "year": "1997"
+        }
+      ],
+      "cards_at": [
+        2.8,
+        5.8
+      ],
+      "card_s": 3.0,
+      "fact": "My Heart Will Go On — главная песня фильма «Титаник».",
+      "fact_at": 6.3
+    },
+    {
+      "start": "0:46",
+      "end": "0:56",
+      "year": 1995,
+      "kicker": "06 / 10",
+      "title": "Британия захватывает чарты",
+      "narration": "В Британии гитарные группы борются за вершины чартов. Одновременно новый поп собирает миллионы фанатов по всему миру.",
+      "visual": {
+        "type": "split",
+        "left": "BRITPOP",
+        "right": "POP"
+      },
+      "cards": [
+        {
+          "artist": "OASIS",
+          "track": "WONDERWALL",
+          "year": "1995"
+        },
+        {
+          "artist": "SPICE GIRLS",
+          "track": "WANNABE",
+          "year": "1996"
+        }
+      ],
+      "cards_at": [
+        3.0,
+        4.6
+      ],
+      "card_s": 3.0,
+      "fact": "В 1995 году соперничество Blur и Oasis стало одной из самых известных битв британских чартов.",
+      "fact_at": 6.0
+    },
+    {
+      "start": "0:56",
+      "end": "1:06",
+      "year": 1997,
+      "kicker": "07 / 10",
+      "title": "Новая электроника",
+      "narration": "А клубная электроника всё сильнее влияет на мейнстрим: французский хаус смешивает диско, сэмплы и машинный ритм.",
+      "visual": {
+        "type": "flow",
+        "steps": [
+          "DISCO",
+          "SAMPLING",
+          "HOUSE"
+        ],
+        "bpm": 124
+      },
+      "cards": [
+        {
+          "artist": "DAFT PUNK",
+          "track": "AROUND THE WORLD",
+          "year": "1997"
+        },
+        {
+          "artist": "FATBOY SLIM",
+          "track": "PRAISE YOU",
+          "year": "1998"
+        }
+      ],
+      "cards_at": [
+        3.6,
+        6.6
+      ],
+      "card_s": 2.8,
+      "fact": "1997 — Daft Punk выпускают дебютный альбом Homework.",
+      "fact_at": 4.6
+    },
+    {
+      "start": "1:06",
+      "end": "1:18",
+      "year": 1998,
+      "kicker": "08 / 10",
+      "title": "Технология меняет голос",
+      "narration": "И вот парадокс: в девяносто восьмом обработанный голос перестают скрывать. Эффект, который считался студийным инструментом, сам становится частью мелодии.",
+      "visual": {
+        "type": "autotune",
+        "headline": "AUTO-TUNE",
+        "year": 1998,
+        "chain": [
+          "VOICE",
+          "PROCESSING",
+          "NEW SOUND"
+        ],
+        "morph_at": [
+          3.0,
+          5.6
+        ]
+      },
+      "cards": [
+        {
+          "artist": "CHER",
+          "track": "BELIEVE",
+          "year": "1998"
+        }
+      ],
+      "cards_at": [
+        6.6
+      ],
+      "card_s": 4.0,
+      "fact": "Auto-Tune становится слышимым художественным приёмом, который позже изменит поп-музыку и хип-хоп.",
+      "fact_at": 7.4
+    },
+    {
+      "start": "1:18",
+      "end": "1:30",
+      "year": 2000,
+      "kicker": "09 / 10",
+      "title": "Конец эпохи",
+      "narration": "В девяносто девятом появляется Napster — и музыка начинает уходить из магазинов в интернет. А в двухтысячном уже звучат хиты будущего.",
+      "tts": "В девяносто девятом появляется Напстер — и музыка начинает уходить из магазинов в интернет. А в двухтысячном уже звучат хиты будущего.",
+      "visual": {
+        "type": "formats",
+        "from_year": 1999,
+        "to_year": 2000,
+        "years_at": 4.4
+      },
+      "cards": [
+        {
+          "artist": "MODJO",
+          "track": "LADY (HEAR ME TONIGHT)",
+          "year": "2000"
+        },
+        {
+          "artist": "DAFT PUNK",
+          "track": "ONE MORE TIME",
+          "year": "2000"
+        }
+      ],
+      "cards_at": [
+        6.4,
+        9.1
+      ],
+      "card_s": 2.6,
+      "fact": "Июнь 1999 — запуск Napster, сервиса обмена музыкальными MP3-файлами.",
+      "fact_at": 4.6
+    },
+    {
+      "start": "1:30",
+      "end": "1:35",
+      "kicker": "",
+      "title": "",
+      "narration": "А какой трек девяностых ты узнаешь всего за две секунды?",
+      "visual": {
+        "type": "finale",
+        "headline": "1990–2000",
+        "question": "КАКАЯ ПЕСНЯ ДЛЯ ТЕБЯ — СИМВОЛ ЭПОХИ?",
+        "cta": "НАПИШИ В КОММЕНТАРИЯХ"
+      },
+      "voice_at": 0.3
+    }
+  ],
+  "notes": {
+    "california_love": "WhoSampled classes the Joe Cocker link as an interpolation (the riff replayed), so the fact says so.",
+    "children": "Released November 1995; peaked at No. 2 on the UK chart in early 1996 (Official Charts).",
+    "napster": "Launched 1 June 1999 (Shawn Fanning, Sean Parker).",
+    "edits": {
+      "1": "Представь десятилетие, где гранж, рэп и танцевальная музыка одновременно покоряют планету.",
+      "2": "В начале девяностых рок перестаёт быть отполированным. На первый план выходят шумные гитары, уязвимость и голос поколения.",
+      "3": "Хип-хоп выходит за пределы улиц. Рэп становится глобальным, а старые фанк- и соул-пластинки — основой новых хитов.",
+      "6": "В Британии гитарные группы борются за вершины чартов, а новый поп собирает миллионы фанатов по всему миру.",
+      "8": "И вот парадокс: в девяносто восьмом обработанный голос перестают скрывать. Студийный эффект сам становится частью мелодии.",
+      "10": "Какой трек девяностых ты узнаешь за две секунды?"
+    }
+  },
+  "sources": [
+    "https://www.whosampled.com/sample/176/2Pac-Dr.-Dre-Roger-Troutman-California-Love-Joe-Cocker-Woman-to-Woman/",
+    "https://www.officialcharts.com/songs/robert-miles-children/",
+    "https://en.wikipedia.org/wiki/Napster"
+  ]
+}

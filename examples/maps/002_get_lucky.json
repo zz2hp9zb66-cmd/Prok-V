@@ -1,0 +1,67 @@
+{
+  "number": 2,
+  "track": "Get Lucky",
+  "artist": "Daft Punk",
+  "album": "Random Access Memories",
+  "year": "2013",
+  "label": "Columbia",
+  "bpm": 116,
+  "sections": [
+    {"type": "hook", "start": "0:00", "end": "0:03", "object": "helmets",
+     "text": "ДВА РОБОТА РЕШИЛИ ЗАПИСАТЬ ХИТ ПОЧТИ БЕЗ ПРИВЫЧНЫХ ИМ СЕМПЛОВ.",
+     "body": "И собрали музыкантов, которые соединяют несколько поколений музыки.", "body_at": 1.2},
+    {"type": "object", "start": "0:03", "end": "0:07",
+     "above": "DAFT PUNK", "feat": "feat. PHARRELL WILLIAMS + NILE RODGERS", "rays": true},
+    {"type": "coordinates", "start": "0:07", "end": "0:11", "items": [
+      {"label": "ARTIST", "value": "Daft Punk", "side": "left"},
+      {"label": "YEAR", "value": "2013", "side": "top"},
+      {"label": "ALBUM", "value": "Random Access Memories", "side": "right"},
+      {"label": "LABEL", "value": "Columbia", "side": "bottom"}]},
+    {"type": "places", "start": "0:11", "end": "0:15",
+     "places": [{"city": "NEW YORK", "place": "Electric Lady Studios"}, {"city": "LOS ANGELES"}],
+     "caption": "Не просто песня — серия живых студийных сессий."},
+    {"type": "branches", "start": "0:15", "end": "0:20", "tag": "ELECTRONIC × POP × DISCO", "items": [
+      {"name": "DAFT PUNK", "role": "production"},
+      {"name": "PHARRELL WILLIAMS", "role": "vocals"},
+      {"name": "NILE RODGERS", "role": "guitar"}]},
+    {"type": "musicians", "start": "0:20", "end": "0:25", "keep": true,
+     "caption": "Вместо программирования — настоящие музыканты и настоящая студийная игра.", "items": [
+      {"instrument": "GUITAR", "name": "Nile Rodgers", "texture": "guitar"},
+      {"instrument": "BASS", "name": "Nathan East", "texture": "bass"},
+      {"instrument": "DRUMS", "name": "Omar Hakim", "texture": "drums"},
+      {"instrument": "VOCALS", "name": "Pharrell Williams", "texture": "vocals"}]},
+    {"type": "statement", "start": "0:25", "end": "0:29", "words": ["SAMPLE?", "NO."],
+     "caption": "Не взять старую disco-запись.",
+     "emphasis": "А создать новую запись, которую однажды будут семплировать другие."},
+    {"type": "chain", "start": "0:29", "end": "0:34", "origin": "NILE RODGERS",
+     "items": ["1970s", "CHIC", "GOOD TIMES", "DISCO / FUNK", "2013", "GET LUCKY"],
+     "caption": "Daft Punk не семплируют старое disco — они приглашают человека, который помог создать его звучание."},
+    {"type": "cycle", "start": "0:34", "end": "0:38",
+     "items": ["DISCO", "HOUSE", "FRENCH TOUCH", "DAFT PUNK", "GET LUCKY"],
+     "caption": "Круг замыкается — обратно к живым инструментам."},
+    {"type": "awards", "start": "0:38", "end": "0:42", "year": "2014", "label": "GRAMMY",
+     "items": ["RECORD OF THE YEAR", "BEST POP DUO / GROUP PERFORMANCE"],
+     "caption": "Random Access Memories — Album of the Year"},
+    {"type": "final_map", "start": "0:42", "end": "0:45.3", "top": "DAFT PUNK", "subtitle": "2013", "nodes": [
+      {"text": "NILE RODGERS", "dir": "out"},
+      {"text": "NATHAN EAST", "dir": "out"},
+      {"text": "OMAR HAKIM", "dir": "out"},
+      {"text": "GRAMMY", "dir": "out"},
+      {"text": "POP", "dir": "out"},
+      {"text": "PHARRELL", "dir": "out"},
+      {"text": "DISCO", "dir": "in"},
+      {"text": "CHIC", "dir": "in"}]},
+    {"type": "outro", "start": "0:45.3", "end": "0:47.5", "lines": ["Один трек.", "Несколько поколений музыки."],
+     "card": "КАРТА ОДНОГО ТРЕКА — GET LUCKY."}
+  ],
+  "notes": {
+    "personnel": "Paul Jackson Jr. also plays guitar on the track (not shown, as in the script)",
+    "studios": "RAM sessions: Electric Lady (New York); Henson and Conway (Los Angeles); Nathan East recalls Conway",
+    "grammys_2014": "Get Lucky — Record of the Year, Best Pop Duo/Group Performance; RAM — Album of the Year"
+  },
+  "sources": [
+    "https://en.wikipedia.org/wiki/Get_Lucky_(Daft_Punk_song)",
+    "https://artistworks.com/blog/daft-punk-get-lucky-features-nathan-east-bass",
+    "https://www.discogs.com/release/4570366-Daft-Punk-Random-Access-Memories"
+  ]
+}
