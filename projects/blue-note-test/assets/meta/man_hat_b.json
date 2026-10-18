@@ -1,0 +1,19 @@
+{
+  "id": "man_hat_b",
+  "title": "Мужчина в шляпе — «Фрэнсис Вольф» (тест)",
+  "query": "Мужчина в шляпе — «Фрэнсис Вольф» (тест)",
+  "source": "test_generator",
+  "url": "",
+  "author": "cbroll procedural test asset",
+  "license": "generated placeholder",
+  "license_url": "",
+  "status": "test_placeholder",
+  "original": "assets/originals/man_hat_b.jpg",
+  "cut": true,
+  "tone": null,
+  "models": [],
+  "cutout": "assets/cutouts/man_hat_b.png",
+  "styled": "assets/styled/man_hat_b.png",
+  "width": 1000,
+  "height": 1300
+}

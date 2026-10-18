@@ -1,0 +1,19 @@
+{
+  "id": "ocean_liner",
+  "title": "Трансатлантический лайнер (тест)",
+  "query": "Трансатлантический лайнер (тест)",
+  "source": "test_generator",
+  "url": "",
+  "author": "cbroll procedural test asset",
+  "license": "generated placeholder",
+  "license_url": "",
+  "status": "test_placeholder",
+  "original": "assets/originals/ocean_liner.jpg",
+  "cut": true,
+  "tone": null,
+  "models": [],
+  "cutout": "assets/cutouts/ocean_liner.png",
+  "styled": "assets/styled/ocean_liner.png",
+  "width": 1600,
+  "height": 900
+}

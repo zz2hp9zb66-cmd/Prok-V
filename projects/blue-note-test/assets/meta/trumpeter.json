@@ -1,0 +1,19 @@
+{
+  "id": "trumpeter",
+  "title": "Трубач, силуэт (тест)",
+  "query": "Трубач, силуэт (тест)",
+  "source": "test_generator",
+  "url": "",
+  "author": "cbroll procedural test asset",
+  "license": "generated placeholder",
+  "license_url": "",
+  "status": "test_placeholder",
+  "original": "assets/originals/trumpeter.jpg",
+  "cut": true,
+  "tone": null,
+  "models": [],
+  "cutout": "assets/cutouts/trumpeter.png",
+  "styled": "assets/styled/trumpeter.png",
+  "width": 1000,
+  "height": 1500
+}

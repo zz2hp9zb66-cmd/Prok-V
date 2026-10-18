@@ -1,0 +1,59 @@
+{
+  "01": {
+    "template": "duo",
+    "plan": {
+      "mood": "Нью-Йорк 1939, начало истории, эмиграция",
+      "headline": "1939",
+      "caption": "НЬЮ-ЙОРК",
+      "subjects": [
+        {"slot": "bg_photo", "kind": "place", "role": "background", "query": "New York skyline 1939 photograph", "asset": "nyc_skyline"},
+        {"slot": "prop1", "kind": "object", "role": "prop", "query": "ocean liner 1930s photograph", "asset": "ocean_liner"},
+        {"slot": "hero1", "kind": "person", "role": "hero", "query": "Alfred Lion portrait", "asset": "man_hat_a", "label": "АЛЬФРЕД ЛАЙОН"},
+        {"slot": "hero2", "kind": "person", "role": "hero", "query": "Francis Wolff portrait", "asset": "man_hat_b", "label": "ФРЭНСИС ВОЛЬФ"}
+      ]
+    }
+  },
+  "02": {
+    "template": "hero_props",
+    "plan": {
+      "mood": "ночная запись после концерта, дым, прожектор",
+      "headline": "ПО НОЧАМ",
+      "caption": "после концертов",
+      "subjects": [
+        {"slot": "bg_photo", "kind": "place", "role": "background", "query": "jazz club night 1940s photograph", "asset": "night_club"},
+        {"slot": "hero1", "kind": "person", "role": "hero", "query": "jazz trumpeter 1940s photograph", "asset": "trumpeter"},
+        {"slot": "prop1", "kind": "object", "role": "prop", "query": "vintage wall clock", "asset": "wall_clock"},
+        {"slot": "prop2", "kind": "object", "role": "prop", "query": "trumpet isolated", "asset": "trumpet"}
+      ]
+    }
+  },
+  "03": {
+    "template": "stack",
+    "plan": {
+      "mood": "домашняя студия, техника записи, графический дизайн обложек",
+      "headline": "ЗВУК",
+      "caption": "гостиная Руди Ван Гелдера",
+      "subjects": [
+        {"slot": "bg_photo", "kind": "place", "role": "background", "query": "Van Gelder studio Hackensack living room", "asset": "living_room"},
+        {"slot": "hero1", "kind": "object", "role": "hero", "query": "reel-to-reel tape recorder 1950s", "asset": "tape_recorder"},
+        {"slot": "prop1", "kind": "object", "role": "prop", "query": "ribbon microphone RCA 44", "asset": "ribbon_mic"},
+        {"slot": "prop2", "kind": "document", "role": "prop", "query": "1950s jazz album cover typography", "asset": "album_cover"},
+        {"slot": "prop3", "kind": "object", "role": "prop", "query": "vinyl record", "asset": "vinyl"}
+      ]
+    }
+  },
+  "04": {
+    "template": "poster",
+    "plan": {
+      "mood": "кульминация, хард-боп, энергия",
+      "headline": "HARD\nBOP",
+      "caption": "BLUE NOTE",
+      "subjects": [
+        {"slot": "hero1", "kind": "person", "role": "hero", "query": "John Coltrane 1957 photograph", "asset": "sax_player", "label": "ДЖОН КОЛТРЕЙН"},
+        {"slot": "hero2", "kind": "person", "role": "hero", "query": "Art Blakey photograph", "asset": "drummer", "label": "АРТ БЛЕЙКИ"},
+        {"slot": "prop1", "kind": "object", "role": "prop", "query": "saxophone isolated", "asset": "saxophone"},
+        {"slot": "prop2", "kind": "object", "role": "prop", "query": "drum kit isolated", "asset": "drum_kit"}
+      ]
+    }
+  }
+}

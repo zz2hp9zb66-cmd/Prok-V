@@ -1,0 +1,19 @@
+{
+  "id": "vinyl",
+  "title": "Виниловая пластинка (тест)",
+  "query": "Виниловая пластинка (тест)",
+  "source": "test_generator",
+  "url": "",
+  "author": "cbroll procedural test asset",
+  "license": "generated placeholder",
+  "license_url": "",
+  "status": "test_placeholder",
+  "original": "assets/originals/vinyl.jpg",
+  "cut": true,
+  "tone": null,
+  "models": [],
+  "cutout": "assets/cutouts/vinyl.png",
+  "styled": "assets/styled/vinyl.png",
+  "width": 1200,
+  "height": 1200
+}

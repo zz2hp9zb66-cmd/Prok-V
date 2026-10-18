@@ -1,0 +1,42 @@
+{
+  "fps": 30,
+  "pace": "medium",
+  "entries": [
+    {
+      "scene": "01",
+      "duration_frames": 232,
+      "locked": false,
+      "transition_out": {
+        "type": "fade",
+        "frames": 12
+      }
+    },
+    {
+      "scene": "02",
+      "duration_frames": 190,
+      "locked": false,
+      "transition_out": {
+        "type": "fade",
+        "frames": 12
+      }
+    },
+    {
+      "scene": "03",
+      "duration_frames": 204,
+      "locked": false,
+      "transition_out": {
+        "type": "fade",
+        "frames": 12
+      }
+    },
+    {
+      "scene": "04",
+      "duration_frames": 190,
+      "locked": false,
+      "transition_out": {
+        "type": "fade",
+        "frames": 12
+      }
+    }
+  ]
+}

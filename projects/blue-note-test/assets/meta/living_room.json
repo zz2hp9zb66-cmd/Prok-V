@@ -1,0 +1,19 @@
+{
+  "id": "living_room",
+  "title": "Гостиная-студия (тест)",
+  "query": "Гостиная-студия (тест)",
+  "source": "test_generator",
+  "url": "",
+  "author": "cbroll procedural test asset",
+  "license": "generated placeholder",
+  "license_url": "",
+  "status": "test_placeholder",
+  "original": "assets/originals/living_room.jpg",
+  "cut": false,
+  "tone": "sepia",
+  "models": [],
+  "cutout": null,
+  "styled": "assets/styled/living_room.png",
+  "width": 1200,
+  "height": 1600
+}

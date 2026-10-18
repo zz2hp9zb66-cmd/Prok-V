@@ -1,0 +1,19 @@
+{
+  "id": "wall_clock",
+  "title": "Настенные часы, 3:00 (тест)",
+  "query": "Настенные часы, 3:00 (тест)",
+  "source": "test_generator",
+  "url": "",
+  "author": "cbroll procedural test asset",
+  "license": "generated placeholder",
+  "license_url": "",
+  "status": "test_placeholder",
+  "original": "assets/originals/wall_clock.jpg",
+  "cut": true,
+  "tone": null,
+  "models": [],
+  "cutout": "assets/cutouts/wall_clock.png",
+  "styled": "assets/styled/wall_clock.png",
+  "width": 1100,
+  "height": 1100
+}

@@ -1,0 +1,22 @@
+{
+  "id": "tape_recorder",
+  "title": "Катушечный магнитофон (тест)",
+  "query": "Катушечный магнитофон (тест)",
+  "source": "test_generator",
+  "url": "",
+  "author": "cbroll procedural test asset",
+  "license": "generated placeholder",
+  "license_url": "",
+  "status": "test_placeholder",
+  "original": "assets/originals/tape_recorder.jpg",
+  "cut": true,
+  "tone": null,
+  "models": [
+    "birefnet-general-lite",
+    "isnet-general-use"
+  ],
+  "cutout": "assets/cutouts/tape_recorder.png",
+  "styled": "assets/styled/tape_recorder.png",
+  "width": 1400,
+  "height": 1100
+}

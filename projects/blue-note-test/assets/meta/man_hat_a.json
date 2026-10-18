@@ -1,0 +1,19 @@
+{
+  "id": "man_hat_a",
+  "title": "Мужчина в шляпе — «Альфред Лайон» (тест)",
+  "query": "Мужчина в шляпе — «Альфред Лайон» (тест)",
+  "source": "test_generator",
+  "url": "",
+  "author": "cbroll procedural test asset",
+  "license": "generated placeholder",
+  "license_url": "",
+  "status": "test_placeholder",
+  "original": "assets/originals/man_hat_a.jpg",
+  "cut": true,
+  "tone": null,
+  "models": [],
+  "cutout": "assets/cutouts/man_hat_a.png",
+  "styled": "assets/styled/man_hat_a.png",
+  "width": 1000,
+  "height": 1300
+}

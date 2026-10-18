@@ -1,0 +1,19 @@
+{
+  "id": "saxophone",
+  "title": "Саксофон (тест)",
+  "query": "Саксофон (тест)",
+  "source": "test_generator",
+  "url": "",
+  "author": "cbroll procedural test asset",
+  "license": "generated placeholder",
+  "license_url": "",
+  "status": "test_placeholder",
+  "original": "assets/originals/saxophone.jpg",
+  "cut": true,
+  "tone": null,
+  "models": [],
+  "cutout": "assets/cutouts/saxophone.png",
+  "styled": "assets/styled/saxophone.png",
+  "width": 1000,
+  "height": 1400
+}

@@ -1,0 +1,19 @@
+{
+  "id": "trumpet",
+  "title": "Труба (тест)",
+  "query": "Труба (тест)",
+  "source": "test_generator",
+  "url": "",
+  "author": "cbroll procedural test asset",
+  "license": "generated placeholder",
+  "license_url": "",
+  "status": "test_placeholder",
+  "original": "assets/originals/trumpet.jpg",
+  "cut": true,
+  "tone": null,
+  "models": [],
+  "cutout": "assets/cutouts/trumpet.png",
+  "styled": "assets/styled/trumpet.png",
+  "width": 1400,
+  "height": 900
+}

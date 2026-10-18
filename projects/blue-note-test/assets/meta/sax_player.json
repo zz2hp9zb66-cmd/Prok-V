@@ -1,0 +1,19 @@
+{
+  "id": "sax_player",
+  "title": "Саксофонист, силуэт (тест)",
+  "query": "Саксофонист, силуэт (тест)",
+  "source": "test_generator",
+  "url": "",
+  "author": "cbroll procedural test asset",
+  "license": "generated placeholder",
+  "license_url": "",
+  "status": "test_placeholder",
+  "original": "assets/originals/sax_player.jpg",
+  "cut": true,
+  "tone": null,
+  "models": [],
+  "cutout": "assets/cutouts/sax_player.png",
+  "styled": "assets/styled/sax_player.png",
+  "width": 1000,
+  "height": 1500
+}

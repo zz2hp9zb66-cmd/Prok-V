@@ -1,0 +1,17 @@
+{
+  "name": "blue-note-test",
+  "title": "Blue Note — тест",
+  "language": "ru",
+  "pace": "medium",
+  "fps": 30,
+  "width": 1080,
+  "height": 1920,
+  "seed": 1,
+  "palette": {
+    "paper": "#efe6d2",
+    "ink": "#151515",
+    "blue": "#1d3f8f",
+    "accent": "#e2572b",
+    "cream": "#f6efdf"
+  }
+}

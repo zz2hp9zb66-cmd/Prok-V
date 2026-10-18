@@ -1,0 +1,19 @@
+{
+  "id": "ribbon_mic",
+  "title": "Ленточный микрофон (тест)",
+  "query": "Ленточный микрофон (тест)",
+  "source": "test_generator",
+  "url": "",
+  "author": "cbroll procedural test asset",
+  "license": "generated placeholder",
+  "license_url": "",
+  "status": "test_placeholder",
+  "original": "assets/originals/ribbon_mic.jpg",
+  "cut": true,
+  "tone": null,
+  "models": [],
+  "cutout": "assets/cutouts/ribbon_mic.png",
+  "styled": "assets/styled/ribbon_mic.png",
+  "width": 900,
+  "height": 1400
+}

@@ -1,0 +1,19 @@
+{
+  "id": "drummer",
+  "title": "Барабанщик, силуэт (тест)",
+  "query": "Барабанщик, силуэт (тест)",
+  "source": "test_generator",
+  "url": "",
+  "author": "cbroll procedural test asset",
+  "license": "generated placeholder",
+  "license_url": "",
+  "status": "test_placeholder",
+  "original": "assets/originals/drummer.jpg",
+  "cut": true,
+  "tone": null,
+  "models": [],
+  "cutout": "assets/cutouts/drummer.png",
+  "styled": "assets/styled/drummer.png",
+  "width": 1200,
+  "height": 1300
+}

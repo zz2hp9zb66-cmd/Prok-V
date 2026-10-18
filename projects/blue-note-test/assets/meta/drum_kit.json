@@ -1,0 +1,19 @@
+{
+  "id": "drum_kit",
+  "title": "Ударная установка (тест)",
+  "query": "Ударная установка (тест)",
+  "source": "test_generator",
+  "url": "",
+  "author": "cbroll procedural test asset",
+  "license": "generated placeholder",
+  "license_url": "",
+  "status": "test_placeholder",
+  "original": "assets/originals/drum_kit.jpg",
+  "cut": true,
+  "tone": null,
+  "models": [],
+  "cutout": "assets/cutouts/drum_kit.png",
+  "styled": "assets/styled/drum_kit.png",
+  "width": 1500,
+  "height": 1200
+}

@@ -1,0 +1,19 @@
+{
+  "id": "nyc_skyline",
+  "title": "Нью-Йорк, панорама (тест)",
+  "query": "Нью-Йорк, панорама (тест)",
+  "source": "test_generator",
+  "url": "",
+  "author": "cbroll procedural test asset",
+  "license": "generated placeholder",
+  "license_url": "",
+  "status": "test_placeholder",
+  "original": "assets/originals/nyc_skyline.jpg",
+  "cut": false,
+  "tone": "blue",
+  "models": [],
+  "cutout": null,
+  "styled": "assets/styled/nyc_skyline.png",
+  "width": 1200,
+  "height": 1600
+}
