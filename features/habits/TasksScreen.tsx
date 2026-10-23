@@ -1,5 +1,6 @@
 import { router } from 'expo-router';
 import type { GestureResponderEvent } from 'react-native';
+import { AddItemCard } from '@/components/AddItemCard';
 import { EmptyState } from '@/components/EmptyState';
 import { HabitCard } from '@/components/HabitCard';
 import { RoomScreen } from '@/components/RoomScreen';
@@ -44,14 +45,9 @@ export function TasksScreen() {
   return (
     <RoomScreen variant="section" tobiState={headerTobi} overlay={flying.overlay}>
       <TOBIHeader ref={flying.targetRef} title="Привет!" subtitle="Что сделаем сегодня?" balance={balance} />
-      <SectionHeader title="Привычки" onAdd={openCreate} addLabel="Создать привычку" />
+      <SectionHeader title="Привычки" />
       {data && data.habits.length === 0 ? (
-        <EmptyState
-          title="Пока нет привычек"
-          description="Создай привычку, выполняй её и получай баллы."
-          actionTitle="Создать первую привычку"
-          onAction={openCreate}
-        />
+        <EmptyState title="Пока нет привычек" description="Создай привычку, выполняй её и получай баллы." />
       ) : null}
       {data?.habits.map((view) => (
         <HabitCard
@@ -62,6 +58,7 @@ export function TasksScreen() {
           onComplete={(event) => complete(view.habit.id, event)}
         />
       ))}
+      {data ? <AddItemCard title="Добавить привычку" onPress={openCreate} /> : null}
     </RoomScreen>
   );
 }

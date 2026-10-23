@@ -155,7 +155,7 @@ describe('main user flow', () => {
   it('creates a task from «Задачи» with the task creation screen', async () => {
     await settingsRepository.setOnboardingCompleted(mockServices.db);
     const app = renderRouter('./app', { initialUrl: '/tasks' });
-    fireEvent.press(await screen.findByText('Создать первую привычку'));
+    fireEvent.press(await screen.findByText('Добавить привычку'));
     await screen.findByText('Новая задача');
     expect(screen.queryByLabelText(/^Шаг /)).toBeNull(); // no onboarding step outside onboarding
     expect(screen.getByLabelText('Лимит выполнений в день').props.value).toBe('1'); // default limit
@@ -263,7 +263,7 @@ describe('cold start: welcome for 3 s, then onboarding or «Задачи»', () 
     await settingsRepository.setOnboardingCompleted(mockServices.db);
     const app = renderRouter('./app', { initialUrl: '/' });
     act(() => jest.advanceTimersByTime(3000));
-    await screen.findByText('Создать первую привычку');
+    await screen.findByText('Добавить привычку');
     expect(app.getPathname()).toBe('/tasks');
   });
 
@@ -316,7 +316,7 @@ describe('cold start: welcome for 3 s, then onboarding or «Задачи»', () 
       ['Награды', 'Пока нет целей'],
       ['Статистика', 'Эта неделя'],
       ['Профиль', 'Посмотреть приветствие'],
-      ['Задачи', 'Создать первую привычку'],
+      ['Задачи', 'Добавить привычку'],
     ];
     for (const [tab, content] of tabs) {
       fireEvent.press(screen.getByLabelText(tab));
@@ -389,7 +389,7 @@ describe('item icons', () => {
   it('task: choose an icon on creation, see it in «Задачи», change it on edit; ✕ keeps the old one', async () => {
     await settingsRepository.setOnboardingCompleted(mockServices.db);
     const app = renderRouter('./app', { initialUrl: '/tasks' });
-    fireEvent.press(await screen.findByText('Создать первую привычку'));
+    fireEvent.press(await screen.findByText('Добавить привычку'));
     await screen.findByText('Новая задача');
     expect(screen.getByTestId('tobi-icon-default_habit')).toBeTruthy(); // default before choosing
 
@@ -430,7 +430,7 @@ describe('item icons', () => {
   it('goal and wish: chosen icons are shown in «Награды»; leaving edit without saving keeps the icon', async () => {
     await settingsRepository.setOnboardingCompleted(mockServices.db);
     renderRouter('./app', { initialUrl: '/rewards' });
-    fireEvent.press(await screen.findByText('Создать цель'));
+    fireEvent.press(await screen.findByText('Добавить цель'));
     await screen.findByText('Новая цель');
     await typeInto('Название', 'Прочитать 12 книг');
     await typeInto('Стоимость в баллах', '120');
@@ -440,7 +440,7 @@ describe('item icons', () => {
     await screen.findByText('Прочитать 12 книг');
 
     fireEvent.press(screen.getByText('Желания'));
-    fireEvent.press(await screen.findByText('Создать желание'));
+    fireEvent.press(await screen.findByText('Добавить желание'));
     await screen.findByText('Новое желание');
     await typeInto('Название', 'Путешествие'); // no icon chosen → default wish icon
     await typeInto('Стоимость в баллах', '5000');
@@ -495,3 +495,54 @@ describe('item icons', () => {
     expect(screen.getAllByTestId('tobi-icon-default_habit')).toHaveLength(2);
   });
 });
+
+describe('«Добавить …» cards after the lists', () => {
+  it('Задачи: one card after the last habit (also when empty), opens the habit form', async () => {
+    await settingsRepository.setOnboardingCompleted(mockServices.db);
+    const app = renderRouter('./app', { initialUrl: '/tasks' });
+    await screen.findByText('Пока нет привычек');
+    expect(screen.getAllByText('Добавить привычку')).toHaveLength(1); // empty list: card still there
+    expect(screen.queryByLabelText('Создать привычку')).toBeNull(); // no duplicate «+» in the header
+    fireEvent.press(screen.getByText('Добавить привычку'));
+    await screen.findByText('Новая задача');
+    expect(app.getPathname()).toBe('/habit/new');
+  });
+
+  it('places the card after the last habit card', async () => {
+    await settingsRepository.setOnboardingCompleted(mockServices.db);
+    for (const name of ['Бег', 'Чтение', 'Вода']) {
+      await createHabit(mockServices, { name, weekdays: [0, 1, 2, 3, 4, 5, 6], pointsPerCompletion: 1, dailyLimit: 1 });
+    }
+    renderRouter('./app', { initialUrl: '/tasks' });
+    await screen.findByText('Вода');
+    const texts = screen.UNSAFE_root.findAll((n) => typeof n.props.children === 'string' && String(n.type) === 'Text').map(
+      (n) => n.props.children as string,
+    );
+    expect(texts.indexOf('Добавить привычку')).toBeGreaterThan(texts.indexOf('Вода'));
+    expect(texts.filter((t) => t === 'Добавить привычку')).toHaveLength(1);
+  });
+
+  it('Цели and Желания: card opens the right form; no card in the archive', async () => {
+    await settingsRepository.setOnboardingCompleted(mockServices.db);
+    await createReward(mockServices, 'goal', { name: 'Кино', cost: 50 });
+    const app = renderRouter('./app', { initialUrl: '/rewards' });
+    await screen.findByText('Кино');
+    expect(screen.getAllByText('Добавить цель')).toHaveLength(1);
+    fireEvent.press(screen.getByText('Добавить цель'));
+    await screen.findByText('Новая цель');
+    expect(app.getSearchParams()).toMatchObject({ type: 'goal' });
+    fireEvent.press(screen.getByLabelText('Назад'));
+
+    fireEvent.press(await screen.findByText('Желания'));
+    await screen.findByText('Пока нет желаний');
+    fireEvent.press(screen.getByText('Добавить желание'));
+    await screen.findByText('Новое желание');
+    expect(app.getSearchParams()).toMatchObject({ type: 'wish' });
+    fireEvent.press(screen.getByLabelText('Назад'));
+
+    fireEvent.press(await screen.findByText('Архив'));
+    await screen.findByText('Архив пуст');
+    expect(screen.queryByText(/^Добавить /)).toBeNull();
+  });
+});
+

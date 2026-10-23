@@ -44,6 +44,9 @@ export const colors = {
   shadow: palette.brand.brown,
   /** neutral.black at 35% — modal backdrop. */
   overlay: 'rgba(46, 46, 46, 0.35)',
+  /** brand.brown at 7% / 12% — quiet translucent beige for secondary «Добавить …» cards. */
+  addCard: 'rgba(139, 90, 60, 0.07)',
+  addCardIcon: 'rgba(139, 90, 60, 0.12)',
   /** Text placed directly on scene images (TOBI's room). */
   textOnImage: palette.neutral.white,
   textOnImageSecondary: 'rgba(255, 255, 255, 0.9)',

@@ -1,5 +1,6 @@
 import { router } from 'expo-router';
 import { useState } from 'react';
+import { AddItemCard } from '@/components/AddItemCard';
 import { EmptyState } from '@/components/EmptyState';
 import { ArchivedRewardCard, RewardCard } from '@/components/RewardCard';
 import { RoomScreen } from '@/components/RoomScreen';
@@ -37,25 +38,15 @@ export function RewardsScreen() {
 
   const balance = data?.balance ?? 0;
   const items = tab === 'goal' ? data?.goals : tab === 'wish' ? data?.wishes : data?.archive;
-  // Contextual creation (§6): «+» only in goals and wishes, never in the archive.
+  // Contextual creation (§6): «Добавить …» after the list in goals and wishes, never in the archive.
   const onAdd = tab === 'archive' ? undefined : () => router.push({ pathname: '/reward/new', params: { type: tab } });
 
   return (
     <RoomScreen variant="section" tobiState="tobi_rewards">
       <TOBIHeader title="Награды" subtitle="Копи баллы на то, что важно." balance={balance} />
       <SegmentedControl options={TABS} value={tab} onChange={setTab} />
-      <SectionHeader
-        title={TABS.find((t) => t.value === tab)!.label}
-        onAdd={onAdd}
-        addLabel={tab === 'goal' ? 'Создать цель' : 'Создать желание'}
-      />
-      {items && items.length === 0 ? (
-        <EmptyState
-          {...EMPTY[tab]}
-          actionTitle={onAdd ? (tab === 'goal' ? 'Создать цель' : 'Создать желание') : undefined}
-          onAction={onAdd}
-        />
-      ) : null}
+      <SectionHeader title={TABS.find((t) => t.value === tab)!.label} />
+      {items && items.length === 0 ? <EmptyState {...EMPTY[tab]} /> : null}
       {items?.map((reward) =>
         tab === 'archive' ? (
           <ArchivedRewardCard key={reward.id} reward={reward} />
@@ -68,6 +59,7 @@ export function RewardsScreen() {
           />
         ),
       )}
+      {items && onAdd ? <AddItemCard title={tab === 'goal' ? 'Добавить цель' : 'Добавить желание'} onPress={onAdd} /> : null}
     </RoomScreen>
   );
 }
