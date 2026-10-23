@@ -11,6 +11,22 @@ import { iconColors } from '@/theme/colors';
 import { createTestContext } from './helpers/testContext';
 import { createTestDatabase } from './helpers/testDatabase';
 
+/** Reads width, height and alpha flag from a WebP header (VP8L or VP8X), no dependencies. */
+function readWebpInfo(buf: Buffer): { width: number; height: number; alpha: boolean } {
+  if (buf.toString('ascii', 0, 4) !== 'RIFF' || buf.toString('ascii', 8, 12) !== 'WEBP') throw new Error('not a WebP file');
+  const chunk = buf.toString('ascii', 12, 16);
+  if (chunk === 'VP8L') {
+    const bits = buf.readUInt32LE(21);
+    return { width: (bits & 0x3fff) + 1, height: ((bits >> 14) & 0x3fff) + 1, alpha: ((bits >> 28) & 1) === 1 };
+  }
+  if (chunk === 'VP8X') {
+    const w = buf.readUIntLE(24, 3) + 1;
+    const h = buf.readUIntLE(27, 3) + 1;
+    return { width: w, height: h, alpha: (buf[20]! & 0x10) !== 0 };
+  }
+  throw new Error(`unsupported WebP chunk ${chunk}`);
+}
+
 const habit = { name: 'Бег', weekdays: [0, 1, 2, 3, 4, 5, 6] as const, pointsPerCompletion: 10, dailyLimit: 1 };
 
 describe('icon registry', () => {
@@ -45,7 +61,14 @@ describe('icon registry', () => {
       expect(icon.color).toBe(item.category);
       expect(iconColors[icon.color]).toBeDefined();
       expect(fs.existsSync(path.join(__dirname, '../assets/icons', item.webp))).toBe(true);
-      expect(item.size).toEqual([1024, 1024]);
+      expect(item.size).toEqual([256, 256]);
+    }
+  });
+
+  it('every library file is a 256×256 WebP with an alpha channel', () => {
+    for (const item of manifest.items) {
+      const info = readWebpInfo(fs.readFileSync(path.join(__dirname, '../assets/icons', item.webp)));
+      expect({ id: item.id, ...info }).toEqual({ id: item.id, width: 256, height: 256, alpha: true });
     }
   });
 

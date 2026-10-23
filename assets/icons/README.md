@@ -1,13 +1,15 @@
 # Item icons (habits, goals, wishes)
 
 ## Where the images are
-- `webp/<category>/<id>.webp` — **TOBI Icon Library v1**: 70 icons, 1024×1024, transparent background,
+- `webp/<category>/<id>.webp` — **TOBI Icon Library v1**: 70 icons, 256×256, transparent background,
   no text, one visual style. Categories: `sport`, `health`, `learning`, `work`, `finance`, `life`.
 - `manifest.json` — the library manifest (ids, Russian labels, categories, background colors).
 - `LICENSE_ICONS.txt` — the icons are derived from Font Awesome Free (CC BY 4.0): the app must show attribution.
 
 Everything is local and bundled with the app — no network.
-Only WebP is bundled (half the size of the PNG set; pixel-identical layout, transparency kept).
+Only WebP is bundled. Working images are 256×256 lossless WebP, downscaled (Lanczos, premultiplied alpha)
+from the library's 1024×1024 originals: same layout, margins and colors, transparency kept.
+256 px covers the largest on-screen size (picker cell at @3x); `tests/icons.test.ts` checks every file is 256×256.
 
 ## How the registry works
 `features/icons/iconRegistry.ts`:
@@ -20,7 +22,7 @@ Only WebP is bundled (half the size of the PNG set; pixel-identical layout, tran
   `components/TobiIconPicker.tsx` is the «Выбрать иконку» sheet.
 
 ## Add a new icon
-1. Put the file here: `webp/<category>/<new_id>.webp` (square, transparent, symbol ≈70% of the canvas
+1. Put the file here: `webp/<category>/<new_id>.webp` (256×256, transparent, symbol ≈70% of the canvas
    like the rest of the library; PNG also works).
 2. Append an entry to `ICON_LIBRARY` with a **new unique id** and a literal path:
    `{ id: 'surfing', label: 'Сёрфинг', glyph: { kind: 'image', source: require('@/assets/icons/webp/sport/surfing.webp') }, color: 'sport' }`

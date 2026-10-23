@@ -2,8 +2,8 @@
   "name": "TOBI Icon Library",
   "version": "1.0",
   "size_px": [
-    1024,
-    1024
+    256,
+    256
   ],
   "transparent": true,
   "items": [
@@ -16,8 +16,8 @@
       "png": "png/sport/sport.png",
       "webp": "webp/sport/sport.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -29,8 +29,8 @@
       "png": "png/sport/gym.png",
       "webp": "webp/sport/gym.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -42,8 +42,8 @@
       "png": "png/sport/walking.png",
       "webp": "webp/sport/walking.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -55,8 +55,8 @@
       "png": "png/sport/cycling.png",
       "webp": "webp/sport/cycling.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -68,8 +68,8 @@
       "png": "png/sport/swimming.png",
       "webp": "webp/sport/swimming.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -81,8 +81,8 @@
       "png": "png/sport/yoga.png",
       "webp": "webp/sport/yoga.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -94,8 +94,8 @@
       "png": "png/sport/football.png",
       "webp": "webp/sport/football.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -107,8 +107,8 @@
       "png": "png/sport/basketball.png",
       "webp": "webp/sport/basketball.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -120,8 +120,8 @@
       "png": "png/sport/hiking.png",
       "webp": "webp/sport/hiking.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -133,8 +133,8 @@
       "png": "png/sport/medal.png",
       "webp": "webp/sport/medal.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -146,8 +146,8 @@
       "png": "png/health/water.png",
       "webp": "webp/health/water.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -159,8 +159,8 @@
       "png": "png/health/sleep.png",
       "webp": "webp/health/sleep.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -172,8 +172,8 @@
       "png": "png/health/apple.png",
       "webp": "webp/health/apple.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -185,8 +185,8 @@
       "png": "png/health/heart_health.png",
       "webp": "webp/health/heart_health.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -198,8 +198,8 @@
       "png": "png/health/tooth.png",
       "webp": "webp/health/tooth.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -211,8 +211,8 @@
       "png": "png/health/meditation.png",
       "webp": "webp/health/meditation.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -224,8 +224,8 @@
       "png": "png/health/steps.png",
       "webp": "webp/health/steps.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -237,8 +237,8 @@
       "png": "png/health/sun.png",
       "webp": "webp/health/sun.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -250,8 +250,8 @@
       "png": "png/health/bath.png",
       "webp": "webp/health/bath.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -263,8 +263,8 @@
       "png": "png/health/medical.png",
       "webp": "webp/health/medical.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -276,8 +276,8 @@
       "png": "png/learning/reading.png",
       "webp": "webp/learning/reading.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -289,8 +289,8 @@
       "png": "png/learning/language.png",
       "webp": "webp/learning/language.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -302,8 +302,8 @@
       "png": "png/learning/study.png",
       "webp": "webp/learning/study.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -315,8 +315,8 @@
       "png": "png/learning/writing.png",
       "webp": "webp/learning/writing.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -328,8 +328,8 @@
       "png": "png/learning/notes.png",
       "webp": "webp/learning/notes.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -341,8 +341,8 @@
       "png": "png/learning/brain.png",
       "webp": "webp/learning/brain.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -354,8 +354,8 @@
       "png": "png/learning/science.png",
       "webp": "webp/learning/science.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -367,8 +367,8 @@
       "png": "png/learning/math.png",
       "webp": "webp/learning/math.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -380,8 +380,8 @@
       "png": "png/learning/coding.png",
       "webp": "webp/learning/coding.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -393,8 +393,8 @@
       "png": "png/learning/library.png",
       "webp": "webp/learning/library.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -406,8 +406,8 @@
       "png": "png/work/work.png",
       "webp": "webp/work/work.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -419,8 +419,8 @@
       "png": "png/work/computer.png",
       "webp": "webp/work/computer.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -432,8 +432,8 @@
       "png": "png/work/calendar.png",
       "webp": "webp/work/calendar.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -445,8 +445,8 @@
       "png": "png/work/clock.png",
       "webp": "webp/work/clock.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -458,8 +458,8 @@
       "png": "png/work/checklist.png",
       "webp": "webp/work/checklist.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -471,8 +471,8 @@
       "png": "png/work/target.png",
       "webp": "webp/work/target.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -484,8 +484,8 @@
       "png": "png/work/email.png",
       "webp": "webp/work/email.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -497,8 +497,8 @@
       "png": "png/work/meeting.png",
       "webp": "webp/work/meeting.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -510,8 +510,8 @@
       "png": "png/work/idea.png",
       "webp": "webp/work/idea.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -523,8 +523,8 @@
       "png": "png/work/project.png",
       "webp": "webp/work/project.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -536,8 +536,8 @@
       "png": "png/finance/money.png",
       "webp": "webp/finance/money.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -549,8 +549,8 @@
       "png": "png/finance/saving.png",
       "webp": "webp/finance/saving.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -562,8 +562,8 @@
       "png": "png/finance/bank.png",
       "webp": "webp/finance/bank.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -575,8 +575,8 @@
       "png": "png/finance/chart.png",
       "webp": "webp/finance/chart.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -588,8 +588,8 @@
       "png": "png/finance/gift.png",
       "webp": "webp/finance/gift.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -601,8 +601,8 @@
       "png": "png/finance/shopping.png",
       "webp": "webp/finance/shopping.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -614,8 +614,8 @@
       "png": "png/finance/coins.png",
       "webp": "webp/finance/coins.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -627,8 +627,8 @@
       "png": "png/finance/house.png",
       "webp": "webp/finance/house.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -640,8 +640,8 @@
       "png": "png/finance/car.png",
       "webp": "webp/finance/car.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -653,8 +653,8 @@
       "png": "png/finance/receipt.png",
       "webp": "webp/finance/receipt.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -666,8 +666,8 @@
       "png": "png/life/travel.png",
       "webp": "webp/life/travel.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -679,8 +679,8 @@
       "png": "png/life/globe.png",
       "webp": "webp/life/globe.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -692,8 +692,8 @@
       "png": "png/life/coffee.png",
       "webp": "webp/life/coffee.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -705,8 +705,8 @@
       "png": "png/life/cooking.png",
       "webp": "webp/life/cooking.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -718,8 +718,8 @@
       "png": "png/life/cleaning.png",
       "webp": "webp/life/cleaning.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -731,8 +731,8 @@
       "png": "png/life/plant.png",
       "webp": "webp/life/plant.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -744,8 +744,8 @@
       "png": "png/life/pet.png",
       "webp": "webp/life/pet.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -757,8 +757,8 @@
       "png": "png/life/music.png",
       "webp": "webp/life/music.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -770,8 +770,8 @@
       "png": "png/life/camera.png",
       "webp": "webp/life/camera.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -783,8 +783,8 @@
       "png": "png/life/art.png",
       "webp": "webp/life/art.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -796,8 +796,8 @@
       "png": "png/life/friends.png",
       "webp": "webp/life/friends.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -809,8 +809,8 @@
       "png": "png/life/love.png",
       "webp": "webp/life/love.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -822,8 +822,8 @@
       "png": "png/life/family.png",
       "webp": "webp/life/family.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -835,8 +835,8 @@
       "png": "png/life/star.png",
       "webp": "webp/life/star.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -848,8 +848,8 @@
       "png": "png/life/trophy.png",
       "webp": "webp/life/trophy.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -861,8 +861,8 @@
       "png": "png/life/movie.png",
       "webp": "webp/life/movie.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -874,8 +874,8 @@
       "png": "png/life/game.png",
       "webp": "webp/life/game.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -887,8 +887,8 @@
       "png": "png/life/vinyl.png",
       "webp": "webp/life/vinyl.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -900,8 +900,8 @@
       "png": "png/life/nature.png",
       "webp": "webp/life/nature.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     },
     {
@@ -913,8 +913,8 @@
       "png": "png/life/celebration.png",
       "webp": "webp/life/celebration.webp",
       "size": [
-        1024,
-        1024
+        256,
+        256
       ]
     }
   ]
