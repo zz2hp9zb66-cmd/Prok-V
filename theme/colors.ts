@@ -67,6 +67,13 @@ export const iconColors = {
   lilac: { background: '#E9E3F5', icon: '#6A5A9E' },
   amber: { background: '#FFF0D6', icon: '#C9822A' },
   rose: { background: '#FBE3E6', icon: '#C9566A' },
+  // TOBI Icon Library v1 category backgrounds (from assets/icons/manifest.json).
+  sport: { background: '#B8E9CC', icon: '#27965D' },
+  health: { background: '#C8EDF6', icon: '#258DBA' },
+  learning: { background: '#E3D7FA', icon: '#7758B5' },
+  work: { background: '#F9DFBE', icon: '#BD742D' },
+  finance: { background: '#FCE2B3', icon: '#BC8040' },
+  life: { background: '#F8CED7', icon: '#C65B6D' },
 } as const;
 
 export type IconColorToken = keyof typeof iconColors;

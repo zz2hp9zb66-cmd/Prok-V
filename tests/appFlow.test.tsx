@@ -467,6 +467,22 @@ describe('item icons', () => {
     ]);
   });
 
+  it('the last library icon can be chosen; previously saved temporary ids show the new images', async () => {
+    await settingsRepository.setOnboardingCompleted(mockServices.db);
+    const old = await createReward(mockServices, 'wish', { name: 'Книга', cost: 30, iconId: 'reading' });
+    renderRouter('./app', { initialUrl: '/rewards' });
+    fireEvent.press(await screen.findByText('Желания'));
+    await screen.findByText('Книга');
+    expect(screen.getByTestId('tobi-icon-reading')).toBeTruthy();
+
+    fireEvent.press(screen.getByLabelText('Книга'));
+    fireEvent.press(await screen.findByText('Редактировать'));
+    await pickIcon(/^Иконка: Чтение\. Изменить$/, 'Праздник');
+    await screen.findByLabelText('Иконка: Праздник. Изменить');
+    fireEvent.press(screen.getByText('Сохранить'));
+    await waitFor(async () => expect((await getReward(mockServices, old.id))?.iconId).toBe('celebration'));
+  });
+
   it('old records without an icon and unknown icon ids show the default icon without errors', async () => {
     await settingsRepository.setOnboardingCompleted(mockServices.db);
     const a = await createHabit(mockServices, { name: 'Старая', weekdays: [0, 1, 2, 3, 4, 5, 6], pointsPerCompletion: 1, dailyLimit: 1 });

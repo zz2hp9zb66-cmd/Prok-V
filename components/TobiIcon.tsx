@@ -15,6 +15,9 @@ export function TobiIcon({ iconId, owner, size = 44 }: TobiIconProps) {
   const icon = resolveIcon(iconId, owner);
   const color = iconColors[icon.color];
   const glyphSize = Math.round(size * 0.55);
+  // Library images already have safe margins (symbol ≈73% of the file), so
+  // the image box is larger to keep the symbol ≈60% of the circle.
+  const imageSize = Math.round(size * IMAGE_SCALE);
   return (
     <View
       style={[styles.circle, { width: size, height: size, backgroundColor: color.background }]}
@@ -24,11 +27,19 @@ export function TobiIcon({ iconId, owner, size = 44 }: TobiIconProps) {
       {icon.glyph.kind === 'vector' ? (
         <Ionicons name={icon.glyph.name} size={glyphSize} color={color.icon} />
       ) : (
-        <Image source={icon.glyph.source} style={{ width: glyphSize, height: glyphSize }} resizeMode="contain" />
+        <Image
+          source={icon.glyph.source}
+          style={{ width: imageSize, height: imageSize }}
+          resizeMode="contain"
+          // Android: decode the 1024 px files at display size (iOS does this by default).
+          resizeMethod="resize"
+        />
       )}
     </View>
   );
 }
+
+const IMAGE_SCALE = 0.82;
 
 const styles = StyleSheet.create({
   circle: { borderRadius: radius.pill, alignItems: 'center', justifyContent: 'center' },

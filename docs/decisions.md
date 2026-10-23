@@ -93,8 +93,9 @@
 - Отображение: круглая пастельная иконка слева в карточках «Задач», «Целей», «Желаний», «Архива» и в заголовке экранов деталей.
 - В SQLite хранится только id (`habits.icon_id`, `rewards.icon_id`, миграция v2). Старые записи (NULL)
   и неизвестные id показывают иконку по умолчанию.
-- Временная библиотека (Ionicons): `sport`, `reading`, `water`, `language`, `sleep`; авторские PNG/WebP подключаются
-  через реестр `features/icons/iconRegistry.ts` с сохранением id (см. `assets/icons/README.md`).
+- Библиотека: TOBI Icon Library v1 — 70 WebP в `assets/icons/webp/` (раньше 5 временных Ionicons; их id
+  `sport`, `reading`, `water`, `language`, `sleep` сохранены). Подложки — цвета категорий из манифеста.
+  Подключение и замена — `assets/icons/README.md`.
 
 ## D9. Принятые технические решения
 - Удаление привычки — soft delete (`deleted_at`); выполнения и транзакции остаются.

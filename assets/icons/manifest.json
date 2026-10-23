@@ -1,0 +1,921 @@
+{
+  "name": "TOBI Icon Library",
+  "version": "1.0",
+  "size_px": [
+    1024,
+    1024
+  ],
+  "transparent": true,
+  "items": [
+    {
+      "id": "sport",
+      "label_ru": "Бег",
+      "category": "sport",
+      "backgroundColor": "#B8E9CC",
+      "iconColor": "#27965D",
+      "png": "png/sport/sport.png",
+      "webp": "webp/sport/sport.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "gym",
+      "label_ru": "Тренировка",
+      "category": "sport",
+      "backgroundColor": "#B8E9CC",
+      "iconColor": "#27965D",
+      "png": "png/sport/gym.png",
+      "webp": "webp/sport/gym.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "walking",
+      "label_ru": "Ходьба",
+      "category": "sport",
+      "backgroundColor": "#B8E9CC",
+      "iconColor": "#27965D",
+      "png": "png/sport/walking.png",
+      "webp": "webp/sport/walking.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "cycling",
+      "label_ru": "Велосипед",
+      "category": "sport",
+      "backgroundColor": "#B8E9CC",
+      "iconColor": "#27965D",
+      "png": "png/sport/cycling.png",
+      "webp": "webp/sport/cycling.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "swimming",
+      "label_ru": "Плавание",
+      "category": "sport",
+      "backgroundColor": "#B8E9CC",
+      "iconColor": "#27965D",
+      "png": "png/sport/swimming.png",
+      "webp": "webp/sport/swimming.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "yoga",
+      "label_ru": "Йога",
+      "category": "sport",
+      "backgroundColor": "#B8E9CC",
+      "iconColor": "#27965D",
+      "png": "png/sport/yoga.png",
+      "webp": "webp/sport/yoga.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "football",
+      "label_ru": "Футбол",
+      "category": "sport",
+      "backgroundColor": "#B8E9CC",
+      "iconColor": "#27965D",
+      "png": "png/sport/football.png",
+      "webp": "webp/sport/football.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "basketball",
+      "label_ru": "Баскетбол",
+      "category": "sport",
+      "backgroundColor": "#B8E9CC",
+      "iconColor": "#27965D",
+      "png": "png/sport/basketball.png",
+      "webp": "webp/sport/basketball.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "hiking",
+      "label_ru": "Поход",
+      "category": "sport",
+      "backgroundColor": "#B8E9CC",
+      "iconColor": "#27965D",
+      "png": "png/sport/hiking.png",
+      "webp": "webp/sport/hiking.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "medal",
+      "label_ru": "Достижение",
+      "category": "sport",
+      "backgroundColor": "#B8E9CC",
+      "iconColor": "#27965D",
+      "png": "png/sport/medal.png",
+      "webp": "webp/sport/medal.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "water",
+      "label_ru": "Вода",
+      "category": "health",
+      "backgroundColor": "#C8EDF6",
+      "iconColor": "#258DBA",
+      "png": "png/health/water.png",
+      "webp": "webp/health/water.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "sleep",
+      "label_ru": "Сон",
+      "category": "health",
+      "backgroundColor": "#C8EDF6",
+      "iconColor": "#258DBA",
+      "png": "png/health/sleep.png",
+      "webp": "webp/health/sleep.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "apple",
+      "label_ru": "Питание",
+      "category": "health",
+      "backgroundColor": "#C8EDF6",
+      "iconColor": "#258DBA",
+      "png": "png/health/apple.png",
+      "webp": "webp/health/apple.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "heart_health",
+      "label_ru": "Здоровье",
+      "category": "health",
+      "backgroundColor": "#C8EDF6",
+      "iconColor": "#258DBA",
+      "png": "png/health/heart_health.png",
+      "webp": "webp/health/heart_health.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "tooth",
+      "label_ru": "Зубы",
+      "category": "health",
+      "backgroundColor": "#C8EDF6",
+      "iconColor": "#258DBA",
+      "png": "png/health/tooth.png",
+      "webp": "webp/health/tooth.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "meditation",
+      "label_ru": "Медитация",
+      "category": "health",
+      "backgroundColor": "#C8EDF6",
+      "iconColor": "#258DBA",
+      "png": "png/health/meditation.png",
+      "webp": "webp/health/meditation.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "steps",
+      "label_ru": "Шаги",
+      "category": "health",
+      "backgroundColor": "#C8EDF6",
+      "iconColor": "#258DBA",
+      "png": "png/health/steps.png",
+      "webp": "webp/health/steps.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "sun",
+      "label_ru": "Солнце",
+      "category": "health",
+      "backgroundColor": "#C8EDF6",
+      "iconColor": "#258DBA",
+      "png": "png/health/sun.png",
+      "webp": "webp/health/sun.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "bath",
+      "label_ru": "Ванна",
+      "category": "health",
+      "backgroundColor": "#C8EDF6",
+      "iconColor": "#258DBA",
+      "png": "png/health/bath.png",
+      "webp": "webp/health/bath.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "medical",
+      "label_ru": "Забота о здоровье",
+      "category": "health",
+      "backgroundColor": "#C8EDF6",
+      "iconColor": "#258DBA",
+      "png": "png/health/medical.png",
+      "webp": "webp/health/medical.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "reading",
+      "label_ru": "Чтение",
+      "category": "learning",
+      "backgroundColor": "#E3D7FA",
+      "iconColor": "#7758B5",
+      "png": "png/learning/reading.png",
+      "webp": "webp/learning/reading.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "language",
+      "label_ru": "Языки",
+      "category": "learning",
+      "backgroundColor": "#E3D7FA",
+      "iconColor": "#7758B5",
+      "png": "png/learning/language.png",
+      "webp": "webp/learning/language.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "study",
+      "label_ru": "Учёба",
+      "category": "learning",
+      "backgroundColor": "#E3D7FA",
+      "iconColor": "#7758B5",
+      "png": "png/learning/study.png",
+      "webp": "webp/learning/study.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "writing",
+      "label_ru": "Письмо",
+      "category": "learning",
+      "backgroundColor": "#E3D7FA",
+      "iconColor": "#7758B5",
+      "png": "png/learning/writing.png",
+      "webp": "webp/learning/writing.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "notes",
+      "label_ru": "Заметки",
+      "category": "learning",
+      "backgroundColor": "#E3D7FA",
+      "iconColor": "#7758B5",
+      "png": "png/learning/notes.png",
+      "webp": "webp/learning/notes.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "brain",
+      "label_ru": "Мышление",
+      "category": "learning",
+      "backgroundColor": "#E3D7FA",
+      "iconColor": "#7758B5",
+      "png": "png/learning/brain.png",
+      "webp": "webp/learning/brain.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "science",
+      "label_ru": "Наука",
+      "category": "learning",
+      "backgroundColor": "#E3D7FA",
+      "iconColor": "#7758B5",
+      "png": "png/learning/science.png",
+      "webp": "webp/learning/science.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "math",
+      "label_ru": "Математика",
+      "category": "learning",
+      "backgroundColor": "#E3D7FA",
+      "iconColor": "#7758B5",
+      "png": "png/learning/math.png",
+      "webp": "webp/learning/math.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "coding",
+      "label_ru": "Программирование",
+      "category": "learning",
+      "backgroundColor": "#E3D7FA",
+      "iconColor": "#7758B5",
+      "png": "png/learning/coding.png",
+      "webp": "webp/learning/coding.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "library",
+      "label_ru": "Книга",
+      "category": "learning",
+      "backgroundColor": "#E3D7FA",
+      "iconColor": "#7758B5",
+      "png": "png/learning/library.png",
+      "webp": "webp/learning/library.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "work",
+      "label_ru": "Работа",
+      "category": "work",
+      "backgroundColor": "#F9DFBE",
+      "iconColor": "#BD742D",
+      "png": "png/work/work.png",
+      "webp": "webp/work/work.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "computer",
+      "label_ru": "Компьютер",
+      "category": "work",
+      "backgroundColor": "#F9DFBE",
+      "iconColor": "#BD742D",
+      "png": "png/work/computer.png",
+      "webp": "webp/work/computer.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "calendar",
+      "label_ru": "Планирование",
+      "category": "work",
+      "backgroundColor": "#F9DFBE",
+      "iconColor": "#BD742D",
+      "png": "png/work/calendar.png",
+      "webp": "webp/work/calendar.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "clock",
+      "label_ru": "Время",
+      "category": "work",
+      "backgroundColor": "#F9DFBE",
+      "iconColor": "#BD742D",
+      "png": "png/work/clock.png",
+      "webp": "webp/work/clock.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "checklist",
+      "label_ru": "Список дел",
+      "category": "work",
+      "backgroundColor": "#F9DFBE",
+      "iconColor": "#BD742D",
+      "png": "png/work/checklist.png",
+      "webp": "webp/work/checklist.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "target",
+      "label_ru": "Цель",
+      "category": "work",
+      "backgroundColor": "#F9DFBE",
+      "iconColor": "#BD742D",
+      "png": "png/work/target.png",
+      "webp": "webp/work/target.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "email",
+      "label_ru": "Почта",
+      "category": "work",
+      "backgroundColor": "#F9DFBE",
+      "iconColor": "#BD742D",
+      "png": "png/work/email.png",
+      "webp": "webp/work/email.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "meeting",
+      "label_ru": "Встреча",
+      "category": "work",
+      "backgroundColor": "#F9DFBE",
+      "iconColor": "#BD742D",
+      "png": "png/work/meeting.png",
+      "webp": "webp/work/meeting.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "idea",
+      "label_ru": "Идея",
+      "category": "work",
+      "backgroundColor": "#F9DFBE",
+      "iconColor": "#BD742D",
+      "png": "png/work/idea.png",
+      "webp": "webp/work/idea.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "project",
+      "label_ru": "Проект",
+      "category": "work",
+      "backgroundColor": "#F9DFBE",
+      "iconColor": "#BD742D",
+      "png": "png/work/project.png",
+      "webp": "webp/work/project.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "money",
+      "label_ru": "Деньги",
+      "category": "finance",
+      "backgroundColor": "#FCE2B3",
+      "iconColor": "#BC8040",
+      "png": "png/finance/money.png",
+      "webp": "webp/finance/money.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "saving",
+      "label_ru": "Накопления",
+      "category": "finance",
+      "backgroundColor": "#FCE2B3",
+      "iconColor": "#BC8040",
+      "png": "png/finance/saving.png",
+      "webp": "webp/finance/saving.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "bank",
+      "label_ru": "Банк",
+      "category": "finance",
+      "backgroundColor": "#FCE2B3",
+      "iconColor": "#BC8040",
+      "png": "png/finance/bank.png",
+      "webp": "webp/finance/bank.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "chart",
+      "label_ru": "Рост",
+      "category": "finance",
+      "backgroundColor": "#FCE2B3",
+      "iconColor": "#BC8040",
+      "png": "png/finance/chart.png",
+      "webp": "webp/finance/chart.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "gift",
+      "label_ru": "Подарок",
+      "category": "finance",
+      "backgroundColor": "#FCE2B3",
+      "iconColor": "#BC8040",
+      "png": "png/finance/gift.png",
+      "webp": "webp/finance/gift.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "shopping",
+      "label_ru": "Покупки",
+      "category": "finance",
+      "backgroundColor": "#FCE2B3",
+      "iconColor": "#BC8040",
+      "png": "png/finance/shopping.png",
+      "webp": "webp/finance/shopping.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "coins",
+      "label_ru": "Монеты",
+      "category": "finance",
+      "backgroundColor": "#FCE2B3",
+      "iconColor": "#BC8040",
+      "png": "png/finance/coins.png",
+      "webp": "webp/finance/coins.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "house",
+      "label_ru": "Дом",
+      "category": "finance",
+      "backgroundColor": "#FCE2B3",
+      "iconColor": "#BC8040",
+      "png": "png/finance/house.png",
+      "webp": "webp/finance/house.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "car",
+      "label_ru": "Автомобиль",
+      "category": "finance",
+      "backgroundColor": "#FCE2B3",
+      "iconColor": "#BC8040",
+      "png": "png/finance/car.png",
+      "webp": "webp/finance/car.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "receipt",
+      "label_ru": "Расходы",
+      "category": "finance",
+      "backgroundColor": "#FCE2B3",
+      "iconColor": "#BC8040",
+      "png": "png/finance/receipt.png",
+      "webp": "webp/finance/receipt.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "travel",
+      "label_ru": "Путешествие",
+      "category": "life",
+      "backgroundColor": "#F8CED7",
+      "iconColor": "#C65B6D",
+      "png": "png/life/travel.png",
+      "webp": "webp/life/travel.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "globe",
+      "label_ru": "Мир",
+      "category": "life",
+      "backgroundColor": "#F8CED7",
+      "iconColor": "#C65B6D",
+      "png": "png/life/globe.png",
+      "webp": "webp/life/globe.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "coffee",
+      "label_ru": "Кофе",
+      "category": "life",
+      "backgroundColor": "#F8CED7",
+      "iconColor": "#C65B6D",
+      "png": "png/life/coffee.png",
+      "webp": "webp/life/coffee.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "cooking",
+      "label_ru": "Готовка",
+      "category": "life",
+      "backgroundColor": "#F8CED7",
+      "iconColor": "#C65B6D",
+      "png": "png/life/cooking.png",
+      "webp": "webp/life/cooking.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "cleaning",
+      "label_ru": "Уборка",
+      "category": "life",
+      "backgroundColor": "#F8CED7",
+      "iconColor": "#C65B6D",
+      "png": "png/life/cleaning.png",
+      "webp": "webp/life/cleaning.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "plant",
+      "label_ru": "Растения",
+      "category": "life",
+      "backgroundColor": "#F8CED7",
+      "iconColor": "#C65B6D",
+      "png": "png/life/plant.png",
+      "webp": "webp/life/plant.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "pet",
+      "label_ru": "Питомец",
+      "category": "life",
+      "backgroundColor": "#F8CED7",
+      "iconColor": "#C65B6D",
+      "png": "png/life/pet.png",
+      "webp": "webp/life/pet.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "music",
+      "label_ru": "Музыка",
+      "category": "life",
+      "backgroundColor": "#F8CED7",
+      "iconColor": "#C65B6D",
+      "png": "png/life/music.png",
+      "webp": "webp/life/music.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "camera",
+      "label_ru": "Фото",
+      "category": "life",
+      "backgroundColor": "#F8CED7",
+      "iconColor": "#C65B6D",
+      "png": "png/life/camera.png",
+      "webp": "webp/life/camera.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "art",
+      "label_ru": "Творчество",
+      "category": "life",
+      "backgroundColor": "#F8CED7",
+      "iconColor": "#C65B6D",
+      "png": "png/life/art.png",
+      "webp": "webp/life/art.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "friends",
+      "label_ru": "Друзья",
+      "category": "life",
+      "backgroundColor": "#F8CED7",
+      "iconColor": "#C65B6D",
+      "png": "png/life/friends.png",
+      "webp": "webp/life/friends.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "love",
+      "label_ru": "Любовь",
+      "category": "life",
+      "backgroundColor": "#F8CED7",
+      "iconColor": "#C65B6D",
+      "png": "png/life/love.png",
+      "webp": "webp/life/love.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "family",
+      "label_ru": "Семья",
+      "category": "life",
+      "backgroundColor": "#F8CED7",
+      "iconColor": "#C65B6D",
+      "png": "png/life/family.png",
+      "webp": "webp/life/family.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "star",
+      "label_ru": "Желание",
+      "category": "life",
+      "backgroundColor": "#F8CED7",
+      "iconColor": "#C65B6D",
+      "png": "png/life/star.png",
+      "webp": "webp/life/star.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "trophy",
+      "label_ru": "Победа",
+      "category": "life",
+      "backgroundColor": "#F8CED7",
+      "iconColor": "#C65B6D",
+      "png": "png/life/trophy.png",
+      "webp": "webp/life/trophy.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "movie",
+      "label_ru": "Кино",
+      "category": "life",
+      "backgroundColor": "#F8CED7",
+      "iconColor": "#C65B6D",
+      "png": "png/life/movie.png",
+      "webp": "webp/life/movie.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "game",
+      "label_ru": "Игры",
+      "category": "life",
+      "backgroundColor": "#F8CED7",
+      "iconColor": "#C65B6D",
+      "png": "png/life/game.png",
+      "webp": "webp/life/game.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "vinyl",
+      "label_ru": "Винил",
+      "category": "life",
+      "backgroundColor": "#F8CED7",
+      "iconColor": "#C65B6D",
+      "png": "png/life/vinyl.png",
+      "webp": "webp/life/vinyl.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "nature",
+      "label_ru": "Природа",
+      "category": "life",
+      "backgroundColor": "#F8CED7",
+      "iconColor": "#C65B6D",
+      "png": "png/life/nature.png",
+      "webp": "webp/life/nature.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    },
+    {
+      "id": "celebration",
+      "label_ru": "Праздник",
+      "category": "life",
+      "backgroundColor": "#F8CED7",
+      "iconColor": "#C65B6D",
+      "png": "png/life/celebration.png",
+      "webp": "webp/life/celebration.webp",
+      "size": [
+        1024,
+        1024
+      ]
+    }
+  ]
+}

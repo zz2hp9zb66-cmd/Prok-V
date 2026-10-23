@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Modal, Pressable, StyleSheet, View } from 'react-native';
+import { Modal, Pressable, ScrollView, StyleSheet, useWindowDimensions, View } from 'react-native';
 import { type IconOwner, pickerIcons, resolveIcon } from '@/features/icons/iconRegistry';
 import { colors, componentRadius, radius, shadows, spacing } from '@/theme';
 import { AppText } from './AppText';
@@ -23,6 +23,7 @@ export interface TobiIconPickerProps {
  */
 export function TobiIconPicker({ owner, value, onChange, labelVariant = 'caption' }: TobiIconPickerProps) {
   const [open, setOpen] = useState(false);
+  const { height: screenHeight } = useWindowDimensions();
   const current = resolveIcon(value, owner);
   const [draft, setDraft] = useState(current.id);
 
@@ -67,23 +68,26 @@ export function TobiIconPicker({ owner, value, onChange, labelVariant = 'caption
               <Icon name="close-outline" color="textSecondary" size={26} />
             </Pressable>
           </View>
-          <View style={styles.grid} accessibilityRole="radiogroup">
-            {pickerIcons(owner).map((icon) => {
-              const selected = icon.id === draft;
-              return (
-                <Pressable
-                  key={icon.id}
-                  accessibilityRole="radio"
-                  accessibilityState={{ selected }}
-                  accessibilityLabel={icon.label}
-                  onPress={() => setDraft(icon.id)}
-                  style={[styles.cell, selected && styles.cellSelected]}
-                >
-                  <TobiIcon iconId={icon.id} owner={owner} size={64} />
-                </Pressable>
-              );
-            })}
-          </View>
+          {/* The grid scrolls; title and «Выбрать» stay in place. */}
+          <ScrollView style={{ maxHeight: Math.round(screenHeight * 0.55) }} contentContainerStyle={styles.gridScroll}>
+            <View style={styles.grid} accessibilityRole="radiogroup">
+              {pickerIcons(owner).map((icon) => {
+                const selected = icon.id === draft;
+                return (
+                  <Pressable
+                    key={icon.id}
+                    accessibilityRole="radio"
+                    accessibilityState={{ selected }}
+                    accessibilityLabel={icon.label}
+                    onPress={() => setDraft(icon.id)}
+                    style={[styles.cell, selected && styles.cellSelected]}
+                  >
+                    <TobiIcon iconId={icon.id} owner={owner} size={64} />
+                  </Pressable>
+                );
+              })}
+            </View>
+          </ScrollView>
           <PrimaryButton title="Выбрать" onPress={confirm} />
         </View>
       </Modal>
@@ -122,8 +126,15 @@ const styles = StyleSheet.create({
   sheetHeader: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center' },
   sheetTitle: { flex: 1 },
   close: { position: 'absolute', right: 0 },
-  // 3 columns, as in the design reference.
-  grid: { flexDirection: 'row', flexWrap: 'wrap', justifyContent: 'center', columnGap: spacing.md, rowGap: spacing.sm },
+  gridScroll: { alignItems: 'center' },
+  // Exactly 3 columns, as in the design reference.
+  grid: {
+    width: CELL * 3 + spacing.md * 2,
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    columnGap: spacing.md,
+    rowGap: spacing.sm,
+  },
   cell: {
     width: CELL,
     height: CELL,

@@ -1,0 +1,5 @@
+Icons derived from Font Awesome Free Solid SVG icons. Copyright (c) Fonticons, Inc.
+Font Awesome Free Icons licensed under Creative Commons Attribution 4.0 International (CC BY 4.0).
+https://fontawesome.com/license/free
+https://creativecommons.org/licenses/by/4.0/
+Changes: recolored icons, adjusted size, added outlines and shadows, exported to PNG and WebP.
