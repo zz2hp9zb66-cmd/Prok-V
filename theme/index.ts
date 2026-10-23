@@ -1,5 +1,5 @@
-export { colors, palette } from './colors';
-export type { ColorToken } from './colors';
+export { colors, iconColors, palette } from './colors';
+export type { ColorToken, IconColorToken } from './colors';
 export { spacing } from './spacing';
 export type { SpacingToken } from './spacing';
 export { radius, componentRadius } from './radius';

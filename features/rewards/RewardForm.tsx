@@ -4,6 +4,7 @@ import { PointsInput } from '@/components/PointsInput';
 import { PrimaryButton } from '@/components/PrimaryButton';
 import { SecondaryButton } from '@/components/SecondaryButton';
 import { TextInput } from '@/components/TextInput';
+import { TobiIconPicker } from '@/components/TobiIconPicker';
 import { RewardType } from '@/data/db/schema';
 import { spacing } from '@/theme';
 import type { RewardInput } from './rewardsService';
@@ -25,6 +26,7 @@ const PLACEHOLDER: Record<RewardType, string> = {
 export function RewardForm({ type, initial, submitTitle, onSubmit, secondary, busy }: RewardFormProps) {
   const [name, setName] = useState(initial?.name ?? '');
   const [cost, setCost] = useState<number | null>(initial?.cost ?? null);
+  const [iconId, setIconId] = useState<string | null>(initial?.iconId ?? null);
   const [errors, setErrors] = useState<{ name?: string; cost?: string }>({});
 
   const submit = () => {
@@ -33,11 +35,12 @@ export function RewardForm({ type, initial, submitTitle, onSubmit, secondary, bu
     if (!cost || cost < 1) next.cost = 'Минимум 1 балл';
     setErrors(next);
     if (Object.keys(next).length > 0) return;
-    onSubmit({ name, cost: cost! });
+    onSubmit({ name, cost: cost!, iconId });
   };
 
   return (
     <View style={styles.form}>
+      <TobiIconPicker owner={type} value={iconId} onChange={setIconId} />
       <TextInput label="Название" value={name} onChangeText={setName} error={errors.name} placeholder={PLACEHOLDER[type]} />
       <PointsInput label="Стоимость в баллах" value={cost} onChange={setCost} error={errors.cost} placeholder="100" />
       <PrimaryButton title={submitTitle} onPress={submit} disabled={busy} />

@@ -10,6 +10,8 @@ export interface Reward {
   createdAt: string;
   updatedAt: string;
   redeemedAt: string | null;
+  /** Icon registry id; null for records created before icons existed. */
+  iconId: string | null;
 }
 
 interface Row {
@@ -21,6 +23,7 @@ interface Row {
   created_at: string;
   updated_at: string;
   redeemed_at: string | null;
+  icon_id: string | null;
 }
 
 const map = (r: Row): Reward => ({
@@ -32,21 +35,22 @@ const map = (r: Row): Reward => ({
   createdAt: r.created_at,
   updatedAt: r.updated_at,
   redeemedAt: r.redeemed_at,
+  iconId: r.icon_id,
 });
 
 export const rewardsRepository = {
   async insert(db: SqlExecutor, r: Reward): Promise<void> {
     await db.runAsync(
-      `INSERT INTO rewards (id, type, name, cost, status, created_at, updated_at, redeemed_at)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?)`,
-      [r.id, r.type, r.name, r.cost, r.status, r.createdAt, r.updatedAt, r.redeemedAt],
+      `INSERT INTO rewards (id, type, name, cost, status, created_at, updated_at, redeemed_at, icon_id)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+      [r.id, r.type, r.name, r.cost, r.status, r.createdAt, r.updatedAt, r.redeemedAt, r.iconId],
     );
   },
 
   async update(db: SqlExecutor, r: Reward): Promise<void> {
     await db.runAsync(
-      'UPDATE rewards SET name = ?, cost = ?, status = ?, updated_at = ?, redeemed_at = ? WHERE id = ?',
-      [r.name, r.cost, r.status, r.updatedAt, r.redeemedAt, r.id],
+      'UPDATE rewards SET name = ?, cost = ?, status = ?, updated_at = ?, redeemed_at = ?, icon_id = ? WHERE id = ?',
+      [r.name, r.cost, r.status, r.updatedAt, r.redeemedAt, r.iconId, r.id],
     );
   },
 

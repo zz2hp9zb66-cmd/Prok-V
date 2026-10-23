@@ -14,6 +14,7 @@ import { RoomScreen } from '@/components/RoomScreen';
 import { Screen } from '@/components/Screen';
 import { SecondaryButton } from '@/components/SecondaryButton';
 import { TOBIHero } from '@/components/TOBIHero';
+import { TobiIcon } from '@/components/TobiIcon';
 import { useServices } from '@/data/ServicesContext';
 import { RewardStatus, RewardType } from '@/data/db/schema';
 import { useAction } from '@/data/useAction';
@@ -95,7 +96,12 @@ export function RewardDetailsScreen() {
       <AppText variant="caption" color="textSecondary">
         {REWARD_TYPE_LABEL[reward.type]}
       </AppText>
-      <AppText variant="h1">{reward.name}</AppText>
+      <View style={styles.titleRow}>
+        <TobiIcon iconId={reward.iconId} owner={reward.type} size={48} />
+        <AppText variant="h1" style={styles.title}>
+          {reward.name}
+        </AppText>
+      </View>
 
       <Card>
         <View style={styles.row}>
@@ -166,7 +172,7 @@ export function RewardEditScreen() {
       <PanelHeading title="Редактировать награду" />
       <RewardForm
         type={data.type}
-        initial={{ name: data.name, cost: data.cost }}
+        initial={{ name: data.name, cost: data.cost, iconId: data.iconId }}
         submitTitle="Сохранить"
         busy={busy}
         onSubmit={(input) =>
@@ -181,5 +187,7 @@ export function RewardEditScreen() {
 }
 
 const styles = StyleSheet.create({
+  titleRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  title: { flex: 1 },
   row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', gap: spacing.sm },
 });

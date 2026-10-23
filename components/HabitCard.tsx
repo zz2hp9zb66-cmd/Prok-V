@@ -6,6 +6,7 @@ import { AppText } from './AppText';
 import { Card } from './Card';
 import { Icon } from './Icon';
 import { ProgressBar } from './ProgressBar';
+import { TobiIcon } from './TobiIcon';
 
 export interface HabitCardProps {
   view: HabitDayView;
@@ -27,6 +28,7 @@ export function HabitCard({ view, onPress, onComplete, busy }: HabitCardProps) {
   return (
     <Card muted={inactive}>
       <View style={styles.row}>
+        <TobiIcon iconId={view.habit.iconId} owner="habit" />
         <Pressable
           accessibilityRole="button"
           accessibilityLabel={view.habit.name}

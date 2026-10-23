@@ -67,6 +67,11 @@ export const migrations: readonly string[] = [
   CREATE INDEX idx_point_transactions_date ON point_transactions (calendar_date);
   CREATE INDEX idx_point_transactions_source ON point_transactions (source_type, source_id);
   `,
+  // v2 — user-chosen icon (only the registry id is stored; NULL = default icon for the type).
+  `
+  ALTER TABLE habits ADD COLUMN icon_id TEXT;
+  ALTER TABLE rewards ADD COLUMN icon_id TEXT;
+  `,
 ];
 
 export const LATEST_SCHEMA_VERSION = migrations.length;

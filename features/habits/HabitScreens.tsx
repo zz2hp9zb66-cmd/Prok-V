@@ -7,6 +7,7 @@ import { ConfirmationModal } from '@/components/ConfirmationModal';
 import { EmptyState } from '@/components/EmptyState';
 import { ProgressBar } from '@/components/ProgressBar';
 import { Screen } from '@/components/Screen';
+import { TobiIcon } from '@/components/TobiIcon';
 import { SecondaryButton } from '@/components/SecondaryButton';
 import { PrimaryButton } from '@/components/PrimaryButton';
 import { useServices } from '@/data/ServicesContext';
@@ -77,7 +78,12 @@ export function HabitDetailsScreen() {
 
   return (
     <Screen edges={['bottom']}>
-      <AppText variant="h1">{habit.name}</AppText>
+      <View style={styles.titleRow}>
+        <TobiIcon iconId={habit.iconId} owner="habit" size={48} />
+        <AppText variant="h1" style={styles.title}>
+          {habit.name}
+        </AppText>
+      </View>
       <Card>
         <Row label="Дни" value={formatWeekdays(habit.weekdays)} />
         <Row label="Баллы за выполнение" value={formatPoints(details.pointsPerCompletion)} />
@@ -160,6 +166,7 @@ export function HabitEditScreen() {
           weekdays: data.habit.weekdays,
           pointsPerCompletion: latest.pointsPerCompletion,
           dailyLimit: latest.dailyLimit,
+          iconId: data.habit.iconId,
         }}
         note={EDIT_NOTE}
         submitTitle="Сохранить"
@@ -176,6 +183,8 @@ export function HabitEditScreen() {
 }
 
 const styles = StyleSheet.create({
+  titleRow: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
+  title: { flex: 1 },
   row: { flexDirection: 'row', justifyContent: 'space-between', gap: spacing.sm },
   value: { flex: 1, textAlign: 'right' },
   completionInfo: { flex: 1 },

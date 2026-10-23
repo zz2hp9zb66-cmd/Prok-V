@@ -7,6 +7,7 @@ import { spacing } from '@/theme';
 import { AppText } from './AppText';
 import { Card } from './Card';
 import { ProgressBar } from './ProgressBar';
+import { TobiIcon } from './TobiIcon';
 
 export const REWARD_TYPE_LABEL: Record<RewardType, string> = {
   [RewardType.Goal]: 'Цель',
@@ -24,18 +25,23 @@ export function RewardCard({ reward, balance, onPress }: RewardCardProps) {
   const { progress, available } = rewardProgress(reward.cost, balance);
   return (
     <Card onPress={onPress} accessibilityLabel={reward.name}>
-      <View style={styles.row}>
-        <AppText variant="h3" style={styles.name} numberOfLines={2}>
-          {reward.name}
-        </AppText>
-        <AppText variant="bodyStrong" color="accentDark">
-          {formatPoints(reward.cost)}
-        </AppText>
+      <View style={styles.layout}>
+        <TobiIcon iconId={reward.iconId} owner={reward.type} />
+        <View style={styles.body}>
+          <View style={styles.row}>
+            <AppText variant="h3" style={styles.name} numberOfLines={2}>
+              {reward.name}
+            </AppText>
+            <AppText variant="bodyStrong" color="accentDark">
+              {formatPoints(reward.cost)}
+            </AppText>
+          </View>
+          <ProgressBar progress={progress} color={available ? 'success' : 'primary'} />
+          <AppText variant="caption" color={available ? 'success' : 'textSecondary'}>
+            {available ? 'Можно получить' : `Ещё ${formatPoints(reward.cost - balance)}`}
+          </AppText>
+        </View>
       </View>
-      <ProgressBar progress={progress} color={available ? 'success' : 'primary'} />
-      <AppText variant="caption" color={available ? 'success' : 'textSecondary'}>
-        {available ? 'Можно получить' : `Ещё ${formatPoints(reward.cost - balance)}`}
-      </AppText>
     </Card>
   );
 }
@@ -44,22 +50,29 @@ export function RewardCard({ reward, balance, onPress }: RewardCardProps) {
 export function ArchivedRewardCard({ reward }: { reward: Reward }) {
   return (
     <Card>
-      <View style={styles.row}>
-        <AppText variant="h3" style={styles.name} numberOfLines={2}>
-          {reward.name}
-        </AppText>
-        <AppText variant="bodyStrong" color="accentDark">
-          {formatPoints(reward.cost)}
-        </AppText>
+      <View style={styles.layout}>
+        <TobiIcon iconId={reward.iconId} owner={reward.type} />
+        <View style={styles.body}>
+          <View style={styles.row}>
+            <AppText variant="h3" style={styles.name} numberOfLines={2}>
+              {reward.name}
+            </AppText>
+            <AppText variant="bodyStrong" color="accentDark">
+              {formatPoints(reward.cost)}
+            </AppText>
+          </View>
+          <AppText variant="caption" color="textSecondary">
+            {REWARD_TYPE_LABEL[reward.type]} · получена {reward.redeemedAt ? formatDate(reward.redeemedAt) : ''}
+          </AppText>
+        </View>
       </View>
-      <AppText variant="caption" color="textSecondary">
-        {REWARD_TYPE_LABEL[reward.type]} · получена {reward.redeemedAt ? formatDate(reward.redeemedAt) : ''}
-      </AppText>
     </Card>
   );
 }
 
 const styles = StyleSheet.create({
+  layout: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm - spacing.xxs },
+  body: { flex: 1, gap: spacing.xs },
   row: { flexDirection: 'row', alignItems: 'flex-start', gap: spacing.xs },
   name: { flex: 1 },
 });

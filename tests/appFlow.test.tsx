@@ -377,3 +377,105 @@ describe('editing a goal or wish', () => {
   });
 });
 
+
+describe('item icons', () => {
+  const pickIcon = async (current: RegExp, label: string) => {
+    fireEvent.press(await screen.findByLabelText(current));
+    await screen.findByText('Выбрать иконку');
+    fireEvent.press(screen.getByLabelText(label));
+    fireEvent.press(screen.getByText('Выбрать'));
+  };
+
+  it('task: choose an icon on creation, see it in «Задачи», change it on edit; ✕ keeps the old one', async () => {
+    await settingsRepository.setOnboardingCompleted(mockServices.db);
+    const app = renderRouter('./app', { initialUrl: '/tasks' });
+    fireEvent.press(await screen.findByText('Создать первую привычку'));
+    await screen.findByText('Новая задача');
+    expect(screen.getByTestId('tobi-icon-default_habit')).toBeTruthy(); // default before choosing
+
+    await pickIcon(/^Иконка: .*\. Изменить$/, 'Спорт');
+    await screen.findByTestId('tobi-icon-sport');
+    await typeInto('Название задачи', 'Бег');
+    await typeInto('Стоимость задачи', '10');
+    fireEvent.press(screen.getByLabelText('Понедельник'));
+    fireEvent.press(screen.getByText('Продолжить'));
+    await waitFor(() => expect(app.getPathname()).toBe('/tasks'));
+    await screen.findByText('Бег');
+    expect(screen.getByTestId('tobi-icon-sport')).toBeTruthy(); // shown in the task card
+
+    const [row] = await mockServices.db.getAllAsync<{ id: string; icon_id: string }>('SELECT id, icon_id FROM habits');
+    expect(row!.icon_id).toBe('sport');
+
+    // Edit: previous icon shown, change to water.
+    app.unmount();
+    const edit = renderRouter('./app', { initialUrl: `/habit/${row!.id}` });
+    await screen.findByText('Бег');
+    fireEvent.press(screen.getByText('Редактировать'));
+    await screen.findByLabelText('Иконка: Спорт. Изменить');
+    // Close the picker with ✕: nothing changes.
+    fireEvent.press(screen.getByLabelText('Иконка: Спорт. Изменить'));
+    await screen.findByText('Выбрать иконку');
+    fireEvent.press(screen.getByLabelText('Вода'));
+    fireEvent.press(screen.getByLabelText('Отмена'));
+    expect(screen.getByLabelText('Иконка: Спорт. Изменить')).toBeTruthy();
+    await pickIcon(/^Иконка: Спорт\. Изменить$/, 'Вода');
+    await screen.findByLabelText('Иконка: Вода. Изменить');
+    fireEvent.press(screen.getByText('Сохранить'));
+    await waitFor(() => expect(edit.getPathname()).toBe(`/habit/${row!.id}`));
+    await screen.findByTestId('tobi-icon-water');
+    const [after] = await mockServices.db.getAllAsync<{ icon_id: string }>('SELECT icon_id FROM habits');
+    expect(after!.icon_id).toBe('water');
+  });
+
+  it('goal and wish: chosen icons are shown in «Награды»; leaving edit without saving keeps the icon', async () => {
+    await settingsRepository.setOnboardingCompleted(mockServices.db);
+    renderRouter('./app', { initialUrl: '/rewards' });
+    fireEvent.press(await screen.findByText('Создать цель'));
+    await screen.findByText('Новая цель');
+    await typeInto('Название', 'Прочитать 12 книг');
+    await typeInto('Стоимость в баллах', '120');
+    await pickIcon(/^Иконка: Цель\. Изменить$/, 'Чтение');
+    await screen.findByLabelText('Иконка: Чтение. Изменить');
+    fireEvent.press(screen.getByText('Создать цель'));
+    await screen.findByText('Прочитать 12 книг');
+
+    fireEvent.press(screen.getByText('Желания'));
+    fireEvent.press(await screen.findByText('Создать желание'));
+    await screen.findByText('Новое желание');
+    await typeInto('Название', 'Путешествие'); // no icon chosen → default wish icon
+    await typeInto('Стоимость в баллах', '5000');
+    fireEvent.press(screen.getByText('Создать желание'));
+    await screen.findByText('Путешествие');
+
+    fireEvent.press(screen.getByText('Цели'));
+    await screen.findByText('Прочитать 12 книг');
+    expect(screen.getByTestId('tobi-icon-reading')).toBeTruthy();
+    fireEvent.press(screen.getByText('Желания'));
+    await screen.findByText('Путешествие');
+    expect(screen.getByTestId('tobi-icon-default_wish')).toBeTruthy();
+
+    // Edit the wish icon but leave with «Назад»: nothing saved.
+    fireEvent.press(screen.getByLabelText('Путешествие'));
+    fireEvent.press(await screen.findByText('Редактировать'));
+    await pickIcon(/^Иконка: Желание\. Изменить$/, 'Сон');
+    fireEvent.press(screen.getByLabelText('Назад'));
+    await waitFor(() => expect(screen.queryByText('Редактировать награду')).toBeNull());
+    const rows = await mockServices.db.getAllAsync<{ name: string; icon_id: string }>('SELECT name, icon_id FROM rewards ORDER BY name');
+    expect(rows).toEqual([
+      { name: 'Прочитать 12 книг', icon_id: 'reading' },
+      { name: 'Путешествие', icon_id: 'default_wish' },
+    ]);
+  });
+
+  it('old records without an icon and unknown icon ids show the default icon without errors', async () => {
+    await settingsRepository.setOnboardingCompleted(mockServices.db);
+    const a = await createHabit(mockServices, { name: 'Старая', weekdays: [0, 1, 2, 3, 4, 5, 6], pointsPerCompletion: 1, dailyLimit: 1 });
+    const b = await createHabit(mockServices, { name: 'Пропавшая', weekdays: [0, 1, 2, 3, 4, 5, 6], pointsPerCompletion: 1, dailyLimit: 1 });
+    await mockServices.db.runAsync('UPDATE habits SET icon_id = NULL WHERE id = ?', [a.id]);
+    await mockServices.db.runAsync("UPDATE habits SET icon_id = 'removed-icon' WHERE id = ?", [b.id]);
+    renderRouter('./app', { initialUrl: '/tasks' });
+    await screen.findByText('Старая');
+    await screen.findByText('Пропавшая');
+    expect(screen.getAllByTestId('tobi-icon-default_habit')).toHaveLength(2);
+  });
+});

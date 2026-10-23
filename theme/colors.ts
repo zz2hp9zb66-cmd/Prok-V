@@ -54,3 +54,19 @@ export const colors = {
 } as const;
 
 export type ColorToken = keyof typeof colors;
+
+/**
+ * Soft pastel backgrounds and matching glyph colors for item icons
+ * (habits, goals, wishes). Additive tokens; brand and functional colors unchanged.
+ */
+export const iconColors = {
+  green: { background: '#E3F2E1', icon: '#4F8A5B' },
+  peach: { background: '#FDE6D6', icon: '#E76F2E' },
+  blue: { background: '#DDEFFB', icon: '#3D8FC9' },
+  violet: { background: '#ECE4FA', icon: '#7A5CC7' },
+  lilac: { background: '#E9E3F5', icon: '#6A5A9E' },
+  amber: { background: '#FFF0D6', icon: '#C9822A' },
+  rose: { background: '#FBE3E6', icon: '#C9566A' },
+} as const;
+
+export type IconColorToken = keyof typeof iconColors;

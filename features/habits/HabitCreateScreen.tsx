@@ -7,6 +7,7 @@ import { PointsInput } from '@/components/PointsInput';
 import { PrimaryButton } from '@/components/PrimaryButton';
 import { StepIndicator } from '@/components/StepIndicator';
 import { TextInput } from '@/components/TextInput';
+import { TobiIconPicker } from '@/components/TobiIconPicker';
 import { RoomScreen } from '@/components/RoomScreen';
 import type { Weekday } from '@/services/time';
 import { colors, radius, spacing } from '@/theme';
@@ -65,6 +66,7 @@ export function HabitCreateView({ step, onBack, onSubmit, onSkip, busy }: HabitC
   const [points, setPoints] = useState<number | null>(null);
   const [weekdays, setWeekdays] = useState<Weekday[]>([]);
   const [limit, setLimit] = useState<number | null>(1);
+  const [iconId, setIconId] = useState<string | null>(null);
   const [errors, setErrors] = useState<Errors>({});
   const [showHelp, setShowHelp] = useState(false);
 
@@ -72,7 +74,7 @@ export function HabitCreateView({ step, onBack, onSubmit, onSkip, busy }: HabitC
     const next = validateHabitForm({ name, points, weekdays, limit });
     setErrors(next);
     if (Object.keys(next).length > 0) return;
-    onSubmit({ name, weekdays, pointsPerCompletion: points!, dailyLimit: limit! });
+    onSubmit({ name, weekdays, pointsPerCompletion: points!, dailyLimit: limit!, iconId });
   };
 
   return (
@@ -105,6 +107,8 @@ export function HabitCreateView({ step, onBack, onSubmit, onSkip, busy }: HabitC
           {COPY.subtitle}
         </AppText>
       </View>
+
+      <TobiIconPicker owner="habit" value={iconId} onChange={setIconId} labelVariant="heading" />
 
       <TextInput
         label="Название задачи"

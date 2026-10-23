@@ -4,19 +4,22 @@ import type { SqlExecutor } from '@/data/db/types';
 import { type Reward, rewardsRepository } from '@/data/repositories/rewardsRepository';
 import { DomainError } from '@/services/domainError';
 import { toTimestamp } from '@/services/time';
+import { defaultIconId } from '../icons/iconRegistry';
 import { recordPointTransaction } from '../points/pointsService';
 
 /** Goals and wishes share one mechanic (§12). */
 export interface RewardInput {
   name: string;
   cost: number;
+  /** Icon registry id. Omitted = keep the current one (edit) / type default (create). */
+  iconId?: string | null;
 }
 
 function validate(input: RewardInput): RewardInput {
   const name = input.name.trim();
   if (!name) throw new DomainError('validation', 'Reward name is required.');
   if (!Number.isInteger(input.cost) || input.cost < 1) throw new DomainError('validation', 'Cost must be an integer ≥ 1.');
-  return { name, cost: input.cost };
+  return { name, cost: input.cost, iconId: input.iconId };
 }
 
 async function getActiveReward(db: SqlExecutor, id: string): Promise<Reward> {
@@ -38,6 +41,8 @@ export async function createReward(ctx: DomainContext, type: RewardType, input: 
     createdAt: now,
     updatedAt: now,
     redeemedAt: null,
+    // Not chosen → the universal goal / wish icon.
+    iconId: valid.iconId || defaultIconId(type),
   };
   await rewardsRepository.insert(ctx.db, reward);
   return reward;
@@ -48,7 +53,13 @@ export async function updateReward(ctx: DomainContext, id: string, input: Reward
   const valid = validate(input);
   return ctx.db.transaction(async (tx) => {
     const reward = await getActiveReward(tx, id);
-    const updated: Reward = { ...reward, ...valid, updatedAt: toTimestamp(ctx.clock.now()) };
+    const updated: Reward = {
+      ...reward,
+      name: valid.name,
+      cost: valid.cost,
+      iconId: valid.iconId === undefined ? reward.iconId : valid.iconId,
+      updatedAt: toTimestamp(ctx.clock.now()),
+    };
     await rewardsRepository.update(tx, updated);
     return updated;
   });

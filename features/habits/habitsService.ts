@@ -5,6 +5,7 @@ import { type HabitCompletion, completionsRepository } from '@/data/repositories
 import { type HabitRecord, habitsRepository } from '@/data/repositories/habitsRepository';
 import { DomainError } from '@/services/domainError';
 import { addDays, type CalendarDate, toCalendarDate, toTimestamp } from '@/services/time';
+import { defaultIconId } from '../icons/iconRegistry';
 import { recordPointTransaction } from '../points/pointsService';
 import { effectiveParams, type HabitInput, isScheduledOn, validateHabitInput } from './habitRules';
 
@@ -61,13 +62,15 @@ export async function createHabit(ctx: DomainContext, input: HabitInput): Promis
     createdAt: now,
     updatedAt: now,
     deletedAt: null,
+    // Not chosen → the universal habit icon (optional field, never blocks creation).
+    iconId: valid.iconId || defaultIconId('habit'),
   };
   await habitsRepository.insert(ctx.db, habit);
   return habit;
 }
 
 /**
- * Name and weekdays apply immediately (D3). Points and daily limit apply from
+ * Name, weekdays and icon apply immediately (D3). Points and daily limit apply from
  * the next calendar day (§11). Past completions are never recalculated.
  */
 export async function updateHabit(ctx: DomainContext, id: string, input: HabitInput): Promise<HabitRecord> {
@@ -86,6 +89,8 @@ export async function updateHabit(ctx: DomainContext, id: string, input: HabitIn
       pendingPointsPerCompletion: pendingPoints,
       pendingDailyLimit: pendingLimit,
       pendingEffectiveDate: hasPending ? addDays(date, 1) : null,
+      // The icon is cosmetic: applies immediately; omitted keeps the current one.
+      iconId: valid.iconId === undefined ? habit.iconId : valid.iconId,
       updatedAt: toTimestamp(ctx.clock.now()),
     };
     await habitsRepository.update(tx, updated);
