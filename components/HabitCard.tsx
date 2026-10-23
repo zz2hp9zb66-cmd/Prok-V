@@ -1,11 +1,9 @@
 import { Pressable, StyleSheet, View, type GestureResponderEvent } from 'react-native';
 import type { HabitDayView } from '@/features/habits/habitsService';
-import { formatPoints } from '@/services/format';
 import { colors, radius, sizes, spacing } from '@/theme';
 import { AppText } from './AppText';
 import { Card } from './Card';
 import { Icon } from './Icon';
-import { ProgressBar } from './ProgressBar';
 import { TobiIcon } from './TobiIcon';
 
 export interface HabitCardProps {
@@ -15,53 +13,68 @@ export interface HabitCardProps {
   busy?: boolean;
 }
 
-function statusText(view: HabitDayView): string {
-  if (!view.scheduledToday) return 'Сегодня не запланирована';
-  if (!view.canComplete) return 'На сегодня выполнено';
-  return `+${formatPoints(view.pointsPerCompletion)}`;
-}
-
-/** Habit in the Tasks list: progress, points and the complete action (§18). */
+/**
+ * Habit in the Tasks list (§18): icon, name + optional comment, checkbox,
+ * points (and today's progress when the limit is above 1, §8), arrow to details.
+ */
 export function HabitCard({ view, onPress, onComplete, busy }: HabitCardProps) {
+  const done = view.scheduledToday && !view.canComplete;
   const disabled = !view.canComplete || busy;
-  const inactive = !view.canComplete;
+  const { name, comment } = view.habit;
   return (
-    <Card muted={inactive}>
+    <Card muted={!view.scheduledToday} style={styles.card}>
       <View style={styles.row}>
-        <TobiIcon iconId={view.habit.iconId} owner="habit" />
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel={view.habit.name}
+          accessibilityLabel={name}
           onPress={onPress}
           style={({ pressed }) => [styles.info, pressed && styles.pressed]}
         >
-          <AppText variant="h3" color={inactive ? 'textSecondary' : 'textPrimary'} numberOfLines={2}>
-            {view.habit.name}
-          </AppText>
-          <AppText variant="caption" color={view.scheduledToday && view.canComplete ? 'accentDark' : 'textSecondary'}>
-            {statusText(view)}
-          </AppText>
-          {view.scheduledToday ? (
-            <View style={styles.progress}>
-              <View style={styles.bar}>
-                <ProgressBar progress={view.completedToday / view.dailyLimit} color={inactive ? 'success' : 'primary'} />
-              </View>
-              <AppText variant="caption" color="textSecondary">
-                {view.completedToday}/{view.dailyLimit}
+          <TobiIcon iconId={view.habit.iconId} owner="habit" size={sizes.touchTarget + spacing.xxs} />
+          <View style={styles.text}>
+            <AppText variant="cardTitle" color={view.scheduledToday ? 'textPrimary' : 'textSecondary'} numberOfLines={2}>
+              {name}
+            </AppText>
+            {comment ? (
+              <AppText variant="caption" color="textSecondary" numberOfLines={2}>
+                {comment}
               </AppText>
-            </View>
-          ) : null}
+            ) : null}
+            {!view.scheduledToday ? (
+              <AppText variant="small" color="textSecondary">
+                Сегодня не запланирована
+              </AppText>
+            ) : null}
+          </View>
+        </Pressable>
+        <Pressable
+          accessibilityRole="checkbox"
+          accessibilityLabel={`Выполнить: ${name}`}
+          accessibilityState={{ checked: done, disabled }}
+          disabled={disabled}
+          onPress={onComplete}
+          hitSlop={spacing.xxs}
+          style={({ pressed }) => [styles.check, done && styles.checkDone, pressed && styles.pressed]}
+        >
+          {done ? <Icon name="checkmark-outline" color="textOnPrimary" size={sizes.iconMd + spacing.xxs} /> : null}
         </Pressable>
         <Pressable
           accessibilityRole="button"
-          accessibilityLabel={`Выполнить: ${view.habit.name}`}
-          accessibilityState={{ disabled }}
-          disabled={disabled}
-          onPress={onComplete}
-          hitSlop={8}
-          style={({ pressed }) => [styles.check, disabled && styles.checkDisabled, pressed && styles.pressed]}
+          accessibilityLabel={`Подробнее: ${name}`}
+          onPress={onPress}
+          style={({ pressed }) => [styles.meta, pressed && styles.pressed]}
         >
-          <Icon name="checkmark-outline" color={disabled ? 'textSecondary' : 'textOnPrimary'} size={sizes.iconLg} />
+          <View style={styles.points}>
+            <AppText variant="bodyStrong" color={view.scheduledToday ? 'textPrimary' : 'textSecondary'}>
+              +{view.pointsPerCompletion}
+            </AppText>
+            {view.scheduledToday && view.dailyLimit > 1 ? (
+              <AppText variant="caption" color="textSecondary">
+                {view.completedToday}/{view.dailyLimit}
+              </AppText>
+            ) : null}
+          </View>
+          <Icon name="chevron-forward-outline" color="primary" size={sizes.iconSm + spacing.xxs} />
         </Pressable>
       </View>
     </Card>
@@ -69,18 +82,21 @@ export function HabitCard({ view, onPress, onComplete, busy }: HabitCardProps) {
 }
 
 const styles = StyleSheet.create({
-  row: { flexDirection: 'row', alignItems: 'center', gap: spacing.sm },
-  info: { flex: 1, gap: spacing.xxs },
+  card: { paddingVertical: spacing.sm + spacing.xxs, paddingRight: spacing.xs },
+  row: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs },
+  info: { flex: 1, flexDirection: 'row', alignItems: 'center', gap: spacing.sm - spacing.xxs },
+  text: { flex: 1, gap: spacing.xxs / 2 },
   check: {
-    width: 52,
-    height: 52,
-    borderRadius: radius.pill,
-    backgroundColor: colors.primary,
+    width: sizes.touchTarget,
+    height: sizes.touchTarget,
+    borderRadius: radius.sm,
+    borderWidth: 1.5,
+    borderColor: colors.checkboxBorder,
     alignItems: 'center',
     justifyContent: 'center',
   },
-  checkDisabled: { backgroundColor: colors.border },
+  checkDone: { backgroundColor: colors.success, borderWidth: 0 },
+  meta: { flexDirection: 'row', alignItems: 'center', gap: spacing.xxs, minHeight: sizes.touchTarget },
+  points: { minWidth: sizes.touchTarget - spacing.xs, alignItems: 'flex-start' },
   pressed: { opacity: 0.85 },
-  progress: { flexDirection: 'row', alignItems: 'center', gap: spacing.xs, paddingTop: spacing.xxs },
-  bar: { flex: 1 },
 });

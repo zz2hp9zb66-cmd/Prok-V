@@ -76,7 +76,7 @@ describe('main user flow', () => {
     await screen.findByText('1/2');
     fireEvent.press(screen.getByLabelText('Выполнить: Зарядка'), { nativeEvent: { pageX: 0, pageY: 0 } });
     await screen.findByText('2/2');
-    await screen.findByText('На сегодня выполнено');
+    await waitFor(() => expect(screen.getByLabelText('Выполнить: Зарядка').props.accessibilityState).toMatchObject({ checked: true, disabled: true }));
     act(() => jest.advanceTimersByTime(4000)); // let the points land in the counter
     await screen.findByLabelText('Баланс: 20 баллов');
 
@@ -377,6 +377,54 @@ describe('editing a goal or wish', () => {
   });
 });
 
+
+describe('habit comment (D16)', () => {
+  it('is entered on creation, shown under the name, edited and removed; leaving edit without saving keeps it', async () => {
+    await settingsRepository.setOnboardingCompleted(mockServices.db);
+    const app = renderRouter('./app', { initialUrl: '/tasks' });
+    fireEvent.press(await screen.findByText('Добавить привычку'));
+    await screen.findByText('Новая задача');
+    expect(screen.getByPlaceholderText('Например: 8 стаканов, 30 минут, до 23:00')).toBeTruthy();
+    await typeInto('Название задачи', 'Пить воду');
+    await typeInto('Комментарий', '8 стаканов');
+    await typeInto('Стоимость задачи', '5');
+    fireEvent.press(screen.getByLabelText('Понедельник'));
+    fireEvent.press(screen.getByText('Продолжить'));
+    await waitFor(() => expect(app.getPathname()).toBe('/tasks'));
+    await screen.findByText('Пить воду');
+    expect(screen.getByText('8 стаканов')).toBeTruthy();
+    const [row] = await mockServices.db.getAllAsync<{ id: string; comment: string }>('SELECT id, comment FROM habits');
+    expect(row!.comment).toBe('8 стаканов');
+
+    // Edit without saving: nothing changes.
+    app.unmount();
+    const draft = renderRouter('./app', { initialUrl: `/habit/${row!.id}/edit` });
+    await screen.findByDisplayValue('8 стаканов');
+    await typeInto('Комментарий', 'Другое');
+    draft.unmount();
+    const [kept] = await mockServices.db.getAllAsync<{ comment: string }>('SELECT comment FROM habits');
+    expect(kept!.comment).toBe('8 стаканов');
+
+    // Edit and save, then remove.
+    const edit = renderRouter('./app', { initialUrl: `/habit/${row!.id}` });
+    await screen.findByText('Пить воду');
+    fireEvent.press(screen.getByText('Редактировать'));
+    await screen.findByDisplayValue('8 стаканов');
+    await typeInto('Комментарий', '2 литра');
+    fireEvent.press(screen.getByText('Сохранить'));
+    await waitFor(() => expect(edit.getPathname()).toBe(`/habit/${row!.id}`));
+    const [changed] = await mockServices.db.getAllAsync<{ comment: string }>('SELECT comment FROM habits');
+    expect(changed!.comment).toBe('2 литра');
+    fireEvent.press(await screen.findByText('Редактировать'));
+    await screen.findByDisplayValue('2 литра');
+    await typeInto('Комментарий', '');
+    fireEvent.press(screen.getByText('Сохранить'));
+    await waitFor(async () => {
+      const [cleared] = await mockServices.db.getAllAsync<{ comment: string | null }>('SELECT comment FROM habits');
+      expect(cleared!.comment).toBeNull();
+    });
+  });
+});
 
 describe('item icons', () => {
   const pickIcon = async (current: RegExp, label: string) => {

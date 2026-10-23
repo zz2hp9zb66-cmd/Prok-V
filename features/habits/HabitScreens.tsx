@@ -167,6 +167,7 @@ export function HabitEditScreen() {
           pointsPerCompletion: latest.pointsPerCompletion,
           dailyLimit: latest.dailyLimit,
           iconId: data.habit.iconId,
+          comment: data.habit.comment,
         }}
         note={EDIT_NOTE}
         submitTitle="Сохранить"

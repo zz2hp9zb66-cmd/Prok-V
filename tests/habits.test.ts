@@ -253,3 +253,40 @@ describe('atomicity', () => {
     expect(await getBalance(ctx.db)).toBe(10);
   });
 });
+
+describe('habit comment (D16)', () => {
+  it('is optional, trimmed, editable, removable and kept when omitted', async () => {
+    const ctx = await createTestContext();
+    const plain = await createHabit(ctx, habitInput());
+    expect(plain.comment).toBeNull();
+    const blank = await createHabit(ctx, habitInput({ comment: '   ' }));
+    expect(blank.comment).toBeNull();
+
+    const water = await createHabit(ctx, habitInput({ name: 'Пить воду', comment: '  8 стаканов ' }));
+    expect(water.comment).toBe('8 стаканов');
+    expect((await getHabitDetails(ctx, water.id))!.habit.comment).toBe('8 стаканов');
+
+    await updateHabit(ctx, water.id, habitInput({ name: 'Пить воду', comment: 'Drink 2 L' }));
+    expect((await getHabitDetails(ctx, water.id))!.habit.comment).toBe('Drink 2 L');
+    await updateHabit(ctx, water.id, habitInput({ name: 'Пить воду' })); // omitted → kept
+    expect((await getHabitDetails(ctx, water.id))!.habit.comment).toBe('Drink 2 L');
+    await updateHabit(ctx, water.id, habitInput({ name: 'Пить воду', comment: '' })); // cleared
+    expect((await getHabitDetails(ctx, water.id))!.habit.comment).toBeNull();
+  });
+
+  it('allows up to 120 characters', async () => {
+    const ctx = await createTestContext();
+    expect((await createHabit(ctx, habitInput({ comment: 'а'.repeat(120) }))).comment).toHaveLength(120);
+    expect(await errorCode(createHabit(ctx, habitInput({ comment: 'а'.repeat(121) })))).toBe('validation');
+  });
+
+  it('does not affect points, schedule or completions', async () => {
+    const ctx = await createTestContext();
+    const habit = await createHabit(ctx, habitInput({ pointsPerCompletion: 10 }));
+    await updateHabit(ctx, habit.id, habitInput({ pointsPerCompletion: 10, comment: 'Минимум 30 минут' }));
+    const [view] = await listHabitsForToday(ctx);
+    expect(view).toMatchObject({ pointsPerCompletion: 10, upcoming: null, scheduledToday: true, canComplete: true });
+    await completeHabit(ctx, habit.id);
+    expect(await getBalance(ctx.db)).toBe(10);
+  });
+});

@@ -10,6 +10,8 @@ export const typography = {
   lead: { fontSize: 17, lineHeight: 24, fontWeight: '500' },
   body: { fontSize: 16, lineHeight: 22, fontWeight: '400' },
   bodyStrong: { fontSize: 16, lineHeight: 22, fontWeight: '600' },
+  /** Habit name in the compact list card. */
+  cardTitle: { fontSize: 17, lineHeight: 22, fontWeight: '600' },
   caption: { fontSize: 14, lineHeight: 18, fontWeight: '400' },
   small: { fontSize: 12, lineHeight: 16, fontWeight: '400' },
   button: { fontSize: 18, lineHeight: 22, fontWeight: '600' },

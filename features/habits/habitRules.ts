@@ -9,7 +9,12 @@ export interface HabitInput {
   dailyLimit: number;
   /** Icon registry id. Omitted = keep the current one (edit) / type default (create). */
   iconId?: string | null;
+  /** Optional comment (D16). Omitted = keep the current one (edit) / none (create); blank = remove. */
+  comment?: string | null;
 }
+
+/** Max comment length in characters (D16). */
+export const HABIT_COMMENT_MAX_LENGTH = 120;
 
 /** Points and limit effective on `date`, taking a pending next-day change into account (§11). */
 export function effectiveParams(habit: HabitRecord, date: CalendarDate): { pointsPerCompletion: number; dailyLimit: number } {
@@ -33,11 +38,16 @@ export function validateHabitInput(input: HabitInput): HabitInput {
   if (weekdays.length === 0) throw new DomainError('validation', 'At least one weekday is required.');
   if (!isPositiveInt(input.pointsPerCompletion)) throw new DomainError('validation', 'Points must be an integer ≥ 1.');
   if (!isPositiveInt(input.dailyLimit)) throw new DomainError('validation', 'Daily limit must be an integer ≥ 1.');
+  const comment = input.comment === undefined ? undefined : input.comment?.trim() || null;
+  if (comment && comment.length > HABIT_COMMENT_MAX_LENGTH) {
+    throw new DomainError('validation', `Comment must be at most ${HABIT_COMMENT_MAX_LENGTH} characters.`);
+  }
   return {
     name,
     weekdays,
     pointsPerCompletion: input.pointsPerCompletion,
     dailyLimit: input.dailyLimit,
     iconId: input.iconId,
+    comment,
   };
 }

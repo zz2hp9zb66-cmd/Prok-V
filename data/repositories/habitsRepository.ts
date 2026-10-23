@@ -16,6 +16,8 @@ export interface HabitRecord {
   deletedAt: string | null;
   /** Icon registry id; null for records created before icons existed. */
   iconId: string | null;
+  /** Optional note under the name (D16); null = none. Never affects points or schedule. */
+  comment: string | null;
 }
 
 interface Row {
@@ -31,6 +33,7 @@ interface Row {
   updated_at: string;
   deleted_at: string | null;
   icon_id: string | null;
+  comment: string | null;
 }
 
 const map = (r: Row): HabitRecord => ({
@@ -46,6 +49,7 @@ const map = (r: Row): HabitRecord => ({
   updatedAt: r.updated_at,
   deletedAt: r.deleted_at,
   iconId: r.icon_id,
+  comment: r.comment ?? null,
 });
 
 export const habitsRepository = {
@@ -54,8 +58,8 @@ export const habitsRepository = {
       `INSERT INTO habits
         (id, name, selected_weekdays, points_per_completion, daily_limit,
          pending_points_per_completion, pending_daily_limit, pending_effective_date,
-         created_at, updated_at, deleted_at, icon_id)
-       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
+         created_at, updated_at, deleted_at, icon_id, comment)
+       VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)`,
       [
         h.id,
         h.name,
@@ -69,6 +73,7 @@ export const habitsRepository = {
         h.updatedAt,
         h.deletedAt,
         h.iconId,
+        h.comment,
       ],
     );
   },
@@ -78,7 +83,7 @@ export const habitsRepository = {
       `UPDATE habits SET
          name = ?, selected_weekdays = ?, points_per_completion = ?, daily_limit = ?,
          pending_points_per_completion = ?, pending_daily_limit = ?, pending_effective_date = ?,
-         updated_at = ?, deleted_at = ?, icon_id = ?
+         updated_at = ?, deleted_at = ?, icon_id = ?, comment = ?
        WHERE id = ?`,
       [
         h.name,
@@ -91,6 +96,7 @@ export const habitsRepository = {
         h.updatedAt,
         h.deletedAt,
         h.iconId,
+        h.comment,
         h.id,
       ],
     );

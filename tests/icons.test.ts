@@ -122,6 +122,26 @@ describe('icon persistence', () => {
     expect(resolveIcon(null, 'habit').id).toBe('default_habit'); // shown as the default icon
   });
 
+  it('migration v3 keeps existing habits and leaves their comment empty', async () => {
+    const db = createTestDatabase();
+    await db.execAsync(migrations[0]!);
+    await db.execAsync(migrations[1]!);
+    await db.execAsync('PRAGMA user_version = 2');
+    const now = new Date().toISOString();
+    await db.runAsync(
+      "INSERT INTO habits (id, name, selected_weekdays, points_per_completion, daily_limit, created_at, updated_at, icon_id) VALUES ('h1', 'Старая привычка', 127, 5, 2, ?, ?, 'sport')",
+      [now, now],
+    );
+    await migrate(db);
+    expect(await habitsRepository.findById(db, 'h1')).toMatchObject({
+      name: 'Старая привычка',
+      iconId: 'sport',
+      pointsPerCompletion: 5,
+      dailyLimit: 2,
+      comment: null,
+    });
+  });
+
   it('habits: default icon when not chosen, chosen icon saved, changed on edit, kept when omitted', async () => {
     const ctx = await createTestContext();
     const plain = await createHabit(ctx, { ...habit, weekdays: [...habit.weekdays] });

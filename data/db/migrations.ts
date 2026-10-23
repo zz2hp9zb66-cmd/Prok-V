@@ -72,6 +72,10 @@ export const migrations: readonly string[] = [
   ALTER TABLE habits ADD COLUMN icon_id TEXT;
   ALTER TABLE rewards ADD COLUMN icon_id TEXT;
   `,
+  // v3 — optional habit comment shown under the name (D16). NULL = no comment.
+  `
+  ALTER TABLE habits ADD COLUMN comment TEXT;
+  `,
 ];
 
 export const LATEST_SCHEMA_VERSION = migrations.length;

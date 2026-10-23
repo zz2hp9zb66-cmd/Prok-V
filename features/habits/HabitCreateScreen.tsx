@@ -12,7 +12,7 @@ import { RoomScreen } from '@/components/RoomScreen';
 import type { Weekday } from '@/services/time';
 import { colors, radius, spacing } from '@/theme';
 import { HABIT_CREATE_TOBI_SCALE, HABIT_CREATE_TOBI_VISIBLE } from './habitCreateTobi';
-import type { HabitInput } from './habitRules';
+import { HABIT_COMMENT_MAX_LENGTH, type HabitInput } from './habitRules';
 
 /** UI limit for the task name (design requirement). */
 export const HABIT_NAME_MAX_LENGTH = 60;
@@ -67,6 +67,7 @@ export function HabitCreateView({ step, onBack, onSubmit, onSkip, busy }: HabitC
   const [weekdays, setWeekdays] = useState<Weekday[]>([]);
   const [limit, setLimit] = useState<number | null>(1);
   const [iconId, setIconId] = useState<string | null>(null);
+  const [comment, setComment] = useState('');
   const [errors, setErrors] = useState<Errors>({});
   const [showHelp, setShowHelp] = useState(false);
 
@@ -74,7 +75,7 @@ export function HabitCreateView({ step, onBack, onSubmit, onSkip, busy }: HabitC
     const next = validateHabitForm({ name, points, weekdays, limit });
     setErrors(next);
     if (Object.keys(next).length > 0) return;
-    onSubmit({ name, weekdays, pointsPerCompletion: points!, dailyLimit: limit!, iconId });
+    onSubmit({ name, weekdays, pointsPerCompletion: points!, dailyLimit: limit!, iconId, comment });
   };
 
   return (
@@ -120,6 +121,16 @@ export function HabitCreateView({ step, onBack, onSubmit, onSkip, busy }: HabitC
         showCounter
         error={errors.name}
         returnKeyType="next"
+      />
+
+      <TextInput
+        label="Комментарий"
+        labelVariant="heading"
+        placeholder="Например: 8 стаканов, 30 минут, до 23:00"
+        value={comment}
+        onChangeText={setComment}
+        maxLength={HABIT_COMMENT_MAX_LENGTH}
+        showCounter
       />
 
       <PointsInput

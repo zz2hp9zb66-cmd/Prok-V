@@ -9,7 +9,7 @@ import { TextInput } from '@/components/TextInput';
 import { TobiIconPicker } from '@/components/TobiIconPicker';
 import type { Weekday } from '@/services/time';
 import { spacing } from '@/theme';
-import type { HabitInput } from './habitRules';
+import { HABIT_COMMENT_MAX_LENGTH, type HabitInput } from './habitRules';
 
 export interface HabitFormProps {
   initial?: HabitInput;
@@ -33,6 +33,7 @@ export function HabitForm({ initial, submitTitle, onSubmit, secondary, note, bus
   const [points, setPoints] = useState<number | null>(initial?.pointsPerCompletion ?? null);
   const [limit, setLimit] = useState<number | null>(initial?.dailyLimit ?? 1);
   const [iconId, setIconId] = useState<string | null>(initial?.iconId ?? null);
+  const [comment, setComment] = useState(initial?.comment ?? '');
   const [errors, setErrors] = useState<Errors>({});
 
   const submit = () => {
@@ -43,13 +44,21 @@ export function HabitForm({ initial, submitTitle, onSubmit, secondary, note, bus
     if (!limit || limit < 1) next.limit = 'Минимум 1 раз в день';
     setErrors(next);
     if (Object.keys(next).length > 0) return;
-    onSubmit({ name, weekdays, pointsPerCompletion: points!, dailyLimit: limit!, iconId });
+    onSubmit({ name, weekdays, pointsPerCompletion: points!, dailyLimit: limit!, iconId, comment });
   };
 
   return (
     <View style={styles.form}>
       <TobiIconPicker owner="habit" value={iconId} onChange={setIconId} />
       <TextInput label="Название" value={name} onChangeText={setName} error={errors.name} placeholder="Например, читать 20 минут" />
+      <TextInput
+        label="Комментарий"
+        value={comment}
+        onChangeText={setComment}
+        placeholder="Например: 8 стаканов, 30 минут, до 23:00"
+        maxLength={HABIT_COMMENT_MAX_LENGTH}
+        showCounter
+      />
       <View style={styles.field}>
         <AppText variant="caption" color="textSecondary">
           Дни недели

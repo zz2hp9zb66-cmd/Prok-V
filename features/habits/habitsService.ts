@@ -64,13 +64,14 @@ export async function createHabit(ctx: DomainContext, input: HabitInput): Promis
     deletedAt: null,
     // Not chosen → the universal habit icon (optional field, never blocks creation).
     iconId: valid.iconId || defaultIconId('habit'),
+    comment: valid.comment ?? null,
   };
   await habitsRepository.insert(ctx.db, habit);
   return habit;
 }
 
 /**
- * Name, weekdays and icon apply immediately (D3). Points and daily limit apply from
+ * Name, weekdays, icon and comment apply immediately (D3, D16). Points and daily limit apply from
  * the next calendar day (§11). Past completions are never recalculated.
  */
 export async function updateHabit(ctx: DomainContext, id: string, input: HabitInput): Promise<HabitRecord> {
@@ -91,6 +92,8 @@ export async function updateHabit(ctx: DomainContext, id: string, input: HabitIn
       pendingEffectiveDate: hasPending ? addDays(date, 1) : null,
       // The icon is cosmetic: applies immediately; omitted keeps the current one.
       iconId: valid.iconId === undefined ? habit.iconId : valid.iconId,
+      // Like the name, the comment is cosmetic and applies immediately (D16).
+      comment: valid.comment === undefined ? habit.comment : valid.comment,
       updatedAt: toTimestamp(ctx.clock.now()),
     };
     await habitsRepository.update(tx, updated);

@@ -47,6 +47,8 @@ export const colors = {
   /** brand.brown at 7% / 12% — quiet translucent beige for secondary «Добавить …» cards. */
   addCard: 'rgba(139, 90, 60, 0.07)',
   addCardIcon: 'rgba(139, 90, 60, 0.12)',
+  /** brand.brown at 25% — light beige outline of the empty habit checkbox. */
+  checkboxBorder: 'rgba(139, 90, 60, 0.25)',
   /** Text placed directly on scene images (TOBI's room). */
   textOnImage: palette.neutral.white,
   textOnImageSecondary: 'rgba(255, 255, 255, 0.9)',
